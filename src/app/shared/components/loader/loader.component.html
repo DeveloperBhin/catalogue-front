@@ -1,0 +1,40 @@
+<!-- Overlay Type -->
+<div *ngIf="type === 'overlay'" 
+     class="fixed inset-0 bg-white bg-opacity-75 backdrop-blur-sm z-50 flex items-center justify-center"
+     [class.bg-gray-900]="fullScreen"
+     [class.bg-opacity-50]="fullScreen">
+  <div class="flex flex-col items-center justify-center">
+    <div [class]="spinnerSizeClasses + ' border-primary-600 border-t-transparent rounded-full animate-spin'"></div>
+    <p *ngIf="showMessage && message" 
+       [class]="messageSizeClasses + ' mt-4 text-gray-600 font-medium'"
+       style="font-family: 'Inter', sans-serif;">
+      {{ message || 'Loading...' }}
+    </p>
+  </div>
+</div>
+
+<!-- Inline Type -->
+<div *ngIf="type === 'inline'" 
+     class="flex items-center justify-center py-4">
+  <div class="flex flex-col items-center justify-center">
+    <div [class]="spinnerSizeClasses + ' border-primary-600 border-t-transparent rounded-full animate-spin'"></div>
+    <p *ngIf="showMessage && message" 
+       [class]="messageSizeClasses + ' mt-2 text-gray-600 font-medium'"
+       style="font-family: 'Inter', sans-serif;">
+      {{ message || 'Loading...' }}
+    </p>
+  </div>
+</div>
+
+<!-- Spinner Type (default) -->
+<div *ngIf="type === 'spinner'" 
+     class="flex items-center justify-center">
+  <div class="flex flex-col items-center justify-center">
+    <div [class]="spinnerSizeClasses + ' border-primary-600 border-t-transparent rounded-full animate-spin'"></div>
+    <p *ngIf="showMessage && message" 
+       [class]="messageSizeClasses + ' mt-2 text-gray-600 font-medium'"
+       style="font-family: 'Inter', sans-serif;">
+      {{ message || 'Loading...' }}
+    </p>
+  </div>
+</div>

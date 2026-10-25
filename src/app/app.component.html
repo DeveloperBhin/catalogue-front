@@ -1,0 +1,16 @@
+<div class="min-h-screen flex flex-col">
+  <!-- Global Loader -->
+  <app-loader 
+    *ngIf="isLoading$ | async" 
+    type="overlay" 
+    size="large"
+    message="Loading..."
+    [fullScreen]="true">
+  </app-loader>
+  
+  <app-header></app-header>
+  <main class="flex-1">
+    <router-outlet></router-outlet>
+  </main>
+  <app-footer></app-footer>
+</div>

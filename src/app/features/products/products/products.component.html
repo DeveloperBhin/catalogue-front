@@ -1,0 +1,86 @@
+<div class="min-h-screen bg-gray-50">
+  <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-12 lg:py-16">
+    <!-- Header Section - Enhanced Typography-->
+    <div class="mb-10 sm:mb-12 lg:mb-16">
+      <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-3 tracking-tight leading-tight"
+          style="font-family: 'Inter', sans-serif; letter-spacing: -0.02em;">
+        Our Products
+      </h1>
+      <p class="text-base sm:text-lg text-gray-600 leading-relaxed max-w-2xl"
+         style="font-family: 'Inter', sans-serif;">
+        Browse our catalog of agricultural products and research findings
+      </p>
+    </div>
+
+    <!-- Products List - Modern Minimal Design -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+      <div
+        *ngFor="let product of products"
+        (click)="navigateToProduct(product)"
+        class="group bg-white border border-gray-200 rounded-2xl overflow-hidden cursor-pointer
+               hover:border-primary-200 hover:shadow-xl transition-all duration-500 ease-out
+               transform hover:-translate-y-2 product-card">
+        <!-- Product Image with Gradient Overlay -->
+        <div *ngIf="product.imageUrl" class="relative w-full h-52 sm:h-64 overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200">
+          <img
+            [src]="product.imageUrl"
+            [alt]="product.name"
+            class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out product-image"
+            (error)="onImageError($event)"
+            loading="lazy">
+          <!-- Gradient Overlay -->
+          <div class="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+          <!-- Category Badge -->
+          <div *ngIf="product.category" class="absolute top-4 right-4">
+            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium
+                        bg-white/90 backdrop-blur-sm text-gray-700 border border-gray-200/50
+                        group-hover:bg-white group-hover:border-primary-200 transition-colors duration-300">
+              {{ product.category }}
+            </span>
+          </div>
+        </div>
+        <!-- Product Content - Enhanced Typography -->
+        <div class="p-6 sm:p-7">
+          <div class="flex items-start justify-between gap-3 mb-3">
+            <h3 class="text-xl sm:text-2xl font-bold text-gray-900 group-hover:text-primary-600
+                       transition-colors duration-300 leading-tight tracking-tight flex-1"
+                style="font-family: 'Inter', sans-serif; letter-spacing: -0.01em;">
+              {{ product.name }}
+            </h3>
+            <button class="inline-flex items-center gap-2 px-3 py-2 rounded-md text-xs sm:text-sm font-medium
+                          bg-primary-50 text-primary-700 border border-primary-200
+                          group-hover:bg-primary-100 group-hover:border-primary-300
+                          transition-all duration-300 flex-shrink-0 whitespace-nowrap
+                          focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+                    (click)="navigateToProduct(product); $event.stopPropagation()"
+                    [attr.aria-label]="'View details for ' + product.name">
+              <span style="font-family: 'Inter', sans-serif;">View Details</span>
+              <svg class="w-4 h-4 transform group-hover:translate-x-1 transition-transform duration-300"
+                   fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+              </svg>
+            </button>
+          </div>
+          <p *ngIf="product.description" class="text-sm sm:text-base text-gray-600 mt-3 line-clamp-2 leading-relaxed"
+             style="font-family: 'Inter', sans-serif;">
+            {{ product.description }}
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Empty State - Premium Design -->
+    <div *ngIf="products.length === 0" class="text-center py-20 sm:py-24 lg:py-32">
+      <div class="inline-flex items-center justify-center w-20 h-20 rounded-full bg-gray-100 mb-6">
+        <svg class="w-10 h-10 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path>
+        </svg>
+      </div>
+      <h3 class="text-xl sm:text-2xl font-semibold text-gray-900 mb-2" style="font-family: 'Inter', sans-serif;">
+        No products available
+      </h3>
+      <p class="text-gray-500 text-base sm:text-lg">Check back later for updates</p>
+    </div>
+  </div>
+</div>

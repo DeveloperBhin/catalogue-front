@@ -1,0 +1,666 @@
+
+/* ==========================================
+   TARI CROP CATALOGUE PORTAL
+   HEADER COMPONENT
+========================================== */
+
+$primary: #087b43;
+$primary-dark: #065d32;
+$primary-light: #eaf6ed;
+
+$navy: #203d60;
+$text: #374151;
+$border: #e5e7eb;
+$banner-bg: #eaf4f6;
+
+:host {
+  display: block;
+  width: 100%;
+}
+
+/* HEADER ROOT */
+
+.header-modern {
+  width: 100%;
+  position: relative;
+  z-index: 100;
+  background: #ffffff;
+  font-family: 'Inter', Arial, sans-serif;
+}
+
+/* ==========================================
+   GOVERNMENT BANNER
+========================================== */
+
+.government-banner {
+  width: 100%;
+  background: $banner-bg;
+  border-bottom: 1px solid #d2e3e0;
+}
+
+.header-container {
+  width: min(1400px, calc(100% - 48px));
+  min-height: 88px;
+
+  margin: 0 auto;
+  padding: 8px 0;
+
+  display: grid;
+  grid-template-columns: 100px minmax(0, 1fr) 100px;
+  align-items: center;
+  gap: 20px;
+}
+
+/* LOGO CONTAINERS */
+
+.banner-left,
+.banner-right {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+}
+
+.banner-left {
+  justify-content: flex-start;
+}
+
+.banner-right {
+  justify-content: flex-end;
+}
+
+/* TANZANIA COAT OF ARMS */
+
+.government-emblem {
+  display: block;
+  width: auto;
+  max-width: 90px;
+  height: 72px;
+  object-fit: contain;
+}
+
+/* TARI LOGO */
+
+.tari-logo {
+  display: block;
+  width: auto;
+  max-width: 100px;
+  height: 65px;
+  object-fit: contain;
+}
+
+/* ==========================================
+   INSTITUTE INFORMATION
+========================================== */
+
+.banner-center {
+  min-width: 0;
+  text-align: center;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.country-name {
+  margin: 0 0 4px;
+  color: $navy;
+
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.3;
+}
+
+.institute-name {
+  margin: 0;
+  color: $navy;
+
+  font-size: clamp(15px, 1.65vw, 23px);
+  font-weight: 800;
+
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+  text-align: center;
+}
+
+.institute-acronym {
+  margin: 4px 0 0;
+  color: #0a5911;
+
+  font-size: 16px;
+  font-weight: 750;
+  letter-spacing: 0.04em;
+  line-height: 1.3;
+}
+
+/* ==========================================
+   NAVIGATION BAR
+========================================== */
+
+.header-navigation {
+  width: 100%;
+  background: #ffffff;
+
+  border-bottom: 1px solid $border;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.035);
+}
+
+.nav-container {
+  width: min(1400px, calc(100% - 48px));
+  min-height: 54px;
+
+  margin: 0 auto;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+/* RIGHT-ALIGNED DESKTOP NAVIGATION */
+
+.desktop-navigation {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+
+  gap: 24px;
+  margin-left: auto;
+}
+
+/* MAIN LINKS */
+
+.desktop-links {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 26px;
+}
+
+.header-nav-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  min-height: 54px;
+  padding: 0 2px;
+
+  color: $text;
+
+  font-size: 13px;
+  font-weight: 650;
+  text-decoration: none;
+  white-space: nowrap;
+
+  border-bottom: 3px solid transparent;
+
+  transition:
+    color 0.2s ease,
+    border-color 0.2s ease;
+
+  &:hover {
+    color: $primary;
+    border-bottom-color: rgba(8, 123, 67, 0.3);
+  }
+
+  &:focus-visible {
+    outline: 2px solid $primary;
+    outline-offset: 3px;
+  }
+}
+
+/* ACTIVE LINK */
+
+.header-nav-active {
+  color: $primary !important;
+  font-weight: 750;
+  border-bottom-color: $primary !important;
+}
+
+/* ==========================================
+   LANGUAGE SELECTOR
+========================================== */
+
+.language-selector {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+
+  svg {
+    color: $primary;
+    flex-shrink: 0;
+  }
+
+  select {
+    border: none;
+    background: transparent;
+    color: $text;
+
+    font-size: 12px;
+    font-weight: 650;
+
+    padding: 6px 2px;
+    cursor: pointer;
+
+    &:focus-visible {
+      outline: 2px solid $primary;
+      border-radius: 4px;
+    }
+  }
+}
+
+/* ==========================================
+   LOGIN AND REGISTER
+========================================== */
+
+.auth-buttons {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.login-button,
+.register-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  min-width: 75px;
+  min-height: 34px;
+
+  padding: 8px 15px;
+
+  border-radius: 5px;
+  font-size: 12px;
+  font-weight: 750;
+
+  text-decoration: none;
+  white-space: nowrap;
+
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease;
+}
+
+/* LOGIN */
+
+.login-button {
+  color: $primary;
+  background: #ffffff;
+  border: 1px solid $primary;
+
+  &:hover {
+    background: $primary-light;
+  }
+}
+
+/* REGISTER */
+
+.register-button {
+  color: #ffffff;
+  background: $primary;
+  border: 1px solid $primary;
+
+  &:hover {
+    background: $primary-dark;
+    border-color: $primary-dark;
+  }
+}
+
+/* ==========================================
+   BACK BUTTON
+========================================== */
+
+.back-button {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  gap: 8px;
+
+  padding: 9px 12px;
+
+  border: none;
+  border-radius: 6px;
+
+  background: transparent;
+  color: $primary;
+
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background: $primary-light;
+  }
+
+  &:focus-visible {
+    outline: 2px solid $primary;
+    outline-offset: 2px;
+  }
+}
+
+/* ==========================================
+   MOBILE MENU BUTTON
+========================================== */
+
+.mobile-menu-button {
+  display: none;
+  align-items: center;
+  justify-content: center;
+
+  width: 40px;
+  height: 40px;
+
+  padding: 8px;
+
+  border: none;
+  border-radius: 8px;
+
+  background: transparent;
+  color: $primary;
+
+  cursor: pointer;
+
+  &:hover {
+    background: $primary-light;
+  }
+
+  &:focus-visible {
+    outline: 2px solid $primary;
+  }
+}
+
+/* ==========================================
+   MOBILE NAVIGATION
+========================================== */
+
+.mobile-links {
+  display: none;
+
+  padding: 12px 20px 18px;
+
+  border-top: 1px solid $border;
+  background: #ffffff;
+
+  > a {
+    display: block;
+
+    padding: 12px 15px;
+    border-radius: 6px;
+
+    color: $text;
+
+    font-size: 13px;
+    font-weight: 650;
+    text-decoration: none;
+
+    transition:
+      background-color 0.2s ease,
+      color 0.2s ease;
+
+    &:hover {
+      color: $primary;
+      background: $primary-light;
+    }
+  }
+}
+
+/* ACTIVE MOBILE LINK */
+
+.header-mobile-active {
+  color: $primary !important;
+  background: $primary-light;
+  font-weight: 750 !important;
+}
+
+/* MOBILE LANGUAGE */
+
+.mobile-language {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 12px;
+  padding: 12px 15px;
+
+  label {
+    font-size: 13px;
+    font-weight: 650;
+    color: $text;
+  }
+
+  select {
+    padding: 8px 10px;
+
+    border: 1px solid #dce6df;
+    border-radius: 5px;
+
+    background: #ffffff;
+    color: $text;
+
+    font-size: 12px;
+  }
+}
+
+/* MOBILE LOGIN / REGISTER */
+
+.mobile-auth {
+  display: flex;
+  gap: 10px;
+  padding: 12px 15px;
+
+  a {
+    flex: 1;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 11px 14px;
+
+    border: 1px solid $primary;
+    border-radius: 5px;
+
+    color: $primary;
+    background: #ffffff;
+
+    font-size: 13px;
+    font-weight: 750;
+    text-decoration: none;
+  }
+
+  .mobile-register {
+    color: #ffffff;
+    background: $primary;
+  }
+}
+
+/* ==========================================
+   LARGE SCREENS
+========================================== */
+
+@media (min-width: 1600px) {
+  .header-container,
+  .nav-container {
+    width: min(1500px, calc(100% - 80px));
+  }
+
+  .desktop-navigation {
+    gap: 30px;
+  }
+
+  .desktop-links {
+    gap: 32px;
+  }
+}
+
+/* ==========================================
+   TABLET / SMALL DESKTOP
+========================================== */
+
+@media (max-width: 1100px) {
+  .desktop-navigation {
+    gap: 14px;
+  }
+
+  .desktop-links {
+    gap: 15px;
+  }
+
+  .header-nav-link {
+    font-size: 12px;
+  }
+
+  .login-button,
+  .register-button {
+    min-width: 65px;
+    padding: 8px 11px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .header-container {
+    grid-template-columns: 75px minmax(0, 1fr) 85px;
+
+    min-height: 80px;
+    gap: 12px;
+  }
+
+  .government-emblem {
+    max-width: 75px;
+    height: 62px;
+  }
+
+  .tari-logo {
+    max-width: 85px;
+    height: 60px;
+  }
+
+  .country-name {
+    font-size: 11px;
+  }
+
+  .institute-name {
+    font-size: 17px;
+  }
+
+  .institute-acronym {
+    font-size: 14px;
+  }
+}
+
+/* ==========================================
+   MOBILE / TABLET NAVIGATION
+========================================== */
+
+@media (max-width: 900px) {
+  .nav-container {
+    min-height: 46px;
+  }
+
+  .desktop-navigation {
+    display: none;
+  }
+
+  .mobile-menu-button {
+    display: inline-flex;
+    margin-left: auto;
+  }
+
+  .mobile-links {
+    display: block;
+  }
+}
+
+/* ==========================================
+   MOBILE GOVERNMENT BANNER
+========================================== */
+
+@media (max-width: 767px) {
+  .header-container {
+    width: calc(100% - 24px);
+
+    grid-template-columns: 48px minmax(0, 1fr) 55px;
+
+    min-height: 70px;
+    gap: 7px;
+
+    padding: 8px 0;
+  }
+
+  .government-emblem {
+    max-width: 46px;
+    height: 48px;
+  }
+
+  .tari-logo {
+    max-width: 55px;
+    height: 46px;
+  }
+
+  .country-name {
+    font-size: 9px;
+    margin-bottom: 3px;
+  }
+
+  .institute-name {
+    font-size: clamp(10px, 2.7vw, 14px);
+    line-height: 1.25;
+  }
+
+  .institute-acronym {
+    font-size: 11px;
+    letter-spacing: 0;
+    margin-top: 3px;
+  }
+
+  .nav-container {
+    width: calc(100% - 24px);
+  }
+
+  .back-button {
+    font-size: 12px;
+    padding: 8px;
+  }
+}
+
+/* ==========================================
+   SMALL PHONES
+========================================== */
+
+@media (max-width: 380px) {
+  .header-container {
+    grid-template-columns: 36px minmax(0, 1fr) 42px;
+    gap: 5px;
+  }
+
+  .government-emblem {
+    max-width: 35px;
+    height: 40px;
+  }
+
+  .tari-logo {
+    max-width: 42px;
+    height: 38px;
+  }
+
+  .country-name {
+    font-size: 8px;
+  }
+
+  .institute-name {
+    font-size: 10px;
+  }
+
+  .institute-acronym {
+    font-size: 10px;
+  }
+
+  .mobile-links {
+    padding: 8px 12px 14px;
+  }
+}

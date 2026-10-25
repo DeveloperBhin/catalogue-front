@@ -1,0 +1,625 @@
+
+<div class="tari-site" id="top">
+
+  
+
+  
+ 
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-shade"></div>
+
+    <div class="container hero-inner">
+      <div class="hero-copy">
+        <span class="hero-kicker">
+          IMPROVED SEEDS FOR A PRODUCTIVE TANZANIA
+        </span>
+
+        <h1>TARI Crop Catalogue</h1>
+
+        <p>
+          Discover improved crop varieties developed and released by TARI
+          for food security, income and climate resilience.
+        </p>
+
+        <div class="hero-search">
+          <span>⌕</span>
+          <input type="search"
+                 [(ngModel)]="search"
+                 (keydown.enter)="searchCatalogue()"
+                 placeholder="Search crops, varieties, characteristics, or keywords...">
+          <button (click)="searchCatalogue()">Search</button>
+        </div>
+
+        <div class="hero-filters">
+          <label>
+            <span>♧</span>
+            <select [(ngModel)]="selectedCrop">
+              <option value="All">Select Crop</option>
+              <option *ngFor="let c of crops" [value]="c.name">
+                {{ c.name }}
+              </option>
+            </select>
+          </label>
+
+          <label>
+            <span>♧</span>
+            <select [(ngModel)]="selectedRegion">
+              <option value="All">Select Region</option>
+              <option value="Coastal">Coastal</option>
+              <option value="Eastern">Eastern</option>
+              <option value="Southern">Southern</option>
+              <option value="Northern">Northern</option>
+              <option value="Central">Central</option>
+            </select>
+          </label>
+
+          <label>
+            <span>▦</span>
+            <select [(ngModel)]="selectedPeriod">
+              <option value="All">Maturity Period</option>
+              <option *ngFor="let p of periods.slice(1)" [value]="p">
+                {{ p }}
+              </option>
+            </select>
+          </label>
+
+          <label>
+            <span>⌂</span>
+            <select [(ngModel)]="selectedCenter">
+              <option value="All">Research Center</option>
+              <option *ngFor="let c of researchCenters.slice(1)" [value]="c">
+                {{ c }}
+              </option>
+            </select>
+          </label>
+        </div>
+      </div>
+
+      <div class="hero-points">
+        <span>♧ <b>Improved<br>Varieties</b></span>
+        <span>♙ <b>High<br>Yield</b></span>
+        <span>☼ <b>Climate<br>Resilient</b></span>
+        <span>♧ <b>Research<br>Backed</b></span>
+      </div>
+    </div>
+  </section>
+
+  <main class="container">
+
+    <!-- EXPLORE CROPS -->
+    <section class="section explore" id="crops">
+      <div class="section-heading">
+        <div>
+          <h2>Explore Crops</h2>
+          <p>Browse by crop category to find improved varieties from TARI</p>
+        </div>
+        <button class="link-button" (click)="scrollTo('catalogue')">
+          View All Crops →
+        </button>
+      </div>
+
+      <div class="crop-carousel">
+        <button class="carousel-arrow left"
+                (click)="slideCrops(-1)">‹</button>
+
+        <div class="explore-list">
+          <button class="explore-card"
+                  *ngFor="let c of displayedCrops"
+                  (click)="chooseCrop(c)">
+            <div class="crop-image">
+              <span class="fallback-icon">🌱</span>
+              <img [src]="c.image" [alt]="c.name"
+                   (error)="onImageError($event)">
+            </div>
+            <strong>{{ c.name }}</strong>
+            <small>({{ c.count }} varieties)</small>
+          </button>
+        </div>
+
+        <button class="carousel-arrow right"
+                (click)="slideCrops(1)">›</button>
+      </div>
+    </section>
+
+    <!-- STATISTICS -->
+    <section class="stats-row">
+      <div class="stat">
+        <span class="stat-icon green">♧</span>
+        <div><strong>10+</strong><small>Crop Categories</small></div>
+      </div>
+
+      <div class="stat">
+        <span class="stat-icon mint">✣</span>
+        <div><strong>150+</strong><small>Improved Varieties</small></div>
+      </div>
+
+      <div class="stat">
+        <span class="stat-icon lime">▤</span>
+        <div><strong>8</strong><small>Research Centers</small></div>
+      </div>
+
+      <div class="stat">
+        <span class="stat-icon orange">◉</span>
+        <div><strong>100,000+</strong><small>Farmers Reached</small></div>
+      </div>
+
+      <div class="seed-banner">
+        <div>
+          <strong>Quality Seeds<br>for a Better Tomorrow</strong>
+          <button (click)="scrollTo('catalogue')">Learn More →</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- FEATURED VARIETIES -->
+    <section class="section featured-section" id="featured">
+      <div class="featured-layout">
+
+        <div>
+          <div class="section-heading">
+            <div>
+              <h2>Featured Varieties</h2>
+              <p>Popular and high-performing varieties from TARI</p>
+            </div>
+            <button class="link-button" (click)="scrollTo('catalogue')">
+              View All →
+            </button>
+          </div>
+
+          <div class="featured-cards">
+            <article class="featured-card" *ngFor="let v of featured">
+              <div class="feature-photo">
+                <span class="fallback-icon">🌿</span>
+                <img [src]="v.image" [alt]="v.crop"
+                     (error)="onImageError($event)">
+              </div>
+
+              <div class="feature-content">
+                <small>{{ v.crop }}</small>
+                <h3>{{ v.name }}</h3>
+                <p>♧ High yield</p>
+                <p>♧ {{ v.tolerance }} tolerance</p>
+                <p>◷ Matures in {{ v.maturity }}</p>
+                <button (click)="showVariety(v)">View Details</button>
+              </div>
+            </article>
+          </div>
+        </div>
+
+        <!-- SELECTED VARIETY DETAILS -->
+        <aside class="detail-panel">
+          <div class="detail-top">
+            <h3>
+              {{ activeVariety.name }}
+              <span>({{ activeVariety.crop }} Variety)</span>
+            </h3>
+            <span class="availability">Sample</span>
+          </div>
+
+          <div class="detail-content">
+            <div class="detail-media">
+              <div class="detail-main-image">
+                <span class="fallback-icon">🌱</span>
+                <img [src]="activeVariety.image"
+                     [alt]="activeVariety.name"
+                     (error)="onImageError($event)">
+              </div>
+
+              <div class="detail-thumbs">
+                <img *ngFor="let v of featured.slice(0, 3)"
+                     [src]="v.image"
+                     [alt]="v.crop"
+                     (click)="showVariety(v)"
+                     (error)="onImageError($event)">
+              </div>
+            </div>
+
+            <div class="detail-information">
+              <div class="tabs">
+                <button
+                  *ngFor="let tab of ['Overview', 'Characteristics', 'Cultivation', 'Suitability', 'Availability']"
+                  [class.selected]="detailsTab === tab"
+                  (click)="detailsTab = $any(tab)">
+                  {{ tab }}
+                </button>
+              </div>
+
+              <p class="tab-description" *ngIf="detailsTab === 'Overview'">
+                {{ activeVariety.name }} is shown as a sample variety
+                profile. Replace this description with verified research data.
+              </p>
+
+              <p class="tab-description" *ngIf="detailsTab !== 'Overview'">
+                {{ detailsTab }} information will be provided by the
+                TARI catalogue API.
+              </p>
+
+              <dl>
+                <div>
+                  <dt>♧ Scientific Name</dt>
+                  <dd>To be verified</dd>
+                </div>
+                <div>
+                  <dt>◷ Maturity Period</dt>
+                  <dd>{{ activeVariety.maturity }}</dd>
+                </div>
+                <div>
+                  <dt>♧ Average Yield</dt>
+                  <dd>{{ activeVariety.yield }}</dd>
+                </div>
+                <div>
+                  <dt>♧ Drought Tolerance</dt>
+                  <dd>{{ activeVariety.tolerance }}</dd>
+                </div>
+                <div>
+                  <dt>♧ Recommended Regions</dt>
+                  <dd>{{ activeVariety.regions }}</dd>
+                </div>
+              </dl>
+            </div>
+          </div>
+
+          <div class="detail-actions">
+            <button class="btn btn-green"
+                    (click)="openRequest(activeVariety, 'Pre-Order')">
+              🛒 Pre-Order Seedlings
+            </button>
+            <button class="btn btn-outline"
+                    (click)="openRequest(activeVariety, 'Pre-Book')">
+              ▣ Pre-Book
+            </button>
+            <button class="btn btn-outline"
+                    (click)="detailsTab = 'Characteristics'">
+              ↓ Factsheet Info
+            </button>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- POPULAR VARIETIES -->
+    <section class="section popular-section" id="popular">
+      <div class="section-heading">
+        <div>
+          <h2>Popular Varieties</h2>
+          <p>Most viewed and requested varieties by farmers and stakeholders</p>
+        </div>
+        <button class="link-button" (click)="scrollTo('catalogue')">
+          View All →
+        </button>
+      </div>
+
+      <div class="popular-grid">
+        <article class="popular-card"
+                 *ngFor="let v of popular; let i = index">
+          <div class="popular-photo">
+            <span class="fallback-icon">🌾</span>
+            <img [src]="v.image" [alt]="v.crop"
+                 (error)="onImageError($event)">
+            <span class="rank" [class.top-three]="i < 3">
+              {{ i + 1 }}
+            </span>
+          </div>
+
+          <div class="popular-body">
+            <strong>{{ v.name }}</strong>
+            <small>{{ v.crop }}</small>
+            <span class="rating">★ {{ v.rating }} ({{ v.reviews }})</span>
+            <button (click)="showVariety(v)">View Details</button>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- CROP CATALOGUE -->
+    <section class="section catalogue-section" id="catalogue">
+      <div class="catalogue-main">
+        <div>
+          <div class="section-heading">
+            <div>
+              <h2>Crop Catalogue</h2>
+              <p>Browse all crops and their improved varieties</p>
+            </div>
+            <button class="link-button" (click)="resetFilters()">
+              View All →
+            </button>
+          </div>
+
+          <div class="catalogue-grid">
+            <button class="catalogue-card"
+                    *ngFor="let c of filteredCrops"
+                    (click)="chooseCrop(c)">
+              <div class="catalogue-photo">
+                <span class="fallback-icon">🌱</span>
+                <img [src]="c.image" [alt]="c.name"
+                     (error)="onImageError($event)">
+              </div>
+              <div>
+                <strong>{{ c.name }}</strong>
+                <small>{{ c.count }} varieties</small>
+                <span>→</span>
+              </div>
+            </button>
+          </div>
+
+          <p class="empty-state" *ngIf="filteredCrops.length === 0">
+            No crops match the current search.
+            <button (click)="resetFilters()">Clear filters</button>
+          </p>
+        </div>
+
+        <!-- SEARCH BY CHARACTERISTICS -->
+        <aside class="characteristics">
+          <h3>Search by Characteristics</h3>
+
+          <label>
+            Crop Type
+            <select [(ngModel)]="selectedCrop">
+              <option value="All">Select crop</option>
+              <option *ngFor="let c of crops" [value]="c.name">
+                {{ c.name }}
+              </option>
+            </select>
+          </label>
+
+          <label>
+            Maturity Period
+            <select [(ngModel)]="selectedPeriod">
+              <option value="All">Select period</option>
+              <option *ngFor="let p of periods.slice(1)" [value]="p">
+                {{ p }}
+              </option>
+            </select>
+          </label>
+
+          <label>
+            Drought Tolerance
+            <select [(ngModel)]="selectedTolerance">
+              <option value="All">Select tolerance</option>
+              <option *ngFor="let t of tolerances.slice(1)" [value]="t">
+                {{ t }}
+              </option>
+            </select>
+          </label>
+
+          <label>
+            Research Center
+            <select [(ngModel)]="selectedCenter">
+              <option value="All">Select center</option>
+              <option *ngFor="let c of researchCenters.slice(1)" [value]="c">
+                {{ c }}
+              </option>
+            </select>
+          </label>
+
+          <button class="btn btn-green full"
+                  (click)="searchCatalogue()">
+            Search Varieties
+          </button>
+
+          <div class="filter-results"
+               *ngIf="selectedCrop !== 'All' ||
+                      selectedCenter !== 'All' ||
+                      selectedTolerance !== 'All' ||
+                      selectedPeriod !== 'All'">
+            <strong>
+              {{ filteredVarieties.length }} matching sample varieties
+            </strong>
+            <button *ngFor="let v of filteredVarieties"
+                    (click)="showVariety(v)">
+              {{ v.name }} →
+            </button>
+            <button class="clear" (click)="resetFilters()">
+              Clear filters
+            </button>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- RESEARCH CENTERS & UPDATES -->
+    <section class="lower-sections">
+      <div class="centers-panel" id="centers">
+        <div class="section-heading">
+          <div>
+            <h2>Crop Research Centers</h2>
+            <p>Explore varieties by TARI research centers</p>
+          </div>
+          <button class="link-button" (click)="scrollTo('centers')">
+            View All →
+          </button>
+        </div>
+
+        <div class="centers-list">
+          <article *ngFor="let c of centers">
+            <div class="center-photo">
+              <span class="fallback-icon">⌂</span>
+              <img [src]="c.image" [alt]="c.name"
+                   (error)="onImageError($event)">
+            </div>
+            <strong>{{ c.name }}</strong>
+            <small>{{ c.city }}</small>
+          </article>
+        </div>
+      </div>
+
+      <div class="updates-panel" id="updates">
+        <div class="section-heading">
+          <div>
+            <h2>Latest Updates</h2>
+            <p>News, publications and announcements</p>
+          </div>
+          <button class="link-button" (click)="scrollTo('updates')">
+            View All →
+          </button>
+        </div>
+
+        <article class="update" *ngFor="let u of updates">
+          <div class="update-photo">
+            <span class="fallback-icon">🌱</span>
+            <img [src]="u.image" [alt]="u.title"
+                 (error)="onImageError($event)">
+          </div>
+          <div>
+            <strong>{{ u.title }}</strong>
+            <small>{{ u.date }}</small>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- PARTNER WITH TARI -->
+    <section class="partner-banner">
+      <div>
+        <h2>Partner with TARI</h2>
+        <p>
+          Access quality seeds, technical guides and research
+          outputs for a productive Tanzania.
+        </p>
+      </div>
+      <div>
+        <button class="btn btn-green"
+                (click)="openRequest(activeVariety, 'Pre-Order')">
+          Pre-Order Seeds
+        </button>
+        <a class="btn btn-white" href="mailto:info@tari.go.tz">
+          Contact Experts
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer id="footer">
+    <div class="container footer-grid">
+      <div class="footer-about">
+        <div class="footer-brand">
+          🌱 TARI
+          <small>Tanzania Agricultural<br>Research Institute</small>
+        </div>
+        <p>
+          Research for Sustainable Agriculture<br>
+          Food Security | Income Generation | Climate Resilience
+        </p>
+      </div>
+
+      <div>
+        <h4>Quick Links</h4>
+        <a href="#top">Home</a>
+        <a href="#catalogue">Crop Catalogue</a>
+        <a href="#featured">Varieties</a>
+        <a href="#centers">Research Centers</a>
+        <a href="#updates">Resources</a>
+      </div>
+
+      <div>
+        <h4>Resources</h4>
+        <a href="#catalogue">Planting Guides</a>
+        <a href="#featured">Variety Datasheets</a>
+        <a href="#updates">Publications</a>
+        <a href="#updates">Videos</a>
+        <a href="#footer">FAQs</a>
+      </div>
+
+      <div>
+        <h4>Contact Us</h4>
+        <p>📍 TARI Headquarters<br>PO Box 127, Dodoma, Tanzania</p>
+        <p>☎ +255 26 232 1505</p>
+        <p>✉ info@tari.go.tz</p>
+      </div>
+
+      <div>
+        <h4>Follow Us</h4>
+        <p class="socials">f &nbsp; 𝕏 &nbsp; ▶ &nbsp; in</p>
+        <label>Subscribe to Updates</label>
+
+        <form (ngSubmit)="subscribe()" class="subscribe">
+          <input name="newsletter"
+                 [(ngModel)]="newsletterEmail"
+                 type="email"
+                 placeholder="Enter your email"
+                 required>
+          <button type="submit" aria-label="Subscribe">➤</button>
+        </form>
+
+        <small class="newsletter-feedback"
+               *ngIf="newsletterMessage">
+          {{ newsletterMessage }}
+        </small>
+      </div>
+    </div>
+
+    <div class="container footer-bottom">
+      <span>
+        © 2026 Tanzania Agricultural Research Institute (TARI).
+        All rights reserved.
+      </span>
+      <span>Privacy Policy | Terms of Use | Sitemap</span>
+    </div>
+  </footer>
+
+  <!-- PRE-BOOK / PRE-ORDER MODAL -->
+  <div class="modal-backdrop"
+       *ngIf="modalOpen"
+       (click)="closeRequest()">
+
+    <div class="request-modal"
+         role="dialog"
+         aria-modal="true"
+         aria-labelledby="request-heading"
+         (click)="$event.stopPropagation()">
+
+      <button class="modal-close"
+              aria-label="Close"
+              (click)="closeRequest()">×</button>
+
+      <span class="modal-kicker">FRONTEND PREVIEW</span>
+      <h2 id="request-heading">{{ requestKind }} Interest</h2>
+
+      <p>Variety: <strong>{{ requestVariety?.name }}</strong></p>
+
+      <p class="demo-notice">
+        No payment, login, booking, or request is processed
+        in this demonstration.
+      </p>
+
+      <form (ngSubmit)="submitRequest()">
+        <label>
+          Full name
+          <input name="name"
+                 [(ngModel)]="requesterName"
+                 required>
+        </label>
+
+        <label>
+          Phone or email
+          <input name="contact"
+                 [(ngModel)]="requesterContact"
+                 required>
+        </label>
+
+        <label>
+          Quantity
+          <input name="quantity"
+                 type="number"
+                 min="1"
+                 [(ngModel)]="requestQuantity"
+                 required>
+        </label>
+
+        <button class="btn btn-green full" type="submit">
+          Preview {{ requestKind }}
+        </button>
+      </form>
+
+      <p class="request-feedback"
+         role="status"
+         *ngIf="requestFeedback">
+        {{ requestFeedback }}
+      </p>
+    </div>
+  </div>
+
+</div>

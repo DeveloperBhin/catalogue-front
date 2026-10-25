@@ -1,0 +1,364 @@
+<div class="min-h-screen bg-gray-50">
+  <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 lg:py-12">
+    <!-- Loading State -->
+    <div *ngIf="isLoading$ | async" class="text-center py-12">
+      <app-loader type="inline" size="medium" message="Loading variety details..."></app-loader>
+    </div>
+
+    <!-- Error State -->
+    <div *ngIf="error && !(isLoading$ | async)" class="bg-red-50 border border-red-200 rounded-xl p-6 mb-6">
+      <p class="text-red-800">{{ error }}</p>
+    </div>
+
+    <!-- Variety Details -->
+    <div *ngIf="variety && !(isLoading$ | async)" class="overflow-hidden rounded-lg border border-gray-200 bg-white">
+      <!-- Header Section -->
+      <div class="bg-gradient-to-r from-primary-600 to-primary-700 p-6 sm:p-8 lg:p-10">
+        <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
+          <div class="flex-1">
+            <h1 class="text-2xl sm:text-3xl font-bold text-white mb-2 leading-tight" 
+                style="font-family: 'Inter', sans-serif; letter-spacing: -0.02em;">
+              {{ variety.registeredName || variety.varietyReleaseName || variety.commonName || 'Unnamed Variety' }}
+            </h1>
+            <div class="flex flex-wrap items-center gap-3 mt-3">
+              <span *ngIf="variety.varietyType" 
+                    class="inline-flex items-center px-3 py-1.5 rounded-full text-xs sm:text-sm font-medium 
+                           bg-white/20 backdrop-blur-sm text-white border border-white/30">
+                {{ variety.varietyType }}
+              </span>
+              <span *ngIf="variety.typeOfLicense" 
+                    class="inline-flex items-center px-3 py-1.5 rounded-full text-xs sm:text-sm font-medium 
+                           bg-white/20 backdrop-blur-sm text-white border border-white/30">
+                {{ variety.typeOfLicense }}
+              </span>
+              <span *ngIf="variety.varietyOriginalCode" 
+                    class="inline-flex items-center px-3 py-1.5 rounded-full text-xs sm:text-sm font-medium 
+                           bg-white/20 backdrop-blur-sm text-white border border-white/30">
+                Code: {{ variety.varietyOriginalCode }}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Content Section -->
+      <div class="grid grid-cols-1 gap-4 bg-gray-50 p-4 sm:grid-cols-2 sm:p-6 xl:grid-cols-3">
+        <!-- Basic Information -->
+        <section class="variety-info-card">
+          <h2 class="variety-info-heading">
+            Basic Information
+          </h2>
+          <div class="grid grid-cols-1 gap-3">
+            <div *ngIf="variety.localName || variety.commonName">
+              <p class="text-sm font-medium text-gray-500 mb-1">Local/Common Name</p>
+              <p class="text-base text-gray-900">{{ variety.localName || variety.commonName }}</p>
+            </div>
+            <div *ngIf="variety.cropName">
+              <p class="text-sm font-medium text-gray-500 mb-1">Crop Name</p>
+              <p class="text-base text-gray-900">{{ variety.cropName }}</p>
+            </div>
+            <div *ngIf="variety.botanicalName">
+              <p class="text-sm font-medium text-gray-500 mb-1">Botanical Name</p>
+              <p class="text-base text-gray-900">{{ variety.botanicalName }}</p>
+            </div>
+            <div *ngIf="variety.yearOfRelease">
+              <p class="text-sm font-medium text-gray-500 mb-1">Year of Release</p>
+              <p class="text-base text-gray-900">{{ variety.yearOfRelease }}</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="variety-info-card">
+          <h2 class="variety-info-heading">Administrative Information</h2>
+          <div class="grid grid-cols-1 gap-3">
+            <div *ngIf="variety.releaseEntityOwner">
+              <p class="text-sm font-medium text-gray-500 mb-1">Release Entity / Owner</p>
+              <p class="text-base text-gray-900">{{ variety.releaseEntityOwner }}</p>
+            </div>
+            <div *ngIf="variety.varietyOriginalCode">
+              <p class="text-sm font-medium text-gray-500 mb-1">Original Code</p>
+              <p class="text-base text-gray-900">{{ variety.varietyOriginalCode }}</p>
+            </div>
+            <div *ngIf="variety.maintainerCenterName || variety.maintainer">
+              <p class="text-sm font-medium text-gray-500 mb-1">Maintainer</p>
+              <p class="text-base text-gray-900">{{ variety.maintainerCenterName || variety.maintainer }}</p>
+            </div>
+            <div *ngIf="variety.maintenanceStatus">
+              <p class="text-sm font-medium text-gray-500 mb-1">Maintenance Status</p>
+              <p class="text-base text-gray-900">{{ variety.maintenanceStatus }}</p>
+            </div>
+            <div *ngIf="variety.typeOfLicense">
+              <p class="text-sm font-medium text-gray-500 mb-1">Type of License</p>
+              <p class="text-base text-gray-900">{{ variety.typeOfLicense }}</p>
+            </div>
+            <div *ngIf="variety.leadingCentreContacts">
+              <p class="text-sm font-medium text-gray-500 mb-1">Leading Centre Contacts</p>
+              <p class="text-base text-gray-900 whitespace-pre-line">{{ variety.leadingCentreContacts }}</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Growing Areas -->
+        <section class="variety-info-card" *ngIf="variety.productionAltitudeMin || variety.productionAltitudeMax || variety.rainfallMin || variety.rainfallMax || (variety.regionNames && variety.regionNames.length > 0)">
+          <h2 class="variety-info-heading">
+            Growing Areas
+          </h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+            <div *ngIf="variety.productionAltitudeMin || variety.productionAltitudeMax">
+              <p class="text-sm font-medium text-gray-500 mb-1">Altitude Range</p>
+              <p class="text-base text-gray-900">
+                {{ variety.productionAltitudeMin && variety.productionAltitudeMax 
+                  ? variety.productionAltitudeMin + ' - ' + variety.productionAltitudeMax + ' m'
+                  : variety.productionAltitudeMin 
+                  ? 'Min: ' + variety.productionAltitudeMin + ' m'
+                  : 'Max: ' + variety.productionAltitudeMax + ' m' }}
+              </p>
+            </div>
+            <div *ngIf="variety.rainfallMin || variety.rainfallMax">
+              <p class="text-sm font-medium text-gray-500 mb-1">Rainfall Range</p>
+              <p class="text-base text-gray-900">
+                {{ variety.rainfallMin && variety.rainfallMax 
+                  ? variety.rainfallMin + ' - ' + variety.rainfallMax + ' mm'
+                  : variety.rainfallMin 
+                  ? 'Min: ' + variety.rainfallMin + ' mm'
+                  : 'Max: ' + variety.rainfallMax + ' mm' }}
+              </p>
+            </div>
+            <div *ngIf="variety.regionNames && variety.regionNames.length > 0" class="md:col-span-2">
+              <p class="text-sm font-medium text-gray-500 mb-1">Regions</p>
+              <div class="flex flex-wrap gap-2">
+                <span *ngFor="let region of variety.regionNames" 
+                      class="inline-flex items-center px-3 py-1 rounded-full text-xs sm:text-sm font-medium 
+                             bg-primary-50 text-primary-700 border border-primary-200">
+                  {{ region }}
+                </span>
+              </div>
+            </div>
+            <div *ngIf="variety.recommendedAgriculturalEcologicalZones" class="md:col-span-2">
+              <p class="text-sm font-medium text-gray-500 mb-1">Recommended Agricultural Ecological Zones</p>
+              <p class="text-base text-gray-900 whitespace-pre-line">{{ variety.recommendedAgriculturalEcologicalZones }}</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Agronomic Traits -->
+        <section class="variety-info-card" *ngIf="variety.potentialYieldMin || variety.potentialYieldMax || variety.maturityDays || variety.daysTo50PercentFlowering || variety.seedRateKgPerHa || variety.spacingCm || variety.soilType || variety.plantingCalendar || variety.fertilizerRate">
+          <h2 class="variety-info-heading">
+            Production Details
+          </h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+            <div *ngIf="variety.potentialYieldMin || variety.potentialYieldMax">
+              <p class="text-sm font-medium text-gray-500 mb-1">Potential Yield</p>
+              <p class="text-base text-gray-900">
+                {{ variety.potentialYieldMin && variety.potentialYieldMax 
+                  ? variety.potentialYieldMin + ' - ' + variety.potentialYieldMax + ' ton/ha'
+                  : variety.potentialYieldMin 
+                  ? 'Min: ' + variety.potentialYieldMin + ' ton/ha'
+                  : 'Max: ' + variety.potentialYieldMax + ' ton/ha' }}
+              </p>
+            </div>
+            <div *ngIf="variety.maturityDays">
+              <p class="text-sm font-medium text-gray-500 mb-1">Maturity Days</p>
+              <p class="text-base text-gray-900">{{ variety.maturityDays }} days</p>
+            </div>
+            <!-- <div *ngIf="variety.daysTo50PercentFlowering">
+              <p class="text-sm font-medium text-gray-500 mb-1">Days to 50% Flowering</p>
+              <p class="text-base text-gray-900">{{ variety.daysTo50PercentFlowering }} days</p>
+            </div> -->
+            <div *ngIf="variety.seedRateKgPerHa">
+              <p class="text-sm font-medium text-gray-500 mb-1">Seed Rate</p>
+              <p class="text-base text-gray-900">{{ variety.seedRateKgPerHa }} kg/ha</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Morphological Characteristics -->
+        <section class="variety-info-card" *ngIf="variety.growthHabit || variety.plantHeight || variety.flowerColor || variety.seedShape || variety.seedColor || variety.seedSize || variety.color || variety.distinctiveCharacters || variety.specialAttributes">
+          <h2 class="variety-info-heading">
+            Physical Characteristics
+          </h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+            <div *ngIf="variety.growthHabit">
+              <p class="text-sm font-medium text-gray-500 mb-1">Growth Habit</p>
+              <p class="text-base text-gray-900">{{ variety.growthHabit }}</p>
+            </div>
+            <div *ngIf="variety.plantHeight">
+              <p class="text-sm font-medium text-gray-500 mb-1">Plant Height</p>
+              <p class="text-base text-gray-900">{{ variety.plantHeight }}</p>
+            </div>
+            <div *ngIf="variety.flowerColor">
+              <p class="text-sm font-medium text-gray-500 mb-1">Flower Color</p>
+              <p class="text-base text-gray-900">{{ variety.flowerColor }}</p>
+            </div>
+            <div *ngIf="variety.seedShape">
+              <p class="text-sm font-medium text-gray-500 mb-1">Seed Shape</p>
+              <p class="text-base text-gray-900">{{ variety.seedShape }}</p>
+            </div>
+            <div *ngIf="variety.seedColor">
+              <p class="text-sm font-medium text-gray-500 mb-1">Seed Color</p>
+              <p class="text-base text-gray-900">{{ variety.seedColor }}</p>
+            </div>
+            <div *ngIf="variety.seedSize">
+              <p class="text-sm font-medium text-gray-500 mb-1">Seed Size</p>
+              <p class="text-base text-gray-900">{{ variety.seedSize }}</p>
+            </div>
+            <div *ngIf="variety.color">
+              <p class="text-sm font-medium text-gray-500 mb-1">Color</p>
+              <p class="text-base text-gray-900">{{ variety.color }}</p>
+            </div>
+            <div *ngIf="variety.distinctiveCharacters">
+              <p class="text-sm font-medium text-gray-500 mb-1">Distinctive Characters</p>
+              <p class="text-base text-gray-900 whitespace-pre-line">{{ variety.distinctiveCharacters }}</p>
+            </div>
+            <div *ngIf="variety.specialAttributes">
+              <p class="text-sm font-medium text-gray-500 mb-1">Special Attributes</p>
+              <p class="text-base text-gray-900 whitespace-pre-line">{{ variety.specialAttributes }}</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Utilization -->
+        <section class="variety-info-card" *ngIf="variety.uses || variety.nutritionContent || variety.availability">
+          <h2 class="variety-info-heading">
+            Utilization
+          </h2>
+          <div class="space-y-4">
+            <div *ngIf="variety.uses">
+              <p class="text-sm font-medium text-gray-500 mb-1">Uses</p>
+              <p class="text-base text-gray-900">{{ variety.uses }}</p>
+            </div>
+            <div *ngIf="variety.nutritionContent">
+              <p class="text-sm font-medium text-gray-500 mb-1">Nutrient Contents</p>
+              <p class="text-base text-gray-900">{{ variety.nutritionContent }}</p>
+            </div>
+            <div *ngIf="variety.availability">
+              <p class="text-sm font-medium text-gray-500 mb-1">Availability</p>
+              <p class="text-base text-gray-900">{{ variety.availability }}</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Additional Information -->
+        <section class="variety-info-card" *ngIf="variety.limitation || variety.commercialisationLevel || variety.alternativeVarieties || factSheetUrl">
+          <h2 class="variety-info-heading">
+            Additional Information
+          </h2>
+          <div class="space-y-4">
+            <div *ngIf="variety.limitation">
+              <p class="text-sm font-medium text-gray-500 mb-1">Limitations</p>
+              <p class="text-base text-gray-900 whitespace-pre-line">{{ variety.limitation }}</p>
+            </div>
+            <div *ngIf="variety.commercialisationLevel">
+              <p class="text-sm font-medium text-gray-500 mb-1">Commercialisation Level</p>
+              <p class="text-base text-gray-900">{{ variety.commercialisationLevel }}</p>
+            </div>
+            <div *ngIf="variety.alternativeVarieties">
+              <p class="text-sm font-medium text-gray-500 mb-1">Alternative Varieties</p>
+              <p class="text-base text-gray-900 whitespace-pre-line">{{ variety.alternativeVarieties }}</p>
+            </div>
+            <div>
+              <p class="text-sm font-medium text-gray-500 mb-1">Fact Sheet</p>
+              <a *ngIf="factSheetUrl; else noFactSheet"
+                 [href]="factSheetUrl"
+                 download
+                 target="_blank"
+                 rel="noopener"
+                 class="inline-flex items-center gap-2 text-primary-700 hover:text-primary-900 font-medium underline">
+                <span>Download PDF</span>
+                <span aria-hidden="true">&#8595;</span>
+              </a>
+              <ng-template #noFactSheet>
+                <p class="text-base text-gray-500">Not available</p>
+              </ng-template>
+            </div>
+          </div>
+        </section>
+
+        <!-- GAP by Crop -->
+        <section class="variety-info-card" *ngIf="variety.spacingCm || variety.soilType || variety.plantingCalendar || variety.diseaseAndPestManagement || variety.postHarvestManagement || variety.croppingSystem || variety.fertilizerRate">
+          <h2 class="variety-info-heading">
+            Good Agricultural Practices (GAP)
+          </h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+            <div *ngIf="variety.spacingCm">
+              <p class="text-sm font-medium text-gray-500 mb-1">Spacing</p>
+              <p class="text-base text-gray-900">{{ variety.spacingCm }}</p>
+            </div>
+            <div *ngIf="variety.soilType">
+              <p class="text-sm font-medium text-gray-500 mb-1">Soil Type</p>
+              <p class="text-base text-gray-900">{{ variety.soilType }}</p>
+            </div>
+            <div *ngIf="variety.plantingCalendar" class="md:col-span-2">
+              <p class="text-sm font-medium text-gray-500 mb-1">Planting Calendar</p>
+              <p class="text-base text-gray-900 whitespace-pre-line">{{ variety.plantingCalendar }}</p>
+            </div>
+            <div *ngIf="variety.diseaseAndPestManagement" class="md:col-span-2">
+              <p class="text-sm font-medium text-gray-500 mb-1">Disease and Pest Management</p>
+              <p class="text-base text-gray-900 whitespace-pre-line">{{ variety.diseaseAndPestManagement }}</p>
+            </div>
+            <div *ngIf="variety.postHarvestManagement" class="md:col-span-2">
+              <p class="text-sm font-medium text-gray-500 mb-1">Post-Harvest Management</p>
+              <p class="text-base text-gray-900 whitespace-pre-line">{{ variety.postHarvestManagement }}</p>
+            </div>
+            <div *ngIf="variety.croppingSystem" class="md:col-span-2">
+              <p class="text-sm font-medium text-gray-500 mb-1">Cropping System</p>
+              <p class="text-base text-gray-900">{{ variety.croppingSystem }}</p>
+            </div>
+            <div *ngIf="variety.fertilizerRate" class="md:col-span-2">
+              <p class="text-sm font-medium text-gray-500 mb-1">Fertilizer Rate</p>
+              <p class="text-base text-gray-900 whitespace-pre-line">{{ variety.fertilizerRate }}</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Reaction to Stresses -->
+        <section class="variety-info-card" *ngIf="variety.diseases || variety.pests || variety.temperatureStress || variety.heatStress || variety.droughtStress || variety.floodStress">
+          <h2 class="variety-info-heading">
+            Reaction to Stresses
+          </h2>
+          <div class="space-y-4">
+            <div *ngIf="variety.diseases">
+              <p class="text-sm font-medium text-gray-500 mb-1">Diseases</p>
+              <p class="text-base text-gray-900 whitespace-pre-line">{{ variety.diseases }}</p>
+            </div>
+            <div *ngIf="variety.pests">
+              <p class="text-sm font-medium text-gray-500 mb-1">Pests</p>
+              <p class="text-base text-gray-900 whitespace-pre-line">{{ variety.pests }}</p>
+            </div>
+            <div *ngIf="variety.temperatureStress">
+              <p class="text-sm font-medium text-gray-500 mb-1">Temperature Stress</p>
+              <p class="text-base text-gray-900 whitespace-pre-line">{{ variety.temperatureStress }}</p>
+            </div>
+            <div *ngIf="variety.heatStress">
+              <p class="text-sm font-medium text-gray-500 mb-1">Heat Stress</p>
+              <p class="text-base text-gray-900 whitespace-pre-line">{{ variety.heatStress }}</p>
+            </div>
+            <div *ngIf="variety.droughtStress">
+              <p class="text-sm font-medium text-gray-500 mb-1">Drought Stress</p>
+              <p class="text-base text-gray-900 whitespace-pre-line">{{ variety.droughtStress }}</p>
+            </div>
+            <div *ngIf="variety.floodStress">
+              <p class="text-sm font-medium text-gray-500 mb-1">Flood Stress</p>
+              <p class="text-base text-gray-900 whitespace-pre-line">{{ variety.floodStress }}</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Contact Information -->
+        <section class="variety-info-card sm:col-span-2 xl:col-span-3">
+          <h2 class="variety-info-heading">Images</h2>
+          <div *ngIf="variety.imageUrls?.length; else noVarietyImages"
+               class="grid grid-cols-2 gap-3 sm:grid-cols-3 xl:grid-cols-4">
+            <div *ngFor="let imageUrl of variety.imageUrls" class="aspect-[4/3] overflow-hidden rounded-md bg-gray-100">
+              <img [src]="imageUrl" [alt]="variety.registeredName || variety.varietyReleaseName || 'Variety image'"
+                   class="h-full w-full object-cover" (error)="onImageError($event)" loading="lazy">
+            </div>
+          </div>
+          <ng-template #noVarietyImages>
+            <p class="text-sm text-gray-500">No images available for this variety.</p>
+          </ng-template>
+        </section>
+      </div>
+    </div>
+  </div>
+</div>

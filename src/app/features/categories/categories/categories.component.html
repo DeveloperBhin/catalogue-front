@@ -1,0 +1,251 @@
+<div class="min-h-screen bg-gray-50">
+  <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-12 lg:py-16">
+    <!-- Header Section
+    <div class="mb-10 sm:mb-12 lg:mb-16">
+      <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-3 tracking-tight leading-tight"
+          style="font-family: 'Inter', sans-serif; letter-spacing: -0.02em;">
+        Product Categories
+      </h1>
+      <p class="text-base sm:text-lg text-gray-600 leading-relaxed max-w-2xl"
+         style="font-family: 'Inter', sans-serif;">
+        Browse our catalog by category to find the products you need
+      </p>
+    </div>-->
+
+    <div *ngIf="showSearchModal" class="fixed inset-0 z-50 overflow-y-auto bg-gray-900/60 p-4"
+         (click)="closeSearchModal()">
+      <div class="flex min-h-full items-center justify-center">
+        <section role="dialog" aria-modal="true" aria-labelledby="crop-search-title"
+                 class="w-full max-w-2xl rounded-lg bg-white shadow-2xl"
+                 (click)="$event.stopPropagation()">
+          <div class="flex items-start justify-between border-b border-gray-200 px-5 py-4 sm:px-6">
+            <div>
+              <h2 id="crop-search-title" class="text-lg font-semibold text-gray-900">Search varieties</h2>
+              <p class="mt-1 text-sm text-gray-600">Choose a crop, one or more regions, or both.</p>
+            </div>
+            <button type="button" (click)="closeSearchModal()" aria-label="Close crop search"
+                    class="rounded p-1 text-gray-500 hover:bg-gray-100 hover:text-gray-800 focus:outline-none focus:ring-2 focus:ring-primary-500">
+              <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+              </svg>
+            </button>
+          </div>
+
+          <div class="p-5 sm:p-6">
+    <!-- Product and Region Selection Section -->
+    <div class="bg-white">
+      <h2 class="text-lg font-semibold text-gray-900 mb-4" style="font-family: 'Inter', sans-serif;">
+        Search varieties by crop and region
+      </h2>
+
+      <div class="flex flex-col sm:flex-row gap-4 mb-4 items-end">
+        <!-- Product Selection -->
+        <div class="flex-1 w-full sm:w-auto">
+          <label class="block text-sm font-medium text-gray-700 mb-2" style="font-family: 'Inter', sans-serif;">
+            Select Crop
+          </label>
+          <select
+            [(ngModel)]="selectedProduct"
+            (ngModelChange)="onSelectionChange()"
+            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200 bg-white"
+            style="font-family: 'Inter', sans-serif;">
+            <option value="">-- Select a Crop --</option>
+            <option *ngFor="let product of availableProducts" [value]="product.uid || product.id">
+              {{ product.name }}
+            </option>
+          </select>
+        </div>
+
+        <!-- Region Selection -->
+        <div class="flex-1 w-full sm:w-auto">
+          <label class="block text-sm font-medium text-gray-700 mb-2" style="font-family: 'Inter', sans-serif;">
+            Select Regions (Optional)
+          </label>
+          <div class="relative">
+            <div class="w-full px-4 py-3 border border-gray-300 rounded-lg bg-white min-h-[48px] flex flex-wrap gap-2 items-center cursor-pointer"
+                 (click)="toggleRegionDropdown()">
+              <span *ngIf="selectedRegions.length === 0" class="text-gray-400" style="font-family: 'Inter', sans-serif;">
+                -- Select Regions --
+              </span>
+              <span *ngFor="let regionUid of selectedRegions"
+                    class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-primary-100 text-primary-800">
+                {{ getRegionName(regionUid) }}
+                <button type="button"
+                        (click)="removeRegion(regionUid); $event.stopPropagation()"
+                        class="ml-2 text-primary-600 hover:text-primary-800">
+                  ×
+                </button>
+              </span>
+              <svg class="ml-auto w-5 h-5 text-gray-400 transform transition-transform"
+                   [class.rotate-180]="showRegionDropdown"
+                   fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+              </svg>
+            </div>
+            <!-- Region Dropdown -->
+            <div *ngIf="showRegionDropdown && availableRegions.length > 0"
+                 class="absolute z-10 w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg max-h-48 overflow-y-auto">
+              <ul class="py-1">
+                <li *ngFor="let region of availableRegions"
+                    class="px-3 py-2 hover:bg-gray-100 cursor-pointer text-sm text-gray-700 flex items-center"
+                    style="font-family: 'Inter', sans-serif;">
+                  <input type="checkbox"
+                         [checked]="isRegionSelected(region.uid)"
+                         (change)="toggleRegion(region.uid); $event.stopPropagation()"
+                         (click)="$event.stopPropagation()"
+                         class="mr-2 cursor-pointer">
+                  <span (click)="toggleRegion(region.uid); $event.stopPropagation()" class="flex-1 cursor-pointer">
+                    {{ region.name }}
+                  </span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Search Button -->
+        <div class="w-full sm:w-auto flex-shrink-0">
+          <label class="block text-sm font-medium text-gray-700 mb-2 invisible" style="font-family: 'Inter', sans-serif;">
+            Search
+          </label>
+          <button
+            (click)="searchVarieties()"
+            [disabled]="!selectedProduct && selectedRegions.length === 0"
+            class="w-full sm:w-auto px-6 py-3 bg-primary-600 text-white rounded-lg font-medium hover:bg-primary-700
+                   transition-colors duration-200 disabled:bg-gray-300 disabled:cursor-not-allowed
+                   disabled:text-gray-500 whitespace-nowrap"
+            style="font-family: 'Inter', sans-serif;">
+            Search Varieties
+          </button>
+        </div>
+      </div>
+
+      <!-- Selected Filters Display -->
+      <div *ngIf="selectedProduct || selectedRegions.length > 0" class="mb-4">
+        <div class="flex flex-wrap gap-2">
+              <span *ngIf="selectedProduct"
+                class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+            Crop: {{ getSelectedProductName() }}
+            <button type="button"
+                    (click)="clearProductSelection()"
+                    class="ml-2 text-blue-600 hover:text-blue-800">
+              ×
+            </button>
+          </span>
+          <span *ngFor="let regionName of getSelectedRegionNames()"
+                class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+            {{ regionName }}
+          </span>
+        </div>
+      </div>
+          </div>
+              </div>
+        </section>
+      </div>
+    </div>
+
+    <!-- Categories Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-3">
+      <div
+        *ngFor="let category of categories"
+        (click)="navigateToCategory(category)"
+        class="group flex min-w-0 items-center gap-4 bg-white border border-gray-200 rounded-lg p-3 cursor-pointer
+               hover:border-primary-300 hover:shadow-md transition-all duration-200 category-card">
+        <div *ngIf="category.imageUrl" class="category-thumb shrink-0 overflow-hidden rounded-md bg-gray-100">
+          <img
+            [src]="category.imageUrl"
+            [alt]="category.name"
+            class="w-full h-full object-cover category-image"
+            (error)="onImageError($event)"
+            loading="lazy">
+        </div>
+        <div *ngIf="!category.imageUrl" class="category-thumb shrink-0 rounded-md bg-gray-100 flex items-center justify-center">
+          <svg class="w-7 h-7 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path>
+            </svg>
+        </div>
+
+        <div class="min-w-0 flex-1">
+          <h3 class="category-title text-base font-semibold text-gray-900 group-hover:text-primary-600 transition-colors"
+              [title]="category.name">
+            {{ category.name }}
+          </h3>
+          <p *ngIf="category.description" class="category-description mt-1 text-sm text-gray-600"
+             [title]="category.description">
+            {{ category.description }}
+          </p>
+        </div>
+        <svg class="w-4 h-4 text-gray-400 group-hover:text-primary-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+        </svg>
+      </div>
+    </div>
+
+    <section class="mt-12" aria-labelledby="home-products-heading">
+      <div class="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <h2 id="home-products-heading" class="text-xl font-semibold text-gray-900">Explore Crops</h2>
+          <p class="mt-1 text-sm text-gray-600">Compare available varieties and reported yield potential.</p>
+        </div>
+        <div class="flex items-center gap-4">
+          <button type="button" (click)="openSearchModal()" aria-haspopup="dialog"
+                  class="inline-flex items-center gap-2 rounded-md border border-primary-700 px-4 py-2 text-sm font-semibold text-primary-800
+                         hover:bg-primary-50 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2">
+            <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-5.2-5.2m1.7-5.3a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+            </svg>
+            Advanced Search
+          </button>
+          <a routerLink="/products" class="text-sm font-medium text-primary-700 hover:text-primary-800">View all</a>
+        </div>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <article *ngFor="let product of availableProducts"
+                 (click)="navigateToProduct(product)"
+                 (keydown.enter)="navigateToProduct(product)"
+                 tabindex="0"
+                 class="group min-w-0 overflow-hidden rounded-lg border border-gray-200 bg-white cursor-pointer
+                        hover:border-primary-300 hover:shadow-md transition-all duration-200 product-card">
+          <div *ngIf="product.imageUrl" class="product-thumb overflow-hidden bg-gray-100">
+            <img [src]="product.imageUrl" [alt]="product.name" class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                 (error)="onImageError($event)" loading="lazy">
+          </div>
+          <div *ngIf="!product.imageUrl" class="product-thumb bg-gray-100 flex items-center justify-center">
+            <svg class="w-7 h-7 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+            </svg>
+          </div>
+          <div class="min-w-0 p-4">
+            <p class="text-xs font-semibold uppercase text-primary-700">Crop</p>
+            <h3 class="product-title mt-1 text-base font-semibold text-gray-900 group-hover:text-primary-600"
+                [title]="product.name">{{ product.name }}</h3>
+            <p *ngIf="product.description" class="product-description mt-2 text-sm text-gray-600"
+               [title]="product.description">{{ product.description }}</p>
+            <div class="mt-4 grid grid-cols-2 gap-3 border-t border-gray-100 pt-3">
+              <div>
+                <p class="text-xs text-gray-500">Varieties</p>
+                <p class="mt-1 text-sm font-semibold text-gray-900">{{ getCropStats(product)?.varietyCount ?? '...' }}</p>
+              </div>
+              <div>
+                <p class="text-xs text-gray-500">Yield potential</p>
+                <p class="mt-1 text-sm font-semibold text-gray-900">{{ getCropStats(product)?.yieldRange ?? '...' }}</p>
+              </div>
+            </div>
+          </div>
+        </article>
+      </div>
+      <p *ngIf="availableProducts.length === 0" class="rounded-lg border border-dashed border-gray-300 bg-white p-6 text-center text-sm text-gray-600">
+        No crops available.
+      </p>
+    </section>
+
+    <!-- Empty State -->
+    <div *ngIf="categories.length === 0" class="text-center py-20 sm:py-24 lg:py-32">
+      <svg class="w-16 h-16 mx-auto text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      <h3 class="text-xl font-semibold text-gray-900 mb-2">No categories found</h3>
+      <p class="text-gray-600">Try adjusting your search or filter criteria</p>
+    </div>
+  </div>
+</div>

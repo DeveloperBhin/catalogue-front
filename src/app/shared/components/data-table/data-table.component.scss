@@ -1,0 +1,244 @@
+// Data Table Component Styles
+
+.data-table-container {
+  width: 100%;
+  font-family: 'Inter', sans-serif;
+}
+
+// Desktop Table Styles
+.data-table-desktop {
+  width: 100%;
+
+  table {
+    border-collapse: separate;
+    border-spacing: 0;
+  }
+
+  thead {
+    th {
+      position: relative;
+      user-select: none;
+      transition: background-color 0.2s ease;
+
+      &:focus-visible {
+        outline: 2px solid #0A5911;
+        outline-offset: -2px;
+        border-radius: 4px;
+      }
+
+      .sort-icon {
+        transition: transform 0.2s ease, color 0.2s ease;
+        font-size: 0.875rem;
+        min-width: 1rem;
+        display: inline-block;
+      }
+
+      &:hover .sort-icon {
+        color: #0A5911;
+      }
+    }
+  }
+
+  tbody {
+    tr {
+      transition: background-color 0.15s ease, transform 0.1s ease;
+
+      &:focus-visible {
+        outline: 2px solid #0A5911;
+        outline-offset: -2px;
+      }
+
+      &:active {
+        transform: scale(0.998);
+      }
+    }
+  }
+
+  td {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+
+    // Allow text wrapping for long content
+    &.text-wrap {
+      white-space: normal;
+    }
+  }
+}
+
+// Mobile Card Styles
+.data-table-mobile {
+  width: 100%;
+
+  > div > div {
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+
+    &:focus-visible {
+      outline: 2px solid #0A5911;
+      outline-offset: 2px;
+      border-radius: 0.75rem;
+    }
+
+    &:active {
+      transform: scale(0.98);
+    }
+  }
+}
+
+// Loading Skeleton
+.data-table-loading {
+  width: 100%;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+}
+
+.skeleton-loader {
+  padding: 1rem;
+}
+
+.skeleton-header {
+  display: flex;
+  gap: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #e5e7eb;
+  margin-bottom: 1rem;
+}
+
+.skeleton-header-cell {
+  flex: 1;
+  height: 1.5rem;
+  background: linear-gradient(
+    90deg,
+    #f3f4f6 0%,
+    #e5e7eb 50%,
+    #f3f4f6 100%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s ease-in-out infinite;
+  border-radius: 0.25rem;
+}
+
+.skeleton-row {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.skeleton-cell {
+  flex: 1;
+  height: 1rem;
+  background: linear-gradient(
+    90deg,
+    #f3f4f6 0%,
+    #e5e7eb 50%,
+    #f3f4f6 100%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s ease-in-out infinite;
+  border-radius: 0.25rem;
+}
+
+@keyframes skeleton-loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+// Empty State
+.data-table-empty {
+  min-height: 300px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  .empty-icon {
+    opacity: 0.5;
+    filter: grayscale(0.3);
+  }
+}
+
+// Accessibility
+[role="table"] {
+  [role="row"] {
+    &:focus-visible {
+      outline: 2px solid #0A5911;
+      outline-offset: -2px;
+    }
+  }
+
+  [role="columnheader"] {
+    &:focus-visible {
+      outline: 2px solid #0A5911;
+      outline-offset: -2px;
+      border-radius: 4px;
+    }
+  }
+}
+
+// Print Styles
+@media print {
+  .data-table-desktop {
+    table {
+      border: 1px solid #000;
+    }
+
+    thead {
+      background: #f3f4f6 !important;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    tbody tr {
+      page-break-inside: avoid;
+    }
+  }
+
+  .data-table-mobile {
+    display: none;
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 767px) {
+  .data-table-desktop {
+    display: none;
+  }
+}
+
+@media (min-width: 768px) {
+  .data-table-mobile {
+    display: none;
+  }
+}
+
+// High contrast mode support
+@media (prefers-contrast: high) {
+  .data-table-desktop {
+    table {
+      border: 2px solid #000;
+    }
+
+    thead th {
+      border-bottom: 2px solid #000;
+    }
+
+    tbody tr {
+      border-bottom: 1px solid #000;
+    }
+  }
+}
+
+// Reduced motion support
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

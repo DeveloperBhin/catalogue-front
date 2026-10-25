@@ -1,0 +1,7 @@
+<div class="bg-white rounded-lg border border-gray-200 {{ shadowClass }} {{ paddingClass }}">
+  <div *ngIf="title || subtitle" class="mb-4">
+    <h3 *ngIf="title" class="text-xl font-semibold text-gray-900">{{ title }}</h3>
+    <p *ngIf="subtitle" class="text-sm text-gray-600 mt-1">{{ subtitle }}</p>
+  </div>
+  <ng-content></ng-content>
+</div>

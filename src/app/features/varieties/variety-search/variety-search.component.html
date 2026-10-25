@@ -1,0 +1,669 @@
+<div class="min-h-screen bg-gray-50">
+  <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 lg:py-12">
+    <!-- Header -->
+    <div class="mb-6 sm:mb-8">
+      <h1 class="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-2 tracking-tight"
+          style="font-family: 'Inter', sans-serif; letter-spacing: -0.02em;">
+        Variety Search
+      </h1>
+      <p class="text-sm sm:text-base text-gray-600">Search and filter varieties across all products</p>
+    </div>
+
+    <!-- Search Bar -->
+    <div class="mb-6 sm:mb-8">
+      <div class="flex flex-col lg:flex-row gap-4">
+        <div class="flex-1 relative">
+          <input
+            type="text"
+            class="w-full pl-4 sm:pl-5 pr-12 sm:pr-14 py-3.5 sm:py-4 border border-gray-300 rounded-xl
+                   focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent
+                   text-sm sm:text-base shadow-sm hover:border-gray-400 hover:shadow-md
+                   transition-all duration-300 placeholder-gray-400 bg-white"
+            placeholder="Search by name, code, or registered name..."
+            [(ngModel)]="filters.search"
+            (keyup.enter)="search()"
+          />
+          <svg class="absolute right-4 sm:right-5 top-1/2 transform -translate-y-1/2 w-5 h-5 sm:w-6 sm:h-6 text-gray-400 pointer-events-none"
+               fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+          </svg>
+        </div>
+        <button
+          class="px-6 py-3.5 sm:py-4 bg-primary-600 text-white rounded-xl font-medium text-sm sm:text-base
+                 hover:bg-primary-700 transition-colors duration-200 shadow-sm hover:shadow-md
+                 flex items-center justify-center gap-2"
+          (click)="search()">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+          </svg>
+          Search
+        </button>
+        <button
+          class="lg:hidden px-4 py-3.5 sm:py-4 bg-white border border-gray-300 text-gray-700 rounded-xl font-medium text-sm sm:text-base
+                 hover:bg-gray-50 transition-colors duration-200 shadow-sm hover:shadow-md
+                 flex items-center justify-center gap-2"
+          (click)="toggleSidebar()">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+          </svg>
+          Filters
+        </button>
+      </div>
+    </div>
+
+    <!-- Main Content with Sidebar -->
+    <div class="flex flex-col lg:flex-row gap-6">
+      <!-- Mobile Overlay -->
+      <div
+        *ngIf="sidebarOpen && isMobile"
+        class="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden"
+        (click)="toggleSidebar()">
+      </div>
+
+      <!-- Sidebar - Filters -->
+      <aside
+        class="lg:w-80 flex-shrink-0 bg-white rounded-xl shadow-md border border-gray-200 overflow-hidden
+               lg:block"
+        [class.hidden]="isMobile && !sidebarOpen"
+        [class.fixed]="isMobile && sidebarOpen"
+        [class.inset-y-0]="isMobile && sidebarOpen"
+        [class.left-0]="isMobile && sidebarOpen"
+        [class.z-50]="isMobile && sidebarOpen"
+        [class.w-80]="isMobile && sidebarOpen">
+
+        <!-- Sidebar Content -->
+        <div class="relative z-50 lg:z-auto h-full flex flex-col max-h-[calc(100vh-16rem)] lg:max-h-none">
+          <!-- Sidebar Header -->
+          <div class="p-4 sm:p-5 border-b border-gray-200 bg-gray-50 flex items-center justify-between">
+            <h2 class="text-lg font-semibold text-gray-900">Filters</h2>
+            <button
+              class="lg:hidden p-2 hover:bg-gray-200 rounded-lg transition-colors"
+              (click)="toggleSidebar()"
+              aria-label="Close sidebar">
+              <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+              </svg>
+            </button>
+          </div>
+
+          <!-- Scrollable Filter Content -->
+          <div class="flex-1 overflow-y-auto p-4 sm:p-5 space-y-6">
+            <!-- Basic Filters Section -->
+            <div>
+              <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3 pb-2 border-b border-gray-200">
+                Basic Filters
+              </h3>
+              <div class="space-y-4">
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1.5">Variety Type</label>
+                  <select
+                    [(ngModel)]="filters.varietyType"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white">
+                    <option value="">All</option>
+                    <option value="OPV">OPV</option>
+                    <option value="Hybrid">Hybrid</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1.5">License Type</label>
+                  <select
+                    [(ngModel)]="filters.typeOfLicense"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white">
+                    <option value="">All</option>
+                    <option value="Licenced">Licenced</option>
+                    <option value="Open">Open</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1.5">Maintainer Center ID</label>
+                  <input
+                    type="text"
+                    [(ngModel)]="filters.maintainerCenterId"
+                    placeholder="Center UUID"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent" />
+                </div>
+              </div>
+            </div>
+
+            <!-- Release Year Section -->
+            <div>
+              <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3 pb-2 border-b border-gray-200">
+                Release Year
+              </h3>
+              <div class="space-y-4">
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1.5">Min Year</label>
+                  <input
+                    type="number"
+                    [(ngModel)]="filters.yearOfReleaseMin"
+                    placeholder="Min year"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent" />
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1.5">Max Year</label>
+                  <input
+                    type="number"
+                    [(ngModel)]="filters.yearOfReleaseMax"
+                    placeholder="Max year"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent" />
+                </div>
+              </div>
+            </div>
+
+            <!-- Altitude Section -->
+            <div>
+              <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3 pb-2 border-b border-gray-200">
+                Altitude (meters)
+              </h3>
+              <div class="space-y-4">
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1.5">Min Altitude</label>
+                  <input
+                    type="number"
+                    [(ngModel)]="filters.altitudeMin"
+                    placeholder="Min altitude"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent" />
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1.5">Max Altitude</label>
+                  <input
+                    type="number"
+                    [(ngModel)]="filters.altitudeMax"
+                    placeholder="Max altitude"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent" />
+                </div>
+              </div>
+            </div>
+
+            <!-- Rainfall Section -->
+            <div>
+              <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3 pb-2 border-b border-gray-200">
+                Rainfall (mm)
+              </h3>
+              <div class="space-y-4">
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1.5">Min Rainfall</label>
+                  <input
+                    type="number"
+                    [(ngModel)]="filters.rainfallMin"
+                    placeholder="Min rainfall"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent" />
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1.5">Max Rainfall</label>
+                  <input
+                    type="number"
+                    [(ngModel)]="filters.rainfallMax"
+                    placeholder="Max rainfall"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent" />
+                </div>
+              </div>
+            </div>
+
+            <!-- Yield Section -->
+            <div>
+              <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3 pb-2 border-b border-gray-200">
+                Potential Yield (ton/ha)
+              </h3>
+              <div class="space-y-4">
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1.5">Min Yield</label>
+                  <input
+                    type="number"
+                    [(ngModel)]="filters.potentialYieldMin"
+                    placeholder="Min yield"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent" />
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1.5">Max Yield</label>
+                  <input
+                    type="number"
+                    [(ngModel)]="filters.potentialYieldMax"
+                    placeholder="Max yield"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent" />
+                </div>
+              </div>
+            </div>
+
+            <!-- Maturity Section -->
+            <div>
+              <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3 pb-2 border-b border-gray-200">
+                Maturity Days
+              </h3>
+              <div class="space-y-4">
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1.5">Min Days</label>
+                  <input
+                    type="number"
+                    [(ngModel)]="filters.maturityDaysMin"
+                    placeholder="Min days"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent" />
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1.5">Max Days</label>
+                  <input
+                    type="number"
+                    [(ngModel)]="filters.maturityDaysMax"
+                    placeholder="Max days"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent" />
+                </div>
+              </div>
+            </div>
+
+            <!-- Uses Section -->
+            <div>
+              <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3 pb-2 border-b border-gray-200">
+                Utilization
+              </h3>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1.5">Uses (comma-separated)</label>
+                <input
+                  type="text"
+                  [(ngModel)]="usesInput"
+                  placeholder="Food,Fodder,Brew,Oil"
+                  class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent" />
+              </div>
+            </div>
+          </div>
+
+          <!-- Sidebar Actions -->
+          <div class="p-4 sm:p-5 border-t border-gray-200 bg-gray-50 space-y-3">
+            <button
+              class="w-full px-4 py-2.5 bg-primary-600 text-white rounded-lg font-medium text-sm
+                     hover:bg-primary-700 transition-colors duration-200 shadow-sm hover:shadow-md"
+              (click)="search()">
+              Apply Filters
+            </button>
+            <button
+              class="w-full px-4 py-2.5 bg-white border border-gray-300 text-gray-700 rounded-lg font-medium text-sm
+                     hover:bg-gray-50 transition-colors duration-200 shadow-sm hover:shadow-md"
+              (click)="clearFilters()">
+              Clear All
+            </button>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Main Results Area -->
+      <main class="flex-1 min-w-0">
+        <!-- Results Header -->
+        <div class="mb-4 sm:mb-6" *ngIf="pagination">
+          <p class="text-sm text-gray-600">
+            Found <span class="font-semibold text-gray-900">{{ pagination.totalElements }}</span> varieties
+          </p>
+        </div>
+
+        <!-- Loading State -->
+        <div class="text-center py-12" *ngIf="isLoading$ | async">
+          <app-loader type="inline" size="medium" message="Loading varieties..."></app-loader>
+        </div>
+
+        <!-- Results List -->
+        <div *ngIf="!(isLoading$ | async)" class="space-y-4 sm:space-y-6">
+          <ng-container *ngFor="let variety of varieties; let i = index">
+            <div
+              (click)="toggleRow(i)"
+              id="variety-{{ i }}"
+              class="bg-white border border-gray-200 rounded-xl shadow-md overflow-hidden
+                     cursor-pointer transition-all duration-300 hover:shadow-lg"
+              [class.border-primary-300]="isRowExpanded(i)"
+              [class.shadow-lg]="isRowExpanded(i)">
+              <!-- Card Header -->
+              <div class="p-5 sm:p-6" [class.bg-primary-50]="isRowExpanded(i)">
+                <div class="flex items-start justify-between mb-3">
+                  <div class="flex-1 min-w-0 pr-3">
+                    <h3 class="text-lg sm:text-xl font-bold text-gray-900 mb-1"
+                        style="font-family: 'Inter', sans-serif;">
+                      {{ variety.registeredName || variety.varietyReleaseName || variety.commonName || 'Unnamed Variety' }}
+                    </h3>
+                    <p *ngIf="variety.cropName" class="text-sm text-gray-600 mb-2"
+                       style="font-family: 'Inter', sans-serif;">
+                      {{ variety.cropName }}
+                    </p>
+                  </div>
+                  <button
+                    class="ml-3 flex-shrink-0 p-2 -mr-2 touch-target"
+                    (click)="toggleRow(i); $event.stopPropagation()"
+                    aria-label="Toggle details">
+                    <svg class="w-5 h-5 text-gray-400 transition-transform duration-300"
+                         [class.rotate-180]="isRowExpanded(i)"
+                         fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                  </button>
+                </div>
+                <!-- Summary Info -->
+                <div class="grid grid-cols-2 gap-3 mt-3">
+                  <div *ngIf="variety.potentialYieldMin || variety.potentialYieldMax">
+                    <p class="text-xs text-gray-500 mb-1">Potential Yield</p>
+                    <p class="text-sm font-semibold text-gray-900">
+                      {{ variety.potentialYieldMin && variety.potentialYieldMax
+                        ? variety.potentialYieldMin + '-' + variety.potentialYieldMax + ' ton/ha'
+                        : variety.potentialYieldMin
+                        ? 'Min: ' + variety.potentialYieldMin + ' ton/ha'
+                        : 'Max: ' + variety.potentialYieldMax + ' ton/ha' }}
+                    </p>
+                  </div>
+                  <div *ngIf="variety.varietyType">
+                    <p class="text-xs text-gray-500 mb-1">Variety Type</p>
+                    <p class="text-sm font-semibold text-gray-900">{{ variety.varietyType }}</p>
+                  </div>
+                </div>
+                <div class="mt-3 flex flex-wrap gap-2">
+                  <span *ngIf="variety.typeOfLicense"
+                        class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium
+                               bg-blue-100 text-blue-800">
+                    {{ variety.typeOfLicense }}
+                  </span>
+                  <span *ngIf="variety.maintenanceStatus"
+                        class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium"
+                        [class.bg-green-100]="variety.maintenanceStatus === 'Active' || variety.maintenanceStatus === 'Commercial'"
+                        [class.text-green-800]="variety.maintenanceStatus === 'Active' || variety.maintenanceStatus === 'Commercial'"
+                        [class.bg-gray-100]="variety.maintenanceStatus !== 'Active' && variety.maintenanceStatus !== 'Commercial'"
+                        [class.text-gray-800]="variety.maintenanceStatus !== 'Active' && variety.maintenanceStatus !== 'Commercial'">
+                    {{ variety.maintenanceStatus }}
+                  </span>
+                </div>
+              </div>
+
+              <!-- Expanded Details -->
+              <div *ngIf="isRowExpanded(i)" class="border-t border-gray-200 bg-gray-50">
+                <div class="p-5 sm:p-6 space-y-6">
+                  <!-- Basic Information -->
+                  <div>
+                    <h4 class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-3">Basic Information</h4>
+                    <dl class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                      <div *ngIf="variety.varietyOriginalCode">
+                        <dt class="text-xs text-gray-500 uppercase mb-1">Variety Code</dt>
+                        <dd class="text-sm text-gray-900">{{ variety.varietyOriginalCode }}</dd>
+                      </div>
+                      <div *ngIf="variety.localName || variety.commonName">
+                        <dt class="text-xs text-gray-500 uppercase mb-1">Local/Common Name</dt>
+                        <dd class="text-sm text-gray-900">{{ variety.localName || variety.commonName }}</dd>
+                      </div>
+                      <div *ngIf="variety.cropName">
+                        <dt class="text-xs text-gray-500 uppercase mb-1">Crop Name</dt>
+                        <dd class="text-sm text-gray-900">{{ variety.cropName }}</dd>
+                      </div>
+                      <div *ngIf="variety.botanicalName">
+                        <dt class="text-xs text-gray-500 uppercase mb-1">Botanical Name</dt>
+                        <dd class="text-sm text-gray-900 italic">{{ variety.botanicalName }}</dd>
+                      </div>
+                      <div *ngIf="variety.yearOfRelease">
+                        <dt class="text-xs text-gray-500 uppercase mb-1">Year of Release</dt>
+                        <dd class="text-sm text-gray-900">{{ variety.yearOfRelease }}</dd>
+                      </div>
+                      <div *ngIf="variety.releaseEntityOwner">
+                        <dt class="text-xs text-gray-500 uppercase mb-1">Release Entity Owner</dt>
+                        <dd class="text-sm text-gray-900">{{ variety.releaseEntityOwner }}</dd>
+                      </div>
+                      <div *ngIf="variety.maintainerCenterName || variety.maintainer">
+                        <dt class="text-xs text-gray-500 uppercase mb-1">Maintainer Center</dt>
+                        <dd class="text-sm text-gray-900">{{ variety.maintainerCenterName || variety.maintainer }}</dd>
+                      </div>
+                      <div *ngIf="variety.maintenanceStatus">
+                        <dt class="text-xs text-gray-500 uppercase mb-1">Maintenance Status</dt>
+                        <dd class="text-sm text-gray-900">{{ variety.maintenanceStatus }}</dd>
+                      </div>
+                    </dl>
+                  </div>
+
+                  <!-- Growing Areas -->
+                  <div *ngIf="variety.productionAltitudeMin || variety.productionAltitudeMax || variety.rainfallMin || variety.rainfallMax || (variety.regionNames && variety.regionNames.length > 0)">
+                    <h4 class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-3">Growing Areas</h4>
+                    <dl class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                      <div *ngIf="variety.productionAltitudeMin || variety.productionAltitudeMax">
+                        <dt class="text-xs text-gray-500 uppercase mb-1">Altitude Range</dt>
+                        <dd class="text-sm text-gray-900">
+                          {{ variety.productionAltitudeMin && variety.productionAltitudeMax
+                            ? variety.productionAltitudeMin + ' - ' + variety.productionAltitudeMax + ' m'
+                            : variety.productionAltitudeMin
+                            ? 'Min: ' + variety.productionAltitudeMin + ' m'
+                            : 'Max: ' + variety.productionAltitudeMax + ' m' }}
+                        </dd>
+                      </div>
+                      <div *ngIf="variety.rainfallMin || variety.rainfallMax">
+                        <dt class="text-xs text-gray-500 uppercase mb-1">Rainfall Range</dt>
+                        <dd class="text-sm text-gray-900">
+                          {{ variety.rainfallMin && variety.rainfallMax
+                            ? variety.rainfallMin + ' - ' + variety.rainfallMax + ' mm'
+                            : variety.rainfallMin
+                            ? 'Min: ' + variety.rainfallMin + ' mm'
+                            : 'Max: ' + variety.rainfallMax + ' mm' }}
+                        </dd>
+                      </div>
+                      <div *ngIf="variety.regionNames && variety.regionNames.length > 0" class="md:col-span-2">
+                        <dt class="text-xs text-gray-500 uppercase mb-1">Regions</dt>
+                        <dd class="text-sm text-gray-900">
+                          <div class="flex flex-wrap gap-2 mt-1">
+                            <span *ngFor="let region of variety.regionNames"
+                                  class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                              {{ region }}
+                            </span>
+                          </div>
+                        </dd>
+                      </div>
+                    </dl>
+                  </div>
+
+                  <!-- Agronomic Traits -->
+                  <div *ngIf="variety.potentialYieldMin || variety.potentialYieldMax || variety.maturityDays || variety.daysTo50PercentFlowering || variety.seedRateKgPerHa">
+                    <h4 class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-3">Agronomic Traits</h4>
+                    <dl class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                      <div *ngIf="variety.potentialYieldMin || variety.potentialYieldMax">
+                        <dt class="text-xs text-gray-500 uppercase mb-1">Potential Yield</dt>
+                        <dd class="text-sm text-gray-900">
+                          {{ variety.potentialYieldMin && variety.potentialYieldMax
+                            ? variety.potentialYieldMin + ' - ' + variety.potentialYieldMax + ' ton/ha'
+                            : variety.potentialYieldMin
+                            ? 'Min: ' + variety.potentialYieldMin + ' ton/ha'
+                            : 'Max: ' + variety.potentialYieldMax + ' ton/ha' }}
+                        </dd>
+                      </div>
+                      <div *ngIf="variety.maturityDays">
+                        <dt class="text-xs text-gray-500 uppercase mb-1">Maturity Days</dt>
+                        <dd class="text-sm text-gray-900">{{ variety.maturityDays }} days</dd>
+                      </div>
+                      <div *ngIf="variety.daysTo50PercentFlowering">
+                        <dt class="text-xs text-gray-500 uppercase mb-1">Days to 50% Flowering</dt>
+                        <dd class="text-sm text-gray-900">{{ variety.daysTo50PercentFlowering }} days</dd>
+                      </div>
+                      <div *ngIf="variety.seedRateKgPerHa">
+                        <dt class="text-xs text-gray-500 uppercase mb-1">Seed Rate</dt>
+                        <dd class="text-sm text-gray-900">{{ variety.seedRateKgPerHa }} kg/ha</dd>
+                      </div>
+                    </dl>
+                  </div>
+
+                  <!-- Morphological Characteristics -->
+                  <div *ngIf="variety.growthHabit || variety.plantHeight || variety.flowerColor || variety.seedShape || variety.seedColor || variety.seedSize">
+                    <h4 class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-3">Morphological Characteristics</h4>
+                    <dl class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                      <div *ngIf="variety.growthHabit">
+                        <dt class="text-xs text-gray-500 uppercase mb-1">Growth Habit</dt>
+                        <dd class="text-sm text-gray-900">{{ variety.growthHabit }}</dd>
+                      </div>
+                      <div *ngIf="variety.plantHeight">
+                        <dt class="text-xs text-gray-500 uppercase mb-1">Plant Height</dt>
+                        <dd class="text-sm text-gray-900">{{ variety.plantHeight }}</dd>
+                      </div>
+                      <div *ngIf="variety.flowerColor">
+                        <dt class="text-xs text-gray-500 uppercase mb-1">Flower Color</dt>
+                        <dd class="text-sm text-gray-900">{{ variety.flowerColor }}</dd>
+                      </div>
+                      <div *ngIf="variety.seedShape">
+                        <dt class="text-xs text-gray-500 uppercase mb-1">Seed Shape</dt>
+                        <dd class="text-sm text-gray-900">{{ variety.seedShape }}</dd>
+                      </div>
+                      <div *ngIf="variety.seedColor">
+                        <dt class="text-xs text-gray-500 uppercase mb-1">Seed Color</dt>
+                        <dd class="text-sm text-gray-900">{{ variety.seedColor }}</dd>
+                      </div>
+                      <div *ngIf="variety.seedSize">
+                        <dt class="text-xs text-gray-500 uppercase mb-1">Seed Size</dt>
+                        <dd class="text-sm text-gray-900">{{ variety.seedSize }}</dd>
+                      </div>
+                    </dl>
+                  </div>
+
+                  <!-- Utilization -->
+                  <div *ngIf="variety.uses || variety.nutritionContent || variety.availability">
+                    <h4 class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-3">Utilization</h4>
+                    <dl class="space-y-2">
+                      <div *ngIf="variety.uses">
+                        <dt class="text-xs text-gray-500 uppercase mb-1">Uses</dt>
+                        <dd class="text-sm text-gray-900">{{ variety.uses }}</dd>
+                      </div>
+                      <div *ngIf="variety.nutritionContent">
+                        <dt class="text-xs text-gray-500 uppercase mb-1">Nutrition Content</dt>
+                        <dd class="text-sm text-gray-900 whitespace-pre-line">{{ variety.nutritionContent }}</dd>
+                      </div>
+                      <div *ngIf="variety.availability">
+                        <dt class="text-xs text-gray-500 uppercase mb-1">Availability</dt>
+                        <dd class="text-sm text-gray-900">{{ variety.availability }}</dd>
+                      </div>
+                    </dl>
+                  </div>
+
+                  <!-- Additional Information -->
+                  <div *ngIf="variety.specialAttributes || variety.distinctiveCharacters || variety.limitation || variety.color">
+                    <h4 class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-3">Additional Information</h4>
+                    <dl class="space-y-2">
+                      <div *ngIf="variety.specialAttributes">
+                        <dt class="text-xs text-gray-500 uppercase mb-1">Special Attributes</dt>
+                        <dd class="text-sm text-gray-900 whitespace-pre-line">{{ variety.specialAttributes }}</dd>
+                      </div>
+                      <div *ngIf="variety.distinctiveCharacters">
+                        <dt class="text-xs text-gray-500 uppercase mb-1">Distinctive Characters</dt>
+                        <dd class="text-sm text-gray-900 whitespace-pre-line">{{ variety.distinctiveCharacters }}</dd>
+                      </div>
+                      <div *ngIf="variety.limitation">
+                        <dt class="text-xs text-gray-500 uppercase mb-1">Limitations</dt>
+                        <dd class="text-sm text-gray-900 whitespace-pre-line">{{ variety.limitation }}</dd>
+                      </div>
+                      <div *ngIf="variety.color">
+                        <dt class="text-xs text-gray-500 uppercase mb-1">Color</dt>
+                        <dd class="text-sm text-gray-900">{{ variety.color }}</dd>
+                      </div>
+                    </dl>
+                  </div>
+
+                  <!-- GAP by Crop -->
+                  <div *ngIf="variety.spacingCm || variety.soilType || variety.plantingCalendar || variety.diseaseAndPestManagement || variety.postHarvestManagement || variety.croppingSystem || variety.fertilizerRate">
+                    <h4 class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-3">Good Agricultural Practices (GAP)</h4>
+                    <dl class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                      <div *ngIf="variety.spacingCm">
+                        <dt class="text-xs text-gray-500 uppercase mb-1">Spacing</dt>
+                        <dd class="text-sm text-gray-900">{{ variety.spacingCm }}</dd>
+                      </div>
+                      <div *ngIf="variety.soilType">
+                        <dt class="text-xs text-gray-500 uppercase mb-1">Soil Type</dt>
+                        <dd class="text-sm text-gray-900">{{ variety.soilType }}</dd>
+                      </div>
+                      <div *ngIf="variety.plantingCalendar" class="md:col-span-2">
+                        <dt class="text-xs text-gray-500 uppercase mb-1">Planting Calendar</dt>
+                        <dd class="text-sm text-gray-900 whitespace-pre-line">{{ variety.plantingCalendar }}</dd>
+                      </div>
+                      <div *ngIf="variety.diseaseAndPestManagement" class="md:col-span-2">
+                        <dt class="text-xs text-gray-500 uppercase mb-1">Disease and Pest Management</dt>
+                        <dd class="text-sm text-gray-900 whitespace-pre-line">{{ variety.diseaseAndPestManagement }}</dd>
+                      </div>
+                      <div *ngIf="variety.postHarvestManagement" class="md:col-span-2">
+                        <dt class="text-xs text-gray-500 uppercase mb-1">Post-Harvest Management</dt>
+                        <dd class="text-sm text-gray-900 whitespace-pre-line">{{ variety.postHarvestManagement }}</dd>
+                      </div>
+                      <div *ngIf="variety.croppingSystem" class="md:col-span-2">
+                        <dt class="text-xs text-gray-500 uppercase mb-1">Cropping System</dt>
+                        <dd class="text-sm text-gray-900">{{ variety.croppingSystem }}</dd>
+                      </div>
+                      <div *ngIf="variety.fertilizerRate" class="md:col-span-2">
+                        <dt class="text-xs text-gray-500 uppercase mb-1">Fertilizer Rate</dt>
+                        <dd class="text-sm text-gray-900 whitespace-pre-line">{{ variety.fertilizerRate }}</dd>
+                      </div>
+                    </dl>
+                  </div>
+
+                  <!-- Reaction to Stresses -->
+                  <div *ngIf="variety.diseases || variety.pests || variety.temperatureStress || variety.heatStress || variety.droughtStress || variety.floodStress">
+                    <h4 class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-3">Reaction to Stresses</h4>
+                    <dl class="space-y-2">
+                      <div *ngIf="variety.diseases">
+                        <dt class="text-xs text-gray-500 uppercase mb-1">Diseases</dt>
+                        <dd class="text-sm text-gray-900 whitespace-pre-line">{{ variety.diseases }}</dd>
+                      </div>
+                      <div *ngIf="variety.pests">
+                        <dt class="text-xs text-gray-500 uppercase mb-1">Pests</dt>
+                        <dd class="text-sm text-gray-900 whitespace-pre-line">{{ variety.pests }}</dd>
+                      </div>
+                      <div *ngIf="variety.temperatureStress">
+                        <dt class="text-xs text-gray-500 uppercase mb-1">Temperature Stress</dt>
+                        <dd class="text-sm text-gray-900 whitespace-pre-line">{{ variety.temperatureStress }}</dd>
+                      </div>
+                      <div *ngIf="variety.heatStress">
+                        <dt class="text-xs text-gray-500 uppercase mb-1">Heat Stress</dt>
+                        <dd class="text-sm text-gray-900 whitespace-pre-line">{{ variety.heatStress }}</dd>
+                      </div>
+                      <div *ngIf="variety.droughtStress">
+                        <dt class="text-xs text-gray-500 uppercase mb-1">Drought Stress</dt>
+                        <dd class="text-sm text-gray-900 whitespace-pre-line">{{ variety.droughtStress }}</dd>
+                      </div>
+                      <div *ngIf="variety.floodStress">
+                        <dt class="text-xs text-gray-500 uppercase mb-1">Flood Stress</dt>
+                        <dd class="text-sm text-gray-900 whitespace-pre-line">{{ variety.floodStress }}</dd>
+                      </div>
+                    </dl>
+                  </div>
+
+                  <!-- Contact Information -->
+                  <div *ngIf="variety.leadingCentreContacts || variety.alternativeVarieties">
+                    <h4 class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-3">Additional Resources</h4>
+                    <dl class="space-y-2">
+                      <div *ngIf="variety.leadingCentreContacts">
+                        <dt class="text-xs text-gray-500 uppercase mb-1">Leading Centre Contacts</dt>
+                        <dd class="text-sm text-gray-900 whitespace-pre-line">{{ variety.leadingCentreContacts }}</dd>
+                      </div>
+                      <div *ngIf="variety.alternativeVarieties">
+                        <dt class="text-xs text-gray-500 uppercase mb-1">Alternative Varieties</dt>
+                        <dd class="text-sm text-gray-900 whitespace-pre-line">{{ variety.alternativeVarieties }}</dd>
+                      </div>
+                    </dl>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </ng-container>
+
+          <!-- Empty State -->
+          <div *ngIf="varieties.length === 0" class="text-center py-12 bg-white rounded-xl border border-gray-200">
+            <p class="text-gray-600 text-lg">No varieties found. Try adjusting your filters.</p>
+          </div>
+        </div>
+
+        <!-- Pagination -->
+        <div *ngIf="pagination && pagination.totalPages > 1"
+             class="mt-8 flex items-center justify-center gap-4">
+          <button
+            [disabled]="filters.page === 0"
+            (click)="onPageChange((filters.page || 0) - 1)"
+            class="px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white
+                   hover:bg-gray-50 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed
+                   shadow-sm hover:shadow-md">
+            Previous
+          </button>
+          <span class="text-sm text-gray-600">
+            Page <span class="font-semibold text-gray-900">{{ (filters.page || 0) + 1 }}</span> of
+            <span class="font-semibold text-gray-900">{{ pagination.totalPages }}</span>
+          </span>
+          <button
+            [disabled]="(filters.page || 0) >= pagination.totalPages - 1"
+            (click)="onPageChange((filters.page || 0) + 1)"
+            class="px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white
+                   hover:bg-gray-50 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed
+                   shadow-sm hover:shadow-md">
+            Next
+          </button>
+        </div>
+      </main>
+    </div>
+  </div>
+</div>

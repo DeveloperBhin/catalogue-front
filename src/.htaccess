@@ -1,0 +1,59 @@
+# ---------------------------------------------------------------------------
+# cPanel / Apache config for the Angular SPA.
+# Upload next to index.html in the document root (public_html or subdomain).
+#
+# Only mod_rewrite is required. Nothing here uses a directive that Apache
+# forbids in .htaccess context - that is what caused the earlier site-wide
+# 500 (ProxyPassReverse is server-config/vhost only, never .htaccess).
+# ---------------------------------------------------------------------------
+
+RewriteEngine On
+RewriteBase /
+
+# Some cPanel PHP-FPM/CGI setups drop the Authorization header; re-attach it.
+RewriteCond %{HTTP:Authorization} .
+RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
+# --- API proxy -------------------------------------------------------------
+# Browser calls https://<this-domain>/api/... (same origin, so no mixed
+# content). api-proxy.php forwards it server-side to the http-only backend.
+# PHP + curl are available on every cPanel plan, so this always works.
+RewriteRule ^api/ api-proxy.php [L,QSA]
+
+# Image objects. The API returns presigned MinIO URLs on another http-only
+# host; api-proxy.php rewrites them to /media/... so they stay same-origin.
+RewriteRule ^media/ api-proxy.php [L,QSA]
+
+# Faster alternative IF your host has mod_proxy + mod_proxy_http enabled:
+# comment out the line above and uncomment the one below. Do NOT add
+# ProxyPassReverse here - it is illegal in .htaccess and 500s the whole site.
+# RewriteRule ^api/(.*)$ http://41.59.225.78:8018/api/$1 [P,L,QSA]
+
+# --- Angular SPA routing ---------------------------------------------------
+# Anything that is not a real file or directory falls through to index.html.
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^ index.html [L]
+
+# --- Caching (all optional; each guarded so a missing module is ignored) ----
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType text/css               "access plus 1 year"
+  ExpiresByType application/javascript "access plus 1 year"
+  ExpiresByType image/png              "access plus 1 year"
+  ExpiresByType image/jpeg             "access plus 1 year"
+  ExpiresByType image/svg+xml          "access plus 1 year"
+  ExpiresByType font/woff2             "access plus 1 year"
+  ExpiresByType text/html              "access plus 0 seconds"
+</IfModule>
+
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css application/javascript application/json image/svg+xml
+</IfModule>
+
+# index.html must not be cached, or browsers keep requesting stale bundle names.
+<IfModule mod_headers.c>
+  <FilesMatch "index\.html$">
+    Header set Cache-Control "no-cache, no-store, must-revalidate"
+  </FilesMatch>
+</IfModule>

@@ -1,0 +1,177 @@
+<div class="auth-page">
+  <div class="auth-card login-card">
+
+    <!-- LEFT SIDE - IMAGE SLIDER -->
+    <div class="auth-slider d-none d-md-block">
+  <img
+  src="assets/images/tari-logo.png"
+  alt="TARI"
+  class="auth-side-image"
+/>
+
+      <div class="slider-overlay">
+        <div class="slider-content">
+          
+
+          <h2>{{ 'AUTH.ORGANIZATION' | translate }}</h2>
+          <p>{{ 'AUTH.SYSTEM_NAME' | translate }}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT SIDE - LOGIN -->
+    <div class="auth-form-section">
+
+      <!-- TOP ACTIONS -->
+      <div class="auth-actions">
+        <action-buttons
+          class="d-flex"
+          [actionButtons]="utilityButtons">
+        </action-buttons>
+      </div>
+
+      <!-- BRAND -->
+      <div class="brand-header">
+        <img
+          src="assets/images/tari-logo.png"
+          alt="TARI Logo"
+          class="brand-logo"
+        />
+
+        <div class="brand-text">
+          <h2>{{ 'AUTH.ORGANIZATION' | translate }}</h2>
+          <p>{{ 'AUTH.SYSTEM_NAME' | translate }}</p>
+        </div>
+      </div>
+
+      <!-- LOGIN HEADING -->
+      <div class="form-heading">
+        <span class="portal-label">TARI-Catalogue</span>
+
+        <h1>{{ 'AUTH.WELCOME_BACK' | translate }}</h1>
+        <p>{{ 'AUTH.LOGIN_DESCRIPTION' | translate }}</p>
+      </div>
+
+      <!-- ERROR MESSAGE -->
+      <div
+        *ngIf="errorMessage"
+        class="error-alert"
+        role="alert">
+        <span class="material-symbols-outlined">error</span>
+        <span>{{ errorMessage | translate }}</span>
+      </div>
+
+      <!-- LOGIN FORM -->
+      <form
+        [formGroup]="form"
+        (ngSubmit)="submit()"
+        novalidate>
+
+        <!-- EMAIL -->
+        <div class="form-group">
+          <label for="loginEmail">
+            {{ 'AUTH.EMAIL' | translate }}
+          </label>
+
+          <div
+            class="input-wrapper"
+            [class.input-error]="
+              f['email'].touched && f['email'].invalid
+            ">
+            <span class="material-symbols-outlined input-icon">
+              mail
+            </span>
+
+            <input
+              id="loginEmail"
+              type="email"
+              formControlName="email"
+              autocomplete="email"
+              placeholder="name@tari.go.tz"
+            />
+          </div>
+
+          <small
+            *ngIf="f['email'].touched && f['email'].invalid"
+            class="field-error">
+            {{ 'AUTH.INVALID_EMAIL' | translate }}
+          </small>
+        </div>
+
+        <!-- PASSWORD -->
+        <div class="form-group">
+          <label for="loginPassword">
+            {{ 'AUTH.PASSWORD' | translate }}
+          </label>
+
+          <div
+            class="input-wrapper"
+            [class.input-error]="
+              f['password'].touched && f['password'].invalid
+            ">
+            <span class="material-symbols-outlined input-icon">
+              lock
+            </span>
+
+            <input
+              id="loginPassword"
+              formControlName="password"
+              [type]="showPassword ? 'text' : 'password'"
+              autocomplete="current-password"
+              [placeholder]="'AUTH.PASSWORD' | translate"
+            />
+
+            <button
+              type="button"
+              class="password-toggle"
+              (click)="showPassword = !showPassword"
+              [attr.aria-label]="
+                showPassword ? 'Hide password' : 'Show password'
+              "
+              [attr.aria-pressed]="showPassword">
+              <span class="material-symbols-outlined">
+                {{ showPassword ? 'visibility_off' : 'visibility' }}
+              </span>
+            </button>
+          </div>
+
+          <small
+            *ngIf="f['password'].touched && f['password'].invalid"
+            class="field-error">
+            {{ 'AUTH.FIELD_REQUIRED' | translate }}
+          </small>
+        </div>
+
+        <!-- FORGOT PASSWORD -->
+        <div class="form-options">
+          <a
+            routerLink="/auth/forgot-password"
+            class="forgot-password">
+            {{ 'AUTH.FORGOT_PASSWORD' | translate }}
+          </a>
+        </div>
+
+        <!-- LOGIN BUTTON -->
+        <button
+          type="submit"
+          class="submit-btn"
+          [disabled]="isSubmitting">
+          <ng-container *ngIf="!isSubmitting">
+            <span class="material-symbols-outlined">login</span>
+            {{ 'AUTH.SIGN_IN' | translate }}
+          </ng-container>
+
+          <ng-container *ngIf="isSubmitting">
+            <span class="spinner" aria-hidden="true"></span>
+            {{ 'AUTH.SIGNING_IN' | translate }}
+          </ng-container>
+        </button>
+      </form>
+
+      <!-- COPYRIGHT -->
+      <div class="auth-copyright">
+        © TARI Vehicle Management System
+      </div>
+    </div>
+  </div>
+</div>

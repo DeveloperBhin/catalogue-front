@@ -1,0 +1,120 @@
+<div class="data-table-container" #tableContainer>
+  <!-- Loading State -->
+  <div *ngIf="loading" class="data-table-loading">
+    <div class="skeleton-loader">
+      <div class="skeleton-header">
+        <div *ngFor="let col of columns" class="skeleton-header-cell"></div>
+      </div>
+      <div *ngFor="let i of [1,2,3,4,5]" class="skeleton-row">
+        <div *ngFor="let col of columns" class="skeleton-cell"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Desktop Table View -->
+  <div *ngIf="!loading && !isMobile" class="data-table-desktop">
+    <div class="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">
+      <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200" role="table" [attr.aria-label]="'Data table with ' + sortedData.length + ' rows'">
+          <thead class="bg-gradient-to-r from-gray-50 to-gray-100">
+            <tr>
+              <th 
+                *ngFor="let column of columns"
+                [class]="'px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider border-b border-gray-200 ' + (column.headerClass || '')"
+                [style.width]="column.width"
+                [style.text-align]="column.align || 'left'"
+                [attr.aria-sort]="currentSort.column === column.key ? (currentSort.direction === 'asc' ? 'ascending' : 'descending') : 'none'"
+                [attr.aria-label]="column.label + (column.sortable && sortable ? '. Click to sort' : '')"
+                role="columnheader"
+                [attr.tabindex]="column.sortable && sortable ? 0 : null"
+                [attr.aria-pressed]="column.sortable && sortable && currentSort.column === column.key ? (currentSort.direction === 'asc' ? 'true' : 'false') : null"
+                (click)="onSort(column)"
+                (keydown.enter)="column.sortable && sortable && onSort(column)"
+                (keydown.space)="column.sortable && sortable && onSort(column); $event.preventDefault()"
+                [class.cursor-pointer]="column.sortable && sortable"
+                [class.hover:bg-gray-100]="column.sortable && sortable">
+                <div class="flex items-center gap-2">
+                  <ng-container *ngIf="column.headerTemplate; else defaultHeader">
+                    <ng-container *ngTemplateOutlet="column.headerTemplate; context: { $implicit: column }"></ng-container>
+                  </ng-container>
+                  <ng-template #defaultHeader>
+                    <span>{{ column.label }}</span>
+                  </ng-template>
+                  <span *ngIf="column.sortable && sortable" 
+                        class="sort-icon text-gray-400 text-sm"
+                        [attr.aria-label]="currentSort.column === column.key ? (currentSort.direction === 'asc' ? 'Sorted ascending' : 'Sorted descending') : 'Not sorted'">
+                    {{ getSortIcon(column) }}
+                  </span>
+                </div>
+              </th>
+            </tr>
+          </thead>
+          <tbody class="bg-white divide-y divide-gray-200" *ngIf="sortedData.length > 0">
+            <tr 
+              *ngFor="let row of sortedData; trackBy: trackByFn; let i = index"
+              [class]="getRowClasses(row, i)"
+              [attr.aria-rowindex]="i + 1"
+              role="row"
+              [attr.tabindex]="rowClick ? 0 : null"
+              (click)="rowClick && onRowClick(row, i)"
+              (keydown.enter)="rowClick && onRowClick(row, i)"
+              (keydown.space)="rowClick && onRowClick(row, i); $event.preventDefault()"
+              class="transition-colors duration-150"
+              [class.cursor-pointer]="rowClick">
+              <td 
+                *ngFor="let column of columns"
+                [class]="'px-6 py-4 text-sm text-gray-900 ' + (column.cellClass || '')"
+                [style.text-align]="column.align || 'left'"
+                role="cell"
+                [attr.aria-label]="column.label + ': ' + getCellValue(row, column)">
+                <ng-container *ngIf="column.template; else defaultCell">
+                  <ng-container *ngTemplateOutlet="column.template; context: { $implicit: row, column: column, index: i }"></ng-container>
+                </ng-container>
+                <ng-template #defaultCell>
+                  <span class="whitespace-nowrap">{{ getCellValue(row, column) || 'N/A' }}</span>
+                </ng-template>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile Card View -->
+  <div *ngIf="!loading && isMobile" class="data-table-mobile">
+    <div class="space-y-4" *ngIf="sortedData && sortedData.length > 0">
+      <div 
+        *ngFor="let row of sortedData; trackBy: trackByFn; let i = index"
+        [class]="'bg-white border border-gray-200 rounded-xl shadow-sm p-4 ' + (rowClick ? 'cursor-pointer hover:shadow-md' : '')"
+        [attr.aria-label]="'Row ' + (i + 1)"
+        role="article"
+        [attr.tabindex]="rowClick ? 0 : null"
+        (click)="rowClick && onRowClick(row, i)"
+        (keydown.enter)="rowClick && onRowClick(row, i)"
+        (keydown.space)="rowClick && onRowClick(row, i); $event.preventDefault()"
+        class="transition-all duration-200">
+        <div *ngFor="let column of columns" class="mb-3 last:mb-0">
+          <div class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">
+            {{ column.label }}
+          </div>
+          <div [class]="'text-sm text-gray-900 ' + (column.cellClass || '')">
+            <ng-container *ngIf="column.template; else defaultMobileCell">
+              <ng-container *ngTemplateOutlet="column.template; context: { $implicit: row, column: column, index: i }"></ng-container>
+            </ng-container>
+            <ng-template #defaultMobileCell>
+              <span>{{ getCellValue(row, column) || 'N/A' }}</span>
+            </ng-template>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Empty State -->
+  <div *ngIf="!loading && (!sortedData || sortedData.length === 0)" 
+       class="data-table-empty bg-white border border-gray-200 rounded-xl shadow-sm p-12 text-center">
+    <div class="empty-icon text-6xl mb-4">{{ emptyIcon }}</div>
+    <p class="text-gray-500 text-lg font-medium">{{ emptyMessage }}</p>
+  </div>
+</div>

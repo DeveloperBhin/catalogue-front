@@ -1,0 +1,482 @@
+{
+  "LOGIN": {
+    "TITLE": "Ingia kwenye akaunti yako",
+    "USERNAME": "Jina la Mtumiaji",
+    "PASSWORD": "Nenosiri",
+    "BUTTON": "Ingia",
+    "NO_ACCOUNT": "Huna akaunti?",
+    "REGISTER": "Jisajili",
+    "FORGOT_PASSWORD": "Umesahau nenosiri?"
+  },
+
+  "REGISTER": {
+    "TITLE": "Usajili",
+    "SUBTITLE": "Fungua akaunti yako ya mfumo",
+    "DESCRIPTION": "Jaza taarifa zako hapa chini ili kufungua akaunti ya mfumo.",
+
+    "FULLNAME": "Jina Kamili",
+    "USERNAME": "Jina la Mtumiaji",
+    "EMAIL": "Barua Pepe",
+    "REGION":"Mkoa",
+    "DISTRICT":"Wilaya",
+    "WARD":"Kata",
+    "VILLAGE":"Kijiji",
+    "PHONE": "Namba ya Simu",
+    "PASSWORD": "Nenosiri",
+    "CONFIRM_PASSWORD": "Thibitisha Nenosiri",
+    "BUTTON": "Fungua Akaunti",
+
+    "HAVE_ACCOUNT": "Tayari una akaunti?",
+    "SIGN_IN": "Ingia"
+  },
+
+  "LANGUAGE": {
+    "ENGLISH": "Kiingereza",
+    "SWAHILI": "Kiswahili"
+  },
+
+  "SYSTEM": {
+    "NAME": "Mfumo wa Usimamizi wa Uzalishaji wa Korosho (CPMS)"
+  },
+  "VALIDATION": {
+  "REQUIRED": "inahitajika"
+},
+
+  "FARMS": {
+    "DASHBOARD_TITLE": "Dashibodi ya Shamba",
+    "GREETING": "Habari za Asubuhi, Mkulima John",
+    "TOTAL_FARMS": "Jumla ya Mashamba",
+    "TOTAL_ACRES": "Jumla ya Ekari",
+    "TOTAL_TREES": "Jumla ya Miti",
+    "ADD_FARM": "Ongeza Shamba",
+    "VIEW_FARM": "Angalia Shamba"
+  },
+  
+  "TREES": {
+    "DASHBOARD_TITLE": "Dashibodi ya Miti",
+    "GREETING": "Habari za Asubuhi, Mkulima John",
+    "AVAILABLE_TREES": "Miti Iliyopo",
+    "AVAILABLE_VARIETIES": "Aina za Korosho",
+    "TOTAL_PRODUCED": "Jumla ya Kilo Zilizozalishwa",
+    "ADD_TREE": "Ongeza Mti",
+    "SEARCH": "Tafuta...",
+    "TREE_ID": "Namba ya Mti",
+    "BARCODE": "Msimbo",
+    "VARIETY": "Aina",
+    "AGE": "Umri",
+    "STATUS": "Hali",
+    "PRODUCTION": "Uzalishaji",
+    "ACTIONS": "Vitendo",
+    "HEALTHY": "Mzima"
+  
+},
+"ADD_FARM": {
+  "TITLE": "Ongeza Shamba",
+  "FARM_NAME": "Jina la Shamba",
+  "FARM_NAME_REQUIRED": "Jina la shamba linahitajika",
+  "PLANTING_DATE": "Tarehe ya Kupanda",
+  "FARM_TYPE": "Aina ya Shamba",
+  "SELECT_FARM_TYPE": "Chagua Aina ya Shamba",
+  "NEW_FARM": "Shamba Jipya",
+  "PRODUCTION_FARM": "Shamba la Uzalishaji",
+  "FARM_SIZE": "Ukubwa wa Shamba",
+  "ACRES": "Ekari",
+  "SUBMIT": "Wasilisha"
+},
+"REGISTER_TREE": {
+  "TITLE": "Sajili Mti",
+  "FARM": "Shamba",
+  "SELECT_FARM": "Chagua Shamba",
+  "PLANTING_DATE": "Tarehe ya Kupanda",
+  "VARIETY": "Aina ya Korosho",
+  "SELECT_VARIETY": "Chagua Aina",
+  "LATITUDE": "Latitudo ya Mti",
+  "LATITUDE_PLACEHOLDER": "Latitudo ya Mti (0°)",
+  "LONGITUDE": "Longitudo ya Mti",
+  "LONGITUDE_PLACEHOLDER": "Longitudo ya Mti (0°)",
+  "STATUS": "Hali",
+  "SELECT_STATUS": "Chagua Hali",
+  "HEALTHY": "Mzima",
+  "DISEASED": "Una Ugonjwa",
+  "DEAD": "Umekufa",
+  "SUBMIT": "Wasilisha"
+},
+
+  "SIDEBAR": {
+    "VEHICLE_MANAGEMENT": "USIMAMIZI WA MAGARI",
+    "DASHBOARD": "Dashibodi",
+    "VEHICLES": "Magari",
+    "REQUESTS": "Maombi",
+    "REPORTS": "Ripoti",
+    "DRIVERS": "Madereva",
+    "INSPECTIONS": "Ukaguzi",
+    "MAINTENANCE": "Matengenezo",
+    "ACCIDENTS": "Ajali",
+    "FUEL": "Mafuta",
+    "USERS": "Watumiaji",
+    "SETTINGS": "Mipangilio",
+    "PROFILE": "Wasifu",
+        "REGISTER":"Sajili",
+        "LOGOUT": "Toka"
+
+  },
+  "DASHBOARD": {
+  "ASSIGNED_VEHICLE": "Gari Nililopewa",
+  "CURRENT_MILEAGE": "Maili ya Sasa",
+  "PENDING_REQUESTS": "Maombi Yanayosubiri",
+  "APPROVED_PERMITS": "Vibali Vilivyoidhinishwa",
+
+  "OPERATIONAL": "Inafanya Kazi",
+  "YEAR": "Mwaka",
+  "STATION": "Kituo",
+  "NEW_MAINTENANCE_REQUEST": "Tuma Ombi la Matengenezo",
+
+  "CHASSIS_NUMBER": "Namba ya Chassis",
+  "ROUTINE_SERVICE": "Huduma ya Kawaida",
+  "ASSIGNED_DRIVER": "Dereva Aliyekabidhiwa",
+  "REMAINING": "zimebaki",
+
+  "MAINTENANCE_HISTORY": "Historia ya Maombi ya Matengenezo na Vibali",
+  "MAINTENANCE_HISTORY_SUBTITLE": "Angalia hatua ya ombi na pakua kibali kilichoidhinishwa",
+  "TOTAL_REQUESTS": "Jumla ya Maombi",
+
+  "REQUEST_NO": "Rejea / Na. ya Ombi",
+  "SERVICE_TYPE": "Aina ya Huduma",
+  "REASON_DESCRIPTION": "Sababu / Maelezo",
+  "DATE": "Tarehe",
+  "COST_TSH": "Gharama (TSH)",
+  "APPROVAL_STATUS": "Hatua ya Idhini",
+  "ACTION": "Vitendo",
+
+  "ROUTINE_SERVICE_TYPE": "Huduma ya Kawaida",
+  "KILOMETER_BASED": "Kulingana na Kilomita",
+  "BREAKDOWN_REPAIR": "Hitilafu / Matengenezo",
+  "EMERGENCY_SERVICE": "Huduma ya Dharura",
+
+  "APPROVED": "Imeidhinishwa",
+  "CENTER_SUPERVISOR": "Msimamizi wa Kituo",
+  "CENTER_DIRECTOR": "Mkurugenzi wa Kituo",
+  "IT_AM_HQ": "IT / AM (Makao Makuu)",
+  "PERMIT_PENDING": "Kibali Bado",
+
+  "USER_COPY": "Nakala ya Mtumiaji",
+  "DOWNLOAD_PERMIT": "Pakua Kibali"
+},
+
+  "MAINTENANCE_REQUEST": {
+    "TITLE": "Tuma Ombi la Huduma au Matengenezo",
+    "ASSIGNED_VEHICLE": "Gari Lililotengwa",
+    "SERVICE_TYPE": "Aina ya Huduma",
+    "SELECT_SERVICE_TYPE": "Chagua aina ya huduma",
+    "ROUTINE_SERVICE": "Huduma ya Kawaida (Kulingana na KM)",
+    "BREAKDOWN_REPAIR": "Hitilafu / Matengenezo",
+    "EMERGENCY_SERVICE": "Huduma ya Dharura",
+    "OTHER": "Nyingine",
+    "CURRENT_MILEAGE": "Maili ya Sasa (KM)",
+    "CURRENT_MILEAGE_PLACEHOLDER": "Weka maili ya sasa",
+    "DESCRIPTION": "Sababu / Maelezo ya Matengenezo",
+    "DESCRIPTION_PLACEHOLDER": "Eleza hitilafu au vitu vinavyohitaji kubadilishwa (mfano: Oil, Oil Filter, Brake Pads, n.k.)",
+    "ESTIMATED_COST": "Makadirio ya Gharama (TSh)",
+    "COST_PLACEHOLDER": "Mfano: 450,000",
+    "SERVICE_TYPE_REQUIRED": "Aina ya huduma inahitajika",
+    "MILEAGE_REQUIRED": "Maili ya sasa inahitajika",
+    "DESCRIPTION_REQUIRED": "Maelezo ya matengenezo yanahitajika",
+    "INVALID_COST": "Weka makadirio sahihi ya gharama",
+    "SUBMIT": "Wasilisha Ombi"
+  },
+
+  "COMMON": {
+    "CANCEL": "Sitisha",
+    "CLOSE": "Funga"
+  },
+  "CENTER_SUPERVISOR": {
+  "DASHBOARD": "Dashibodi",
+  "ROLE": "Msimamizi wa Kituo",
+
+  "WELCOME_MESSAGE": "Karibu TARI-VMS. Mfumo huu unapatikana pia kwenye programu ya simu.",
+
+  "SUMMARY": "Muhtasari wa shughuli kulingana na jukumu lako.",
+
+  "DOWNLOAD_REPORT": "Ripoti ya Kituo Chako",
+
+  "TOTAL_VEHICLES": "Jumla ya Magari",
+  "OPERATIONAL_VEHICLES": "Yanayofanya Kazi",
+  "OUT_OF_SERVICE": "Nje ya Huduma",
+  "PENDING_REQUESTS": "Maombi Yanayosubiri",
+  "NEED_DECISION": "yanahitaji uamuzi wako",
+
+  "RECENT_REQUESTS": "Maombi ya Karibuni",
+  "VEHICLES": "Magari",
+  "REQUESTS": "Maombi",
+
+  "VIEW_ALL": "Angalia Zote",
+
+  "ROUTINE_SERVICE": "Huduma ya Kawaida (KM-based)",
+  "BREAKDOWN_REPAIR": "Ukarabati wa Hitilafu",
+  "EMERGENCY_SERVICE": "Huduma ya Dharura",
+
+  "PENDING": "Inasubiri",
+  "APPROVED": "Imeidhinishwa",
+
+  "OPERATIONAL": "Inafanya Kazi",
+  "UNDER_SERVICE": "Chini ya Huduma",
+  "NO_REQUESTS": "Hakuna maombi ya matengenezo yaliyopatikana.",
+"NO_VEHICLES": "Hakuna magari yaliyopatikana katika kituo hiki."
+},
+"VEHICLES": {
+  "TITLE": "Magari",
+  "DESCRIPTION": "Kwa faragha ya madereva, jina halionyeshwi — Check No pekee ndiyo inayotumika kuwatambua.",
+  "SEARCH": "Tafuta...",
+  "VEHICLE_NUMBER": "Namba ya Gari",
+  "TYPE_MODEL": "Aina / Model",
+  "MILEAGE": "Mafuta / Mwendo (KM)",
+  "STATUS": "Hali",
+  "CENTER": "Kituo",
+  "CHECK_NO": "Check No",
+  "OPERATIONAL": "Inafanya Kazi",
+  "UNDER_SERVICE": "Chini ya Huduma",
+  "NO_VEHICLES": "Hakuna magari yaliyopatikana"
+},
+
+  "APPROVAL": {
+    "TITLE": "Ukaguzi",
+    "DESCRIPTION": "Fuatilia hatua za uidhinishaji wa kila ombi.",
+
+    "REQUESTED_BY": "Ombi la",
+
+    "DRIVER_REQUESTED": "Dereva Ameomba",
+    "CENTER_SUPERVISOR": "Msimamizi wa Kituo",
+    "CENTER_DIRECTOR": "Mkurugenzi wa Kituo",
+
+    "RECOMMEND": "Pendekeza",
+    "REJECT": "Kataa",
+
+    "STATUS_PENDING": "Inasubiri",
+    "STATUS_APPROVED": "Imeidhinishwa",
+    "STATUS_REJECTED": "Imekataliwa",
+
+    "SERVICE_ROUTINE": "Huduma ya Kawaida (KM-based)",
+    "SERVICE_REPAIR": "Ukarabati wa Hitilafu",
+    "SERVICE_EMERGENCY": "Huduma ya Dharura",
+
+    "DATE_TODAY_0842": "Leo, 08:42",
+    "DATE_YESTERDAY_1410": "Jana, 14:10",
+    "DATE_TODAY_0715": "Leo, 07:15",
+
+    "DESCRIPTION_ROUTINE": "Gari limefikisha KM 85,000 - linahitaji service ya kawaida kabla ya safari ya Dodoma.",
+    "DESCRIPTION_REPAIR": "Breki za nyuma zinatoa mlio - inahitaji ukaguzi wa haraka.",
+    "DESCRIPTION_EMERGENCY": "Gari limesimama njiani kutoka shambani - linahitaji msaada wa dharura.",
+
+    "NO_APPROVALS": "Hakuna Uidhinishaji Unaosubiri",
+    "NO_APPROVALS_DESCRIPTION": "Kwa sasa hakuna maombi yanayohitaji uidhinishaji wako."
+  },
+  
+
+  "CENTER_DIRECTOR": {
+    "DASHBOARD": "Dashibodi",
+    "ROLE": "Mkurugenzi wa Kituo",
+    "WELCOME_MESSAGE": "Karibu TARI-VMS. Mfumo huu unapatikana pia kwenye programu ya simu.",
+    "SUMMARY": "Muhtasari wa shughuli kulingana na jukumu lako.",
+    "DOWNLOAD_REPORT": "Ripoti ya Kituo Chako",
+    "TOTAL_VEHICLES": "Jumla ya Magari",
+    "OPERATIONAL": "Inafanya Kazi",
+    "UNDER_SERVICE": "Chini ya Huduma",
+    "PENDING_REQUESTS": "Maombi Yanosubiri",
+    "NEED_DECISION": "yanahitaji uamuzi wako",
+    "RECENT_REQUESTS": "Maombi ya Karibuni",
+    "VIEW_ALL": "Angalia Zote",
+    "REQUESTS": "Maombi",
+    "ROUTINE_SERVICE": "Huduma ya Kawaida (KM-based)",
+    "BREAKDOWN_REPAIR": "Ukarabati wa Hitilafu",
+    "EMERGENCY_SERVICE": "Huduma ya Dharura",
+    "PENDING": "Inasubiri",
+    "APPROVED": "Imeidhinishwa",
+    "REJECTED": "Imekataliwa"
+
+  },
+ 
+  
+  "APPROVAL": {
+    "TITLE": "Maombi",
+    "DESCRIPTION": "Fuatilia na utoe uamuzi wa mwisho kwa kila ombi.",
+    "REQUESTED_BY": "Ombi la",
+    "DRIVER_REQUESTED": "Dereva Ameomba",
+    "CENTER_SUPERVISOR": "Msimamizi wa Kituo",
+    "CENTER_DIRECTOR": "Mkurugenzi wa Kituo",
+    "PENDING": "Inasubiri",
+    "APPROVED": "Imeidhinishwa",
+    "REJECTED": "Imekataliwa",
+    "APPROVE": "Idhinisha",
+    "REJECT": "Kataa",
+    "NO_APPROVALS": "Hakuna maombi",
+    "NO_APPROVALS_DESCRIPTION": "Hakuna maombi ya kuonyesha kwa sasa.",
+    "ROUTINE_SERVICE": "Huduma ya Kawaida (KM-based)",
+    "BREAKDOWN_REPAIR": "Ukarabati wa Hitilafu",
+    "DESC_1001": "Gari limefikisha KM 85,000 - linahitaji service ya kawaida kabla ya safari ya Dodoma.",
+    "DESC_1002": "Breki za nyuma zinatoa mlio - zinahitaji ukaguzi wa haraka."
+  },
+
+  "TRANSPORT_OFFICER": {
+    "DASHBOARD": "Dashibodi",
+    "ROLE": "Afisa Usafirishaji (TO)",
+    "WELCOME_MESSAGE": "Karibu TARI-VMS. Mfumo huu unapatikana pia kwenye programu ya simu.",
+    "SUMMARY": "Muhtasari wa shughuli kulingana na jukumu lako.",
+    "DOWNLOAD_REPORT": "Ripoti ya Vituo Vyote",
+    "TOTAL_CENTERS": "Vituo Vyote",
+    "TOTAL_VEHICLES": "Jumla ya Magari (Nchi Nzima)",
+    "OUT_OF_SERVICE": "Nje ya Huduma",
+    "PENDING_REQUESTS": "Maombi Yanayosubiri Uamuzi",
+    "AWAITING_DECISION": "kwenye zamu yako",
+    "RECENT_REQUESTS": "Maombi ya Karibuni",
+    "VEHICLES": "Magari",
+    "VIEW_ALL": "Angalia Zote",
+    "REQUESTS": "Maombi",
+    "ROUTINE_SERVICE": "Huduma ya Kawaida (KM-based)",
+    "BREAKDOWN_REPAIR": "Ukarabati wa Hitilafu",
+    "EMERGENCY_SERVICE": "Huduma ya Dharura",
+    "PENDING": "Inasubiri",
+    "APPROVED": "Imeidhinishwa",
+    "REJECTED": "Imekataliwa",
+    "OPERATIONAL": "Inafanya Kazi",
+    "UNDER_SERVICE": "Chini ya Huduma",
+    "NO_REQUESTS": "Hakuna maombi kwa sasa.",
+    "NO_VEHICLES": "Hakuna magari kwa sasa."
+  },
+  
+
+  "ADMIN_MANAGER": {
+    "DASHBOARD": "Dashibodi",
+    "ROLE": "Meneja wa Utawala (AM)",
+    "SUMMARY": "Muhtasari wa shughuli kulingana na jukumu lako.",
+    "DOWNLOAD_REPORT": "Ripoti ya Vituo Vyote",
+
+    "TOTAL_CENTERS": "Vituo Vyote",
+    "TOTAL_VEHICLES": "Jumla ya Magari (Nchi Nzima)",
+    "UNDER_SERVICE": "Nje ya Huduma",
+    "PENDING_REQUESTS": "Maombi Yanayosubiri Uamuzi",
+    "NEED_DECISION": "Kwenye zamu yako",
+
+    "RECENT_REQUESTS": "Maombi ya Karibuni",
+    "VEHICLES": "Magari",
+    "VIEW_ALL": "Angalia Zote",
+
+    "ROUTINE_SERVICE": "Huduma ya Kawaida (KM-based)",
+    "BREAKDOWN_REPAIR": "Ukarabati wa Hitilafu",
+    "EMERGENCY_SERVICE": "Huduma ya Dharura",
+
+    "STATUS_PENDING": "Inasubiri",
+    "STATUS_APPROVED": "Imeidhinishwa",
+    "STATUS_REJECTED": "Imekataliwa",
+    "STATUS_OPERATIONAL": "Inafanya Kazi",
+    "STATUS_UNDER_SERVICE": "Chini ya Huduma",
+
+    "NO_REQUESTS": "Hakuna maombi ya karibuni.",
+    "NO_VEHICLES": "Hakuna magari yanayopatikana."
+  },
+  
+
+  "CENTERS": {
+    "TITLE": "Vituo Vyote",
+    "SUMMARY_TITLE": "Muhtasari wa Vituo",
+    "SUMMARY_DESCRIPTION": "Vituo 21 vya TARI nchini kote.",
+    "CENTER": "Kituo",
+    "VEHICLES": "Magari",
+    "OPERATIONAL": "Yanayofanya Kazi",
+    "UNDER_SERVICE": "Nje ya Huduma",
+    "PENDING_REQUESTS": "Maombi Yanayosubiri",
+    "VIEW": "Angalia",
+    "NO_CENTERS": "Hakuna vituo vinavyopatikana."
+  },
+
+  "DIRECTOR_HR": {
+    "DASHBOARD": "Dashibodi",
+    "ROLE": "Mkurugenzi wa Rasilimali Watu (DRAM)",
+    "HEAD_OFFICE": "Makao Makuu",
+    "WELCOME_MESSAGE": "Karibu TARI-VMS. Mfumo huu unapatikana pia kwenye programu ya simu.",
+    "SUMMARY": "Muhtasari wa shughuli kulingana na jukumu lako.",
+    "DOWNLOAD_REPORT": "Ripoti ya Vituo Vyote",
+    "TOTAL_CENTERS": "Vituo Vyote",
+    "TOTAL_VEHICLES": "Magari Yote Nchini",
+    "OPERATIONAL": "Yanayofanya Kazi",
+    "OPERATIONAL_PERCENT": "68%",
+    "MONTHLY_REQUESTS": "Maombi ya Mwezi Huu",
+    "RECENT_REQUESTS": "Maombi ya Karibuni",
+    "VEHICLES": "Magari",
+    "VIEW_ALL": "Angalia Zote",
+    "NO_REQUESTS": "Hakuna maombi ya karibuni.",
+    "NO_VEHICLES": "Hakuna magari yanayopatikana."
+  },
+  
+
+  "AUTH": {
+    "ORGANIZATION": "TAASISI YA UTAFITI WA KILIMO TANZANIA (TARI)",
+    "SYSTEM_NAME": "Mfumo wa Usimamizi wa Magari (TARI-VMS)",
+    "WELCOME_BACK": "Karibu Tena",
+    "LOGIN_DESCRIPTION": "Ingia kwenye akaunti yako ya utumishi",
+    "CREATE_ACCOUNT": "Fungua Akaunti",
+    "REGISTER_DESCRIPTION": "Jisajili ili kutumia Mfumo wa Usimamizi wa Magari",
+    "PERSONAL_DETAILS": "Taarifa Binafsi",
+    "WORK_DETAILS": "Taarifa za Kazi",
+    "ACCOUNT_SECURITY": "Usalama wa Akaunti",
+    "FULL_NAME": "Jina Kamili",
+    "EMAIL": "Barua Pepe",
+    "PHONE_NUMBER": "Namba ya Simu",
+    "STAFF_ID": "Namba ya Mtumishi",
+    "CENTER": "Kituo cha TARI",
+    "SELECT_CENTER": "Chagua Kituo cha TARI",
+    "SELECT_ROLE": "Nafasi",
+    "SELECT_ROLE_PLACEHOLDER": "Chagua nafasi yako",
+    "LOADING_ROLES": "Inapakia nafasi...",
+    "ROLE_REQUIRED": "Tafadhali chagua nafasi",
+    "DRIVER_LICENCE": "Leseni ya Udereva / Namba ya Uhakiki",
+    "ROLE_APPROVAL_NOTICE": "Nafasi uliyochagua itahitaji idhini ya msimamizi wa mfumo.",
+    "PASSWORD": "Nenosiri",
+    "CONFIRM_PASSWORD": "Thibitisha Nenosiri",
+    "PASSWORD_MIN_LENGTH": "Nenosiri lazima liwe na angalau herufi 8",
+    "PASSWORD_MISMATCH": "Manenosiri hayalingani",
+    "FIELD_REQUIRED": "Sehemu hii inahitajika",
+    "INVALID_EMAIL": "Weka barua pepe sahihi",
+    "SIGN_IN": "Ingia",
+    "SIGNING_IN": "Inaingia...",
+    "REGISTER": "Jisajili",
+    "CREATING_ACCOUNT": "Inafungua akaunti...",
+    "NO_ACCOUNT": "Huna akaunti?",
+    "ALREADY_HAVE_ACCOUNT": "Tayari una akaunti?",
+    "INVALID_CREDENTIALS": "Barua pepe au nenosiri si sahihi",
+    "EMAIL_EXISTS": "Barua pepe hii tayari imesajiliwa",
+    "LOGIN_FAILED": "Imeshindikana kuingia. Tafadhali jaribu tena.",
+    "REGISTRATION_FAILED": "Usajili umeshindikana. Tafadhali jaribu tena.",
+    "OPTIONS_LOAD_FAILED": "Imeshindikana kupakia nafasi au vituo.",
+    "RETRY": "Jaribu Tena",
+    "FORGOT_PASSWORD":"Umesahau nenosiri ?"
+
+  }
+,
+
+
+  "REQUEST_STATUS": {
+    "APPROVED": "Imeidhinishwa",
+    "PENDING": "Inasubiri Idhini",
+    "REJECTED": "Imekataliwa",
+    "COMPLETED": "Imekamilika",
+    "CANCELLED": "Imeghairiwa"
+  },
+  "VEHICLE_STATUS": {
+    "OPERATIONAL": "Linafanya Kazi",
+    "UNDER_MAINTENANCE": "Liko Matengenezo",
+    "OUT_OF_SERVICE": "Halitumiki",
+    "INACTIVE": "Halifanyi Kazi"
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+

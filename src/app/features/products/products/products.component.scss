@@ -1,0 +1,135 @@
+// Modern Minimal Design Enhancements
+
+// Product Card with Layered Shadows
+.product-card {
+  box-shadow: 
+    0 1px 3px 0 rgba(0, 0, 0, 0.05),
+    0 1px 2px -1px rgba(0, 0, 0, 0.05);
+  
+  &:hover {
+    box-shadow: 
+      0 10px 15px -3px rgba(0, 0, 0, 0.08),
+      0 4px 6px -4px rgba(0, 0, 0, 0.06),
+      0 0 0 1px rgba(14, 165, 233, 0.1);
+  }
+}
+
+// Smooth Image Animation
+.product-image {
+  will-change: transform;
+  backface-visibility: hidden;
+  transform: translateZ(0);
+}
+
+// Enhanced Hover Transition
+.product-card {
+  transition: 
+    transform 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+    border-color 0.3s ease-out;
+}
+
+// Subtle Background Pattern (optional - can be enabled if needed)
+// .product-card::before {
+//   content: '';
+//   position: absolute;
+//   inset: 0;
+//   background-image: 
+//     radial-gradient(circle at 1px 1px, rgba(0, 0, 0, 0.02) 1px, transparent 0);
+//   background-size: 20px 20px;
+//   pointer-events: none;
+//   opacity: 0;
+//   transition: opacity 0.3s ease;
+// }
+
+// .product-card:hover::before {
+//   opacity: 1;
+// }
+
+// Smooth Typography Transitions
+.product-card h3 {
+  transition: color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+// Enhanced Empty State Animation
+.product-card:empty {
+  animation: fadeIn 0.6s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Refined Focus States for Accessibility
+.product-card:focus-visible {
+  outline: 2px solid #0284c7;
+  outline-offset: 4px;
+  border-radius: 1rem;
+}
+
+// Smooth Grid Animation on Load
+.grid > * {
+  animation: slideUp 0.6s ease-out backwards;
+  
+  &:nth-child(1) { animation-delay: 0.05s; }
+  &:nth-child(2) { animation-delay: 0.1s; }
+  &:nth-child(3) { animation-delay: 0.15s; }
+  &:nth-child(4) { animation-delay: 0.2s; }
+  &:nth-child(5) { animation-delay: 0.25s; }
+  &:nth-child(6) { animation-delay: 0.3s; }
+  &:nth-child(7) { animation-delay: 0.35s; }
+  &:nth-child(8) { animation-delay: 0.4s; }
+  &:nth-child(9) { animation-delay: 0.45s; }
+  &:nth-child(10) { animation-delay: 0.5s; }
+  &:nth-child(11) { animation-delay: 0.55s; }
+  &:nth-child(12) { animation-delay: 0.6s; }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Enhanced Category Badge
+.product-card [class*="rounded-full"] {
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+// Refined Image Container
+.product-card > div:first-child {
+  position: relative;
+  
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      180deg,
+      transparent 0%,
+      transparent 60%,
+      rgba(0, 0, 0, 0.03) 100%
+    );
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+  }
+}
+
+.product-card:hover > div:first-child::after {
+  opacity: 1;
+}

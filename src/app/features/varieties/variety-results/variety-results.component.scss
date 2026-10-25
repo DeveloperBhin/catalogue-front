@@ -1,0 +1,535 @@
+// Modern Minimal Design for Product Details Page
+
+// Hero Image Section
+.product-hero {
+  box-shadow:
+    0 10px 15px -3px rgba(0, 0, 0, 0.08),
+    0 4px 6px -4px rgba(0, 0, 0, 0.06);
+
+  img {
+    will-change: transform;
+    backface-visibility: hidden;
+    transform: translateZ(0);
+  }
+}
+
+// Header Card (when no image)
+.product-header-card {
+  box-shadow:
+    0 10px 15px -3px rgba(0, 0, 0, 0.08),
+    0 4px 6px -4px rgba(0, 0, 0, 0.06),
+    0 0 0 1px rgba(0, 0, 0, 0.02);
+
+  transition:
+    box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+// Table Card
+.product-table-card {
+  box-shadow:
+    0 10px 15px -3px rgba(0, 0, 0, 0.08),
+    0 4px 6px -4px rgba(0, 0, 0, 0.06);
+
+  transition:
+    box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+// Table Row Hover Effect
+.product-table-row {
+  transition:
+    background-color 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+    transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+
+  &:hover {
+    transform: translateX(2px);
+  }
+}
+
+// Smooth Back Button Animation
+button[class*="group"] {
+  transition:
+    color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  &:hover {
+    transform: translateX(-2px);
+  }
+}
+
+// Search Input Enhancement
+input[type="text"] {
+  transition:
+    border-color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+
+  &:focus {
+    transform: translateY(-1px);
+  }
+}
+
+// Category Badge Animation
+[class*="rounded-full"] {
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition:
+    background-color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    border-color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+
+  &:hover {
+    transform: scale(1.05);
+  }
+}
+
+// Enhanced Button Styles
+button[class*="bg-primary"] {
+  transition:
+    background-color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  &:hover {
+    box-shadow:
+      0 10px 15px -3px rgba(14, 165, 233, 0.3),
+      0 4px 6px -4px rgba(14, 165, 233, 0.2);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+// Smooth Fade-in Animation for Content
+.product-header-card,
+.product-table-card {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Hero Image Fade-in
+.product-hero {
+  animation: fadeIn 0.8s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+// Refined Focus States for Accessibility
+button:focus-visible,
+input:focus-visible {
+  outline: 2px solid #0284c7;
+  outline-offset: 4px;
+  border-radius: 0.5rem;
+}
+
+// Table Header Styling
+thead {
+  background: linear-gradient(to right, #f9fafb, #f3f4f6);
+}
+
+// Smooth Scroll for Table
+.overflow-x-auto {
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 #f1f5f9;
+
+  &::-webkit-scrollbar {
+    height: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: #f1f5f9;
+    border-radius: 4px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 4px;
+
+    &:hover {
+      background: #94a3b8;
+    }
+  }
+}
+
+// Expandable Row Styles
+.expandable-row {
+  transition:
+    background-color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  &:hover {
+    background-color: #f9fafb;
+    box-shadow:
+      0 4px 6px -1px rgba(0, 0, 0, 0.05),
+      0 2px 4px -2px rgba(0, 0, 0, 0.05);
+  }
+
+  &.bg-primary-50 {
+    background-color: #eff6ff;
+    border-left: 3px solid #0284c7;
+  }
+}
+
+// Expanded Details Row Animation
+.expandable-details-row {
+  animation: slideDown 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+
+  td {
+    animation: fadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+}
+
+@keyframes slideDown {
+  from {
+    max-height: 0;
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    max-height: 1000px;
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Chevron Icon Rotation
+svg[class*="rotate"] {
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+// Expanded Details Content Styling
+.expandable-details-row {
+  dl {
+    dt {
+      transition: color 0.2s ease;
+    }
+
+    dd {
+      transition: color 0.2s ease;
+      word-break: break-word;
+    }
+  }
+}
+
+// Enhanced Table Row Interaction
+.product-table-row {
+  // Removed position: relative and ::before pseudo-element to fix table column alignment
+  // Using border-left on first cell instead (see .product-table-row-first-cell below)
+  
+  &:hover {
+    .product-table-row-first-cell {
+      border-left: 3px solid #0284c7;
+    }
+  }
+
+  &.bg-primary-50 {
+    .product-table-row-first-cell {
+      border-left: 3px solid #0284c7;
+    }
+  }
+}
+
+// First cell border indicator (replaces pseudo-element approach)
+.product-table-row-first-cell {
+  border-left: 3px solid transparent;
+  transition: border-left-color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+// Smooth transitions for all table cells
+.expandable-row td {
+  transition:
+    color 0.2s ease,
+    background-color 0.2s ease;
+}
+
+// Details section grid enhancement
+.expandable-details-row .grid {
+  animation: fadeInUp 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Mobile Card Styles
+.product-variety-card {
+  transition:
+    transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    border-color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  &:active {
+    transform: scale(0.98);
+  }
+
+  &:hover {
+    box-shadow:
+      0 10px 15px -3px rgba(0, 0, 0, 0.1),
+      0 4px 6px -4px rgba(0, 0, 0, 0.05);
+  }
+}
+
+// Touch Target - Minimum 44x44px for mobile
+.touch-target {
+  min-width: 44px;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  -webkit-tap-highlight-color: transparent;
+}
+
+// Mobile Expanded Details Animation
+.expandable-details-mobile {
+  animation: slideDownMobile 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+}
+
+@keyframes slideDownMobile {
+  from {
+    max-height: 0;
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    max-height: 2000px;
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Mobile Card Header Active State
+.product-variety-card [class*="bg-primary-50"] {
+  transition: background-color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+// Mobile Typography Improvements
+@media (max-width: 640px) {
+  .product-variety-card {
+    h3 {
+      font-size: 1rem;
+      line-height: 1.5;
+    }
+
+    p {
+      font-size: 0.875rem;
+      line-height: 1.5;
+    }
+  }
+
+  .expandable-details-mobile {
+    dt {
+      font-size: 0.7rem;
+      margin-bottom: 0.375rem;
+    }
+
+    dd {
+      font-size: 0.875rem;
+      line-height: 1.6;
+      word-break: break-word;
+    }
+  }
+}
+
+// Enhanced Mobile Card Shadows
+@media (max-width: 768px) {
+  .product-variety-card {
+    box-shadow:
+      0 4px 6px -1px rgba(0, 0, 0, 0.1),
+      0 2px 4px -2px rgba(0, 0, 0, 0.06);
+
+    &[class*="shadow-lg"] {
+      box-shadow:
+        0 10px 15px -3px rgba(0, 0, 0, 0.1),
+        0 4px 6px -4px rgba(0, 0, 0, 0.05);
+    }
+  }
+}
+
+// Mobile Search Input Improvements
+@media (max-width: 640px) {
+  input[type="text"] {
+    font-size: 16px; // Prevents zoom on iOS
+    padding: 0.875rem 2.75rem 0.875rem 1rem;
+  }
+}
+
+// Better Mobile Spacing
+@media (max-width: 768px) {
+  .product-variety-card {
+    margin-bottom: 1rem;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}
+
+// Mobile Card Grid Improvements
+@media (max-width: 640px) {
+  .product-variety-card .grid {
+    gap: 0.75rem;
+  }
+}
+
+// Smooth Mobile Interactions
+@media (max-width: 768px) {
+  .product-variety-card {
+    -webkit-tap-highlight-color: rgba(14, 165, 233, 0.1);
+
+    &:active {
+      background-color: #f9fafb;
+    }
+  }
+}
+
+// Mobile Empty State Improvements
+@media (max-width: 640px) {
+  .bg-white[class*="rounded-2xl"] {
+    padding: 2rem 1.5rem;
+
+    svg {
+      width: 3rem;
+      height: 3rem;
+    }
+  }
+}
+
+// Expandable Details Content Scrolling
+.expandable-details-content {
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 #f1f5f9;
+
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: #f1f5f9;
+    border-radius: 4px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 4px;
+
+    &:hover {
+      background: #94a3b8;
+    }
+  }
+
+  // Smooth scrolling
+  scroll-behavior: smooth;
+
+  // Better scrolling on mobile
+  -webkit-overflow-scrolling: touch;
+}
+
+// Details Button Styles - Mobile Cards
+.details-button {
+  min-width: 44px;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(14, 165, 233, 0.1);
+  border: 1px solid rgba(14, 165, 233, 0.2);
+  border-radius: 0.5rem;
+  transition:
+    background-color 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+    border-color 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+    transform 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  -webkit-tap-highlight-color: transparent;
+
+  &:hover {
+    background-color: rgba(14, 165, 233, 0.15);
+    border-color: rgba(14, 165, 233, 0.3);
+    box-shadow: 0 2px 4px rgba(14, 165, 233, 0.1);
+  }
+
+  &:active {
+    transform: scale(0.95);
+    background-color: rgba(14, 165, 233, 0.2);
+  }
+
+  &:focus-visible {
+    outline: 2px solid #0284c7;
+    outline-offset: 2px;
+    border-radius: 0.5rem;
+  }
+
+  // Show text on larger screens
+  @media (min-width: 640px) {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+  }
+
+  // Icon only on mobile
+  @media (max-width: 639px) {
+    span {
+      display: none;
+    }
+  }
+}
+
+// Details Button Styles - Desktop Table
+.details-button-table {
+  min-width: 80px;
+  min-height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(14, 165, 233, 0.1);
+  border: 1px solid rgba(14, 165, 233, 0.2);
+  transition:
+    background-color 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+    border-color 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+    transform 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  -webkit-tap-highlight-color: transparent;
+
+  &:hover {
+    background-color: rgba(14, 165, 233, 0.15);
+    border-color: rgba(14, 165, 233, 0.3);
+    box-shadow: 0 2px 4px rgba(14, 165, 233, 0.1);
+    transform: translateY(-1px);
+  }
+
+  &:active {
+    transform: translateY(0);
+    background-color: rgba(14, 165, 233, 0.2);
+  }
+
+  &:focus-visible {
+    outline: 2px solid #0284c7;
+    outline-offset: 2px;
+  }
+}

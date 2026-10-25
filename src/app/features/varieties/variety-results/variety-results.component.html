@@ -1,0 +1,1167 @@
+<div class="min-h-screen bg-gray-50">
+  <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 lg:py-12">
+    <!-- Loading State -->
+    <div *ngIf="isLoading$ | async" class="text-center py-20">
+      <app-loader type="inline" size="large" message="Searching varieties..."></app-loader>
+    </div>
+
+    <!-- Filter Info Section (shown for all modes) -->
+    <div *ngIf="!(isLoading$ | async) && (selectedProductUid || selectedRegionUids.length > 0)" class="mb-6 sm:mb-8 lg:mb-10">
+      <div class="flex flex-wrap items-center gap-3 mb-4">
+        <div class="text-sm text-gray-600">
+          Showing <span class="font-semibold text-gray-900">{{ filteredVarieties.length }}</span>
+          <span *ngIf="filteredVarieties.length !== 1">varieties</span>
+          <span *ngIf="filteredVarieties.length === 1">variety</span>
+        </div>
+        <div *ngIf="selectedRegionNames.length > 0" class="flex flex-wrap gap-2">
+          <span *ngFor="let regionName of selectedRegionNames"
+                class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+            Region: {{ regionName }}
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Single Product Mode: Product Details -->
+    <div *ngIf="product && !(isLoading$ | async) && searchMode !== 'region-only'">
+      <!-- Hero Image Section - Mobile Optimized -->
+      <div *ngIf="product.imageUrl" class="mb-6 sm:mb-8 lg:mb-10 relative w-full h-56 sm:h-72 md:h-80 lg:h-96 rounded-xl sm:rounded-2xl overflow-hidden
+                                           bg-gradient-to-br from-gray-100 to-gray-200 product-hero">
+        <img
+          [src]="product.imageUrl"
+          [alt]="product.name"
+          class="w-full h-full object-cover"
+          (error)="onImageError($event)"
+          loading="eager">
+        <!-- Gradient Overlay -->
+        <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-black/20 to-transparent"></div>
+        <!-- Category Badge -->
+        <div *ngIf="product.category" class="absolute top-4 right-4 sm:top-6 sm:right-6">
+          <span class="inline-flex items-center px-3 py-1.5 sm:px-4 sm:py-2 rounded-full text-xs sm:text-sm font-medium
+                      bg-white/95 backdrop-blur-sm text-gray-700 border border-gray-200/50 shadow-lg">
+            {{ product.category }}
+          </span>
+        </div>
+        <!-- Product Title Overlay -->
+        <div class="absolute bottom-0 left-0 right-0 p-4 sm:p-6 lg:p-8 xl:p-10">
+          <h1 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-2 sm:mb-3 tracking-tight leading-tight drop-shadow-lg"
+              style="font-family: 'Inter', sans-serif; letter-spacing: -0.02em;">
+            {{ product.name }}
+          </h1>
+          <p *ngIf="product.description" class="text-sm sm:text-base lg:text-lg text-white/95 leading-relaxed max-w-3xl drop-shadow-md line-clamp-2 sm:line-clamp-none"
+             style="font-family: 'Inter', sans-serif;">
+            {{ product.description }}
+          </p>
+        </div>
+      </div>
+
+      <!-- Header Section (when no image) - Mobile Optimized -->
+      <div *ngIf="!product.imageUrl" class="mb-6 sm:mb-8 lg:mb-10 bg-white rounded-xl sm:rounded-2xl shadow-lg border border-gray-200 p-5 sm:p-8 lg:p-10 xl:p-12 product-header-card">
+        <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
+          <div class="flex-1">
+            <h1 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-3 sm:mb-4 tracking-tight leading-tight"
+                style="font-family: 'Inter', sans-serif; letter-spacing: -0.02em;">
+              {{ product.name }}
+            </h1>
+            <p *ngIf="product.description" class="text-sm sm:text-base lg:text-lg text-gray-600 leading-relaxed max-w-3xl"
+               style="font-family: 'Inter', sans-serif;">
+              {{ product.description }}
+            </p>
+          </div>
+          <!-- Category Badge -->
+          <div *ngIf="product.category" class="sm:ml-6 flex-shrink-0">
+            <span class="inline-flex items-center px-3 py-1.5 sm:px-4 sm:py-2 rounded-full text-xs sm:text-sm font-medium
+                        bg-primary-50 text-primary-700 border border-primary-200">
+              {{ product.category }}
+            </span>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- Variety Results - Product Details Card Layout -->
+      <div *ngIf="hasVarieties()" class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
+        <article *ngFor="let variety of filteredVarieties"
+                 (click)="openVarietyPage(variety)"
+                 (keydown.enter)="openVarietyPage(variety)"
+                 tabindex="0"
+                 class="group overflow-hidden rounded-lg border border-gray-200 bg-white cursor-pointer
+                        hover:border-primary-300 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-primary-500">
+          <div *ngIf="variety.imageUrls?.length" class="h-40 overflow-hidden bg-gray-100">
+            <img [src]="variety.imageUrls?.[0]"
+                 [alt]="variety.registeredName || variety.varietyReleaseName || 'Variety image'"
+                 class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                 (error)="onImageError($event)"
+                 loading="lazy">
+          </div>
+          <div *ngIf="!variety.imageUrls?.length" class="flex h-40 items-center justify-center bg-gray-100 text-sm text-gray-400">
+            Image not available
+          </div>
+          <div class="p-4">
+            <div class="flex items-start justify-between gap-3">
+              <div class="min-w-0">
+                <h3 class="truncate text-base font-semibold text-gray-900 group-hover:text-primary-700"
+                    [title]="variety.registeredName || variety.varietyReleaseName">
+                  {{ variety.registeredName || variety.varietyReleaseName || 'Unnamed variety' }}
+                </h3>
+                <p class="mt-1 text-sm text-gray-600">{{ variety.localName || variety.commonName || variety.cropName }}</p>
+              </div>
+              <span *ngIf="variety.maintenanceStatus" class="shrink-0 rounded bg-gray-100 px-2 py-1 text-xs text-gray-700">
+                {{ variety.maintenanceStatus }}
+              </span>
+            </div>
+            <dl class="mt-4 grid grid-cols-2 gap-3 border-t border-gray-100 pt-3">
+              <div>
+                <dt class="text-xs text-gray-500">Release year</dt>
+                <dd class="mt-1 text-sm font-medium text-gray-900">{{ variety.yearOfRelease || 'Not listed' }}</dd>
+              </div>
+              <div>
+                <dt class="text-xs text-gray-500">Potential yield</dt>
+                <dd class="mt-1 text-sm font-medium text-gray-900">
+                  {{ variety.potentialYieldMin && variety.potentialYieldMax
+                    ? variety.potentialYieldMin + '-' + variety.potentialYieldMax + ' t/ha'
+                    : variety.potentialYieldMin
+                    ? 'Min ' + variety.potentialYieldMin + ' t/ha'
+                    : variety.potentialYieldMax
+                    ? 'Max ' + variety.potentialYieldMax + ' t/ha'
+                    : 'Not reported' }}
+                </dd>
+              </div>
+            </dl>
+            <span class="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-primary-700">
+              View variety
+              <svg class="h-4 w-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+              </svg>
+            </span>
+          </div>
+        </article>
+      </div>
+      <div *ngIf="hasVarieties() && filteredVarieties.length === 0"
+           class="rounded-lg border border-gray-200 bg-white p-8 text-center">
+        <p class="font-medium text-gray-800">No varieties match your search</p>
+        <p class="mt-1 text-sm text-gray-600">Try adjusting your search criteria.</p>
+      </div>
+
+      <!-- Legacy expandable card layout retained for region-only results -->
+      <div *ngIf="hasVarieties()" class="hidden">
+        <!-- Empty State -->
+        <div *ngIf="filteredVarieties.length === 0"
+             class="bg-white border border-gray-200 rounded-xl shadow-lg p-8 sm:p-12 text-center">
+          <svg class="mx-auto h-12 w-12 text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+          </svg>
+          <p class="text-gray-600 text-base sm:text-lg font-medium mb-2">No varieties found</p>
+          <p class="text-gray-500 text-sm sm:text-base mb-4">
+            <span *ngIf="selectedProductUid && selectedRegionUids.length > 0">No varieties match the selected product and regions</span>
+            <span *ngIf="selectedProductUid && selectedRegionUids.length === 0">No varieties found for this product</span>
+            <span *ngIf="!selectedProductUid && selectedRegionUids.length > 0">No varieties match the selected regions</span>
+          </p>
+        </div>
+
+        <ng-container *ngFor="let variety of filteredVarieties; let i = index">
+          <div (click)="toggleRow(i)"
+               id="variety-{{ i }}"
+               class="bg-white border border-gray-200 rounded-xl shadow-md overflow-hidden
+                      cursor-pointer transition-all duration-300 product-variety-card"
+               [class.border-primary-300]="isRowExpanded(i)"
+               [class.shadow-lg]="isRowExpanded(i)">
+            <!-- Variety Image (if available) -->
+            <div *ngIf="variety.imageUrls && variety.imageUrls.length > 0"
+                 class="w-full h-40 sm:h-48 overflow-hidden bg-gray-100">
+              <img [src]="variety.imageUrls[0]"
+                   [alt]="variety.registeredName || variety.varietyReleaseName"
+                   class="w-full h-full object-cover"
+                   (error)="onImageError($event)">
+            </div>
+            <!-- Card Header -->
+            <div class="p-4 sm:p-5" [class.bg-primary-50]="isRowExpanded(i)">
+              <div class="flex items-start justify-between mb-3">
+                <div class="flex-1 min-w-0">
+                  <h3 class="text-base font-bold text-gray-900 mb-1 truncate" style="font-family: 'Inter', sans-serif;">
+                    {{ variety.varietyReleaseName }}
+                  </h3>
+                  <p class="text-sm text-gray-600 mb-2" style="font-family: 'Inter', sans-serif;">
+                    {{ variety.cropName }}
+                  </p>
+                </div>
+                <button class="ml-3 flex-shrink-0 px-3 py-2 -mr-2 touch-target details-button"
+                        (click)="toggleRow(i); $event.stopPropagation()"
+                        [attr.aria-label]="isRowExpanded(i) ? 'Hide details' : 'View details'"
+                        [attr.aria-expanded]="isRowExpanded(i)">
+                  <span class="text-xs sm:text-sm font-medium text-primary-700 mr-1.5 hidden sm:inline" style="font-family: 'Inter', sans-serif;">
+                    {{ isRowExpanded(i) ? 'Hide Details' : 'View Details' }}
+                  </span>
+                  <svg class="w-4 h-4 sm:w-5 sm:h-5 text-primary-600 transition-transform duration-300 flex-shrink-0"
+                       [class.rotate-180]="isRowExpanded(i)"
+                       fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                  </svg>
+                </button>
+              </div>
+              <!-- Summary Info - Enhanced -->
+              <div class="grid grid-cols-2 gap-3 mt-3">
+                <div *ngIf="variety.registeredName && variety.registeredName !== variety.varietyReleaseName">
+                  <p class="text-xs text-gray-500 mb-1">Registered Name</p>
+                  <p class="text-sm font-semibold text-gray-900 truncate">{{ variety.registeredName }}</p>
+                </div>
+                <div *ngIf="variety.yearOfRelease">
+                  <p class="text-xs text-gray-500 mb-1">Year of Release</p>
+                  <p class="text-sm font-semibold text-gray-900">{{ variety.yearOfRelease }}</p>
+                </div>
+                <div *ngIf="variety.maintainerCenterName">
+                  <p class="text-xs text-gray-500 mb-1">Maintainer</p>
+                  <p class="text-sm font-semibold text-gray-900 truncate">{{ variety.maintainerCenterName }}</p>
+                </div>
+                <div *ngIf="variety.varietyOriginalCode">
+                  <p class="text-xs text-gray-500 mb-1">Original Code</p>
+                  <p class="text-sm font-semibold text-gray-900">{{ variety.varietyOriginalCode }}</p>
+                </div>
+                <div>
+                  <p class="text-xs text-gray-500 mb-1">Potential Yield</p>
+                  <p class="text-sm font-semibold text-gray-900">
+                    {{ variety.potentialYieldMin && variety.potentialYieldMax
+                      ? variety.potentialYieldMin + '-' + variety.potentialYieldMax + ' ton/ha'
+                      : variety.potentialYieldMin
+                      ? 'Min: ' + variety.potentialYieldMin + ' ton/ha'
+                      : variety.potentialYieldMax
+                      ? 'Max: ' + variety.potentialYieldMax + ' ton/ha'
+                      : 'N/A' }}
+                  </p>
+                </div>
+                <div>
+                  <p class="text-xs text-gray-500 mb-1">Variety Type</p>
+                  <p class="text-sm font-semibold text-gray-900">{{ variety.varietyType || 'N/A' }}</p>
+                </div>
+                <div *ngIf="variety.leadingCentreContacts" class="col-span-2">
+                  <p class="text-xs text-gray-500 mb-1">Contacts</p>
+                  <p class="text-sm font-semibold text-gray-900 line-clamp-2" [title]="variety.leadingCentreContacts">{{ variety.leadingCentreContacts }}</p>
+                </div>
+              </div>
+              <div class="mt-3">
+                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium"
+                      [class.bg-green-100]="variety.maintenanceStatus === 'Active' || variety.maintenanceStatus === 'Commercial'"
+                      [class.text-green-800]="variety.maintenanceStatus === 'Active' || variety.maintenanceStatus === 'Commercial'"
+                      [class.bg-gray-100]="variety.maintenanceStatus !== 'Active' && variety.maintenanceStatus !== 'Commercial'"
+                      [class.text-gray-800]="variety.maintenanceStatus !== 'Active' && variety.maintenanceStatus !== 'Commercial'">
+                  {{ variety.maintenanceStatus || 'N/A' }}
+                </span>
+              </div>
+            </div>
+            <!-- Expanded Details -->
+            <div *ngIf="isRowExpanded(i)" class="border-t border-gray-200 bg-gray-50 expandable-details-mobile">
+              <div class="expandable-details-content max-h-[500px] overflow-y-auto p-4 sm:p-5 space-y-5 pr-2">
+                <!-- Basic Information -->
+                <div>
+                  <h4 class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">Basic Information</h4>
+                  <dl class="space-y-2">
+                    <div>
+                      <dt class="text-xs text-gray-500 uppercase mb-1">Crop Name</dt>
+                      <dd class="text-sm text-gray-900">{{ variety.cropName || 'N/A' }}</dd>
+                    </div>
+                    <div>
+                      <dt class="text-xs text-gray-500 uppercase mb-1">Variety Release Name</dt>
+                      <dd class="text-sm text-gray-900">{{ variety.varietyReleaseName || 'N/A' }}</dd>
+                    </div>
+                    <div>
+                      <dt class="text-xs text-gray-500 uppercase mb-1">Common Name</dt>
+                      <dd class="text-sm text-gray-900">{{ variety.commonName || 'N/A' }}</dd>
+                    </div>
+                    <div>
+                      <dt class="text-xs text-gray-500 uppercase mb-1">Botanical Name</dt>
+                      <dd class="text-sm text-gray-900 italic">{{ variety.botanicalName || 'N/A' }}</dd>
+                    </div>
+                  </dl>
+                </div>
+
+                <!-- Physical Characteristics -->
+                <div>
+                  <h4 class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">Physical Characteristics</h4>
+                  <dl class="space-y-2">
+                    <div>
+                      <dt class="text-xs text-gray-500 uppercase mb-1">Color</dt>
+                      <dd class="text-sm text-gray-900">{{ variety.color || 'N/A' }}</dd>
+                    </div>
+                    <div>
+                      <dt class="text-xs text-gray-500 uppercase mb-1">Distinctive Characters</dt>
+                      <dd class="text-sm text-gray-900 whitespace-pre-line">{{ variety.distinctiveCharacters || 'N/A' }}</dd>
+                    </div>
+                    <div>
+                      <dt class="text-xs text-gray-500 uppercase mb-1">Special Attributes</dt>
+                      <dd class="text-sm text-gray-900 whitespace-pre-line">{{ variety.specialAttributes || 'N/A' }}</dd>
+                    </div>
+                  </dl>
+                </div>
+
+                <!-- Production Details -->
+                <div>
+                  <h4 class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">Production Details</h4>
+                  <dl class="space-y-2">
+                    <div>
+                      <dt class="text-xs text-gray-500 uppercase mb-1">Production Altitude</dt>
+                      <dd class="text-sm text-gray-900">{{ variety.productionAltitude || 'N/A' }}</dd>
+                    </div>
+                    <div>
+                      <dt class="text-xs text-gray-500 uppercase mb-1">Potential Yield</dt>
+                      <dd class="text-sm text-gray-900">{{ variety.potentialYield || 'N/A' }}</dd>
+                    </div>
+                    <div>
+                      <dt class="text-xs text-gray-500 uppercase mb-1">Maturity (Days)</dt>
+                      <dd class="text-sm text-gray-900">{{ variety.maturityDays ? variety.maturityDays + ' days' : 'N/A' }}</dd>
+                    </div>
+                    <div>
+                      <dt class="text-xs text-gray-500 uppercase mb-1">Year of Release</dt>
+                      <dd class="text-sm text-gray-900">{{ variety.yearOfRelease || 'N/A' }}</dd>
+                    </div>
+                  </dl>
+                </div>
+
+                <!-- Administrative Information -->
+                <div>
+                  <h4 class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">Administrative Information</h4>
+                  <dl class="space-y-2">
+                    <div>
+                      <dt class="text-xs text-gray-500 uppercase mb-1">Release Entity/Owner</dt>
+                      <dd class="text-sm text-gray-900">{{ variety.releaseEntityOwner || 'N/A' }}</dd>
+                    </div>
+                    <div>
+                      <dt class="text-xs text-gray-500 uppercase mb-1">Maintainer</dt>
+                      <dd class="text-sm text-gray-900">{{ variety.maintainer || 'N/A' }}</dd>
+                    </div>
+                    <div>
+                      <dt class="text-xs text-gray-500 uppercase mb-1">Maintenance Status</dt>
+                      <dd class="text-sm text-gray-900">{{ variety.maintenanceStatus || 'N/A' }}</dd>
+                    </div>
+                    <div>
+                      <dt class="text-xs text-gray-500 uppercase mb-1">Type of License</dt>
+                      <dd class="text-sm text-gray-900">{{ variety.typeOfLicense || 'N/A' }}</dd>
+                    </div>
+                    <div *ngIf="variety.leadingCentreContacts">
+                      <dt class="text-xs text-gray-500 uppercase mb-1">Leading Centre Contacts</dt>
+                      <dd class="text-sm text-gray-900 whitespace-pre-line">{{ variety.leadingCentreContacts }}</dd>
+                    </div>
+                  </dl>
+                </div>
+
+                <!-- Geographic Information -->
+                <div *ngIf="variety.regionNames && variety.regionNames.length > 0 || variety.recommendedAgriculturalEcologicalZones">
+                  <h4 class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">Geographic Information</h4>
+                  <dl class="space-y-2">
+                    <div *ngIf="variety.regionNames && variety.regionNames.length > 0">
+                      <dt class="text-xs text-gray-500 uppercase mb-1">Regions</dt>
+                      <dd class="text-sm text-gray-900">
+                        <div class="flex flex-wrap gap-2 mt-1">
+                          <span *ngFor="let region of variety.regionNames"
+                                class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                            {{ region }}
+                          </span>
+                        </div>
+                      </dd>
+                    </div>
+                    <div *ngIf="variety.recommendedAgriculturalEcologicalZones">
+                      <dt class="text-xs text-gray-500 uppercase mb-1">Recommended Agricultural Ecological Zones</dt>
+                      <dd class="text-sm text-gray-900 whitespace-pre-line">{{ variety.recommendedAgriculturalEcologicalZones }}</dd>
+                    </div>
+                  </dl>
+                </div>
+
+                <!-- Additional Information -->
+                <div *ngIf="variety.limitation || variety.commercialisationLevel || (variety.imageUrls && variety.imageUrls.length > 0)">
+                  <h4 class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">Additional Information</h4>
+                  <dl class="space-y-2">
+                    <div *ngIf="variety.limitation">
+                      <dt class="text-xs text-gray-500 uppercase mb-1">Limitations</dt>
+                      <dd class="text-sm text-gray-900 whitespace-pre-line">{{ variety.limitation }}</dd>
+                    </div>
+
+                    <!-- Variety Images Section -->
+                    <div *ngIf="variety.imageUrls && variety.imageUrls.length > 0" class="mt-4">
+                      <dt class="text-xs text-gray-500 uppercase mb-3">Variety Images</dt>
+                      <dd>
+                        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+                          <div *ngFor="let imageUrl of variety.imageUrls"
+                               class="relative w-full h-32 sm:h-40 rounded-lg overflow-hidden bg-gray-100">
+                            <img [src]="imageUrl"
+                                 [alt]="variety.registeredName || variety.varietyReleaseName"
+                                 class="w-full h-full object-cover cursor-pointer hover:opacity-90 transition-opacity"
+                                 (error)="onImageError($event)">
+                          </div>
+                        </div>
+                      </dd>
+                    </div>
+
+                    <div *ngIf="variety.commercialisationLevel">
+                      <dt class="text-xs text-gray-500 uppercase mb-1">Commercialisation Level</dt>
+                      <dd class="text-sm text-gray-900">{{ variety.commercialisationLevel }}</dd>
+                    </div>
+                  </dl>
+                </div>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+
+      <!-- Varieties Table Section - Desktop Expandable Design -->
+      <div *ngIf="hasVarieties()" class="hidden">
+        <div class="w-full">
+          <table class="w-full divide-y divide-gray-200 table-auto">
+            <thead class="bg-gradient-to-r from-gray-50 to-gray-100">
+              <tr>
+
+                <th class="px-6 lg:px-8 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider
+                          border-b border-gray-200" style="font-family: 'Inter', sans-serif;">
+                  Registered Name
+                </th>
+                <th class="px-6 lg:px-8 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider
+                          border-b border-gray-200" style="font-family: 'Inter', sans-serif;">
+                  Local Name
+                </th>
+                <th class="px-6 lg:px-8 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider
+                          border-b border-gray-200" style="font-family: 'Inter', sans-serif;">
+                  Original Code
+                </th>
+                <th class="px-6 lg:px-8 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider
+                          border-b border-gray-200" style="font-family: 'Inter', sans-serif;">
+                  Year
+                </th>
+                <th class="px-6 lg:px-8 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider
+                          border-b border-gray-200" style="font-family: 'Inter', sans-serif;">
+                  Potential Yield (MT/ha)
+                </th>
+                <th class="px-6 lg:px-8 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider
+                          border-b border-gray-200" style="font-family: 'Inter', sans-serif;">
+                  Maintainer
+                </th>
+                <th class="px-6 lg:px-8 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider
+                          border-b border-gray-200" style="font-family: 'Inter', sans-serif;">
+                  Maintenance Status
+                </th>
+                <th class="px-6 lg:px-8 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider
+                          border-b border-gray-200" style="font-family: 'Inter', sans-serif;">
+                  Variety Type
+                </th>
+                <th class="px-6 lg:px-8 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider
+                          border-b border-gray-200" style="font-family: 'Inter', sans-serif;">
+                  Contacts
+                </th>
+                <th class="px-6 lg:px-8 py-4 text-center text-xs font-bold text-gray-700 uppercase tracking-wider
+                          border-b border-gray-200" style="font-family: 'Inter', sans-serif;">
+                  Details
+                </th>
+              </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+              <!-- Empty State -->
+              <tr *ngIf="filteredVarieties.length === 0">
+                <td colspan="10" class="px-6 lg:px-8 py-12 text-center">
+                  <svg class="mx-auto h-12 w-12 text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                  </svg>
+                  <p class="text-gray-600 text-lg font-medium mb-2">No varieties found</p>
+                  <p class="text-gray-500 text-sm mb-4">
+                    <span *ngIf="selectedProductUid && selectedRegionUids.length > 0">No varieties match the selected product and regions</span>
+                    <span *ngIf="selectedProductUid && selectedRegionUids.length === 0">No varieties found for this product</span>
+                    <span *ngIf="!selectedProductUid && selectedRegionUids.length > 0">No varieties match the selected regions</span>
+                  </p>
+                </td>
+              </tr>
+              <ng-container *ngFor="let variety of filteredVarieties; let i = index">
+                <!-- Summary Row - Clickable -->
+                <tr (click)="toggleRow(i)"
+                    id="variety-{{ i }}"
+                    class="hover:bg-gray-50 transition-all duration-200 product-table-row cursor-pointer expandable-row"
+                    [class.bg-primary-50]="isRowExpanded(i)">
+           <!--       <td class="px-6 lg:px-8 py-5 text-sm lg:text-base text-gray-900 font-medium"
+                      style="font-family: 'Inter', sans-serif;">
+                    {{ variety.varietyReleaseName }}
+                  </td>-->
+                  <td class="px-6 lg:px-8 py-5 text-sm lg:text-base text-gray-700 product-table-row-first-cell"
+                      style="font-family: 'Inter', sans-serif;">
+                    {{ variety?.registeredName || 'N/A' }}
+                  </td>
+                  <td class="px-6 lg:px-8 py-5 text-sm lg:text-base text-gray-700"
+                      style="font-family: 'Inter', sans-serif;">
+                    {{ variety.localName || 'N/A' }}
+                  </td>
+                  <td class="px-6 lg:px-8 py-5 text-sm lg:text-base text-gray-700"
+                      style="font-family: 'Inter', sans-serif;">
+                    {{ variety.varietyOriginalCode || 'N/A' }}
+                  </td>
+                  <td class="px-6 lg:px-8 py-5 text-sm lg:text-base text-gray-700"
+                      style="font-family: 'Inter', sans-serif;">
+                    {{ variety.yearOfRelease || 'N/A' }}
+                  </td>
+                  <td class="px-6 lg:px-8 py-5 text-sm lg:text-base text-gray-700"
+                      style="font-family: 'Inter', sans-serif;">
+                    {{ variety.potentialYieldMin && variety.potentialYieldMax
+                      ? variety.potentialYieldMin + '-' + variety.potentialYieldMax + ' ton/ha'
+                      : variety.potentialYieldMin
+                      ? 'Min: ' + variety.potentialYieldMin + ' ton/ha'
+                      : variety.potentialYieldMax
+                      ? 'Max: ' + variety.potentialYieldMax + ' ton/ha'
+                      : 'N/A' }}
+                  </td>
+                  <td class="px-6 lg:px-8 py-5 text-sm lg:text-base text-gray-700 truncate max-w-xs"
+                      style="font-family: 'Inter', sans-serif;"
+                      [title]="variety.maintainerCenterName || 'N/A'">
+                    {{ variety.maintainerCenterName || 'N/A' }}
+                  </td>
+                  <td class="px-6 lg:px-8 py-5 text-sm lg:text-base">
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium"
+                          [class.bg-green-100]="variety.maintenanceStatus === 'Commercial' || variety.maintenanceStatus === 'Active'"
+                          [class.text-green-800]="variety.maintenanceStatus === 'Commercial' || variety.maintenanceStatus === 'Active'"
+                          [class.bg-gray-100]="variety.maintenanceStatus !== 'Commercial' && variety.maintenanceStatus !== 'Active'"
+                          [class.text-gray-800]="variety.maintenanceStatus !== 'Commercial' && variety.maintenanceStatus !== 'Active'">
+                      {{ variety.maintenanceStatus || 'N/A' }}
+                    </span>
+                  </td>
+                  <td class="px-6 lg:px-8 py-5 text-sm lg:text-base text-gray-700"
+                      style="font-family: 'Inter', sans-serif;">
+                    {{ variety.varietyType || 'N/A' }}
+                  </td>
+                  <td class="px-6 lg:px-8 py-5 text-sm lg:text-base text-gray-700 truncate max-w-xs"
+                      style="font-family: 'Inter', sans-serif;"
+                      [title]="variety.leadingCentreContacts || 'N/A'">
+                    {{ variety.leadingCentreContacts || 'N/A' }}
+                  </td>
+                  <td class="px-6 lg:px-8 py-5 text-center">
+                    <button class="inline-flex items-center gap-2 px-3 py-2 rounded-md details-button-table"
+                            (click)="toggleRow(i); $event.stopPropagation()"
+                            [attr.aria-label]="isRowExpanded(i) ? 'Hide details' : 'View details'"
+                            [attr.aria-expanded]="isRowExpanded(i)">
+                      <span class="text-xs font-medium text-primary-700" style="font-family: 'Inter', sans-serif;">
+                        {{ isRowExpanded(i) ? 'Hide' : 'View' }}
+                      </span>
+                      <svg class="w-4 h-4 text-primary-600 transition-transform duration-300"
+                           [class.rotate-180]="isRowExpanded(i)"
+                           fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                      </svg>
+                    </button>
+                  </td>
+                </tr>
+                <!-- Expanded Details Row -->
+                <tr *ngIf="isRowExpanded(i)" class="expandable-details-row">
+                  <td colspan="10" class="px-6 lg:px-8 py-6 bg-gray-50">
+                    <div class="expandable-details-content max-h-[600px] overflow-y-auto pr-2">
+                      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <div>
+                          <h4 class="text-sm font-bold text-gray-900 mb-4 uppercase tracking-wide" style="font-family: 'Inter', sans-serif;">
+                            Basic & Production Details
+                          </h4>
+                        <dl class="space-y-3">
+                          <!-- Basic Information -->
+                          <div>
+                            <dt class="text-xs font-semibold text-gray-500 uppercase mb-1">Crop Name</dt>
+                            <dd class="text-sm text-gray-900">{{ variety.cropName || 'N/A' }}</dd>
+                          </div>
+                          <div>
+                            <dt class="text-xs font-semibold text-gray-500 uppercase mb-1">Variety Release Name</dt>
+                            <dd class="text-sm text-gray-900">{{ variety.varietyReleaseName || 'N/A' }}</dd>
+                          </div>
+                          <div>
+                            <dt class="text-xs font-semibold text-gray-500 uppercase mb-1">Common Name</dt>
+                            <dd class="text-sm text-gray-900">{{ variety.commonName || 'N/A' }}</dd>
+                          </div>
+                          <div>
+                            <dt class="text-xs font-semibold text-gray-500 uppercase mb-1">Botanical Name</dt>
+                            <dd class="text-sm text-gray-900 italic">{{ variety.botanicalName || 'N/A' }}</dd>
+                          </div>
+
+                          <!-- Physical Characteristics -->
+                          <div>
+                            <dt class="text-xs font-semibold text-gray-500 uppercase mb-1">Color</dt>
+                            <dd class="text-sm text-gray-900">{{ variety.color || 'N/A' }}</dd>
+                          </div>
+                          <div>
+                            <dt class="text-xs font-semibold text-gray-500 uppercase mb-1">Distinctive Characters</dt>
+                            <dd class="text-sm text-gray-900 whitespace-pre-line">{{ variety.distinctiveCharacters || 'N/A' }}</dd>
+                          </div>
+                          <div>
+                            <dt class="text-xs font-semibold text-gray-500 uppercase mb-1">Special Attributes</dt>
+                            <dd class="text-sm text-gray-900 whitespace-pre-line">{{ variety.specialAttributes || 'N/A' }}</dd>
+                          </div>
+
+                          <!-- Production Details -->
+                          <div>
+                            <dt class="text-xs font-semibold text-gray-500 uppercase mb-1">Production Altitude</dt>
+                            <dd class="text-sm text-gray-900">{{ variety.productionAltitude || 'N/A' }}</dd>
+                          </div>
+                          <div>
+                            <dt class="text-xs font-semibold text-gray-500 uppercase mb-1">Potential Yield</dt>
+                            <dd class="text-sm text-gray-900">
+                              {{ variety.potentialYieldMin && variety.potentialYieldMax
+                                ? variety.potentialYieldMin + '-' + variety.potentialYieldMax + ' ton/ha'
+                                : variety.potentialYieldMin
+                                ? 'Min: ' + variety.potentialYieldMin + ' ton/ha'
+                                : variety.potentialYieldMax
+                                ? 'Max: ' + variety.potentialYieldMax + ' ton/ha'
+                                : 'N/A' }}
+                            </dd>
+                          </div>
+                          <div>
+                            <dt class="text-xs font-semibold text-gray-500 uppercase mb-1">Maturity (Days)</dt>
+                            <dd class="text-sm text-gray-900">{{ variety.maturityDays ? variety.maturityDays + ' days' : 'N/A' }}</dd>
+                          </div>
+                          <div>
+                            <dt class="text-xs font-semibold text-gray-500 uppercase mb-1">Year of Release</dt>
+                            <dd class="text-sm text-gray-900">{{ variety.yearOfRelease || 'N/A' }}</dd>
+                          </div>
+                        </dl>
+                      </div>
+                      <div>
+                        <h4 class="text-sm font-bold text-gray-900 mb-4 uppercase tracking-wide" style="font-family: 'Inter', sans-serif;">
+                          Administrative, Geographic & Additional
+                        </h4>
+                        <dl class="space-y-3">
+                          <!-- Administrative Information -->
+                          <div>
+                            <dt class="text-xs font-semibold text-gray-500 uppercase mb-1">Release Entity/Owner</dt>
+                            <dd class="text-sm text-gray-900">{{ variety.releaseEntityOwner || 'N/A' }}</dd>
+                          </div>
+                          <div>
+                            <dt class="text-xs font-semibold text-gray-500 uppercase mb-1">Maintainer</dt>
+                            <dd class="text-sm text-gray-900">{{ variety.maintainer || 'N/A' }}</dd>
+                          </div>
+                          <div>
+                            <dt class="text-xs font-semibold text-gray-500 uppercase mb-1">Maintenance Status</dt>
+                            <dd class="text-sm text-gray-900">{{ variety.maintenanceStatus || 'N/A' }}</dd>
+                          </div>
+                          <div>
+                            <dt class="text-xs font-semibold text-gray-500 uppercase mb-1">Type of License</dt>
+                            <dd class="text-sm text-gray-900">{{ variety.typeOfLicense || 'N/A' }}</dd>
+                          </div>
+                          <div *ngIf="variety.leadingCentreContacts">
+                            <dt class="text-xs font-semibold text-gray-500 uppercase mb-1">Leading Centre Contacts</dt>
+                            <dd class="text-sm text-gray-900 whitespace-pre-line">{{ variety.leadingCentreContacts }}</dd>
+                          </div>
+
+                          <!-- Geographic Information -->
+                          <div *ngIf="variety.regionNames && variety.regionNames.length > 0">
+                            <dt class="text-xs font-semibold text-gray-500 uppercase mb-1">Regions</dt>
+                            <dd class="text-sm text-gray-900">
+                              <div class="flex flex-wrap gap-2 mt-1">
+                                <span *ngFor="let region of variety.regionNames"
+                                      class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                  {{ region }}
+                                </span>
+                              </div>
+                            </dd>
+                          </div>
+                          <div *ngIf="variety.recommendedAgriculturalEcologicalZones">
+                            <dt class="text-xs font-semibold text-gray-500 uppercase mb-1">Recommended Agricultural Ecological Zones</dt>
+                            <dd class="text-sm text-gray-900 whitespace-pre-line">{{ variety.recommendedAgriculturalEcologicalZones }}</dd>
+                          </div>
+
+                          <!-- Additional Information -->
+                          <div *ngIf="variety.limitation">
+                            <dt class="text-xs font-semibold text-gray-500 uppercase mb-1">Limitations</dt>
+                            <dd class="text-sm text-gray-900 whitespace-pre-line">{{ variety.limitation }}</dd>
+                          </div>
+
+                          <!-- Variety Images Section -->
+                          <div *ngIf="variety.imageUrls && variety.imageUrls.length > 0" class="mt-4">
+                            <dt class="text-xs font-semibold text-gray-500 uppercase mb-3">Variety Images</dt>
+                            <dd>
+                              <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+                                <div *ngFor="let imageUrl of variety.imageUrls"
+                                     class="relative w-full h-32 sm:h-40 rounded-lg overflow-hidden bg-gray-100">
+                                  <img [src]="imageUrl"
+                                       [alt]="variety.registeredName || variety.varietyReleaseName"
+                                       class="w-full h-full object-cover cursor-pointer hover:opacity-90 transition-opacity"
+                                       (error)="onImageError($event)">
+                                </div>
+                              </div>
+                            </dd>
+                          </div>
+
+                          <div *ngIf="variety.commercialisationLevel">
+                            <dt class="text-xs font-semibold text-gray-500 uppercase mb-1">Commercialisation Level</dt>
+                            <dd class="text-sm text-gray-900">{{ variety.commercialisationLevel }}</dd>
+                          </div>
+                        </dl>
+                      </div>
+                    </div>
+                    </div>
+                  </td>
+                </tr>
+              </ng-container>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Empty State for Varieties - Mobile Optimized -->
+      <div *ngIf="product && (!product.varieties || product.varieties.length === 0)"
+           class="bg-white border border-gray-200 rounded-xl sm:rounded-2xl shadow-lg p-8 sm:p-12 text-center">
+        <svg class="mx-auto h-10 w-10 sm:h-12 sm:w-12 text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+        </svg>
+        <p class="text-gray-600 text-base sm:text-lg font-medium mb-2" style="font-family: 'Inter', sans-serif;">
+          No varieties available
+        </p>
+        <p class="text-gray-500 text-sm sm:text-base">Variety information will be displayed here when available.</p>
+      </div>
+    </div>
+
+    <!-- Multi-Product Mode: Region-Only Search Results - Flattened View -->
+    <div *ngIf="!(isLoading$ | async) && searchMode === 'region-only' && varietiesByProduct.size > 0">
+      <!-- Mobile Card Layout -->
+      <div class="md:hidden space-y-4">
+        <ng-container *ngFor="let item of getFlattenedVarieties()">
+          <div (click)="toggleRow(item.index)"
+               id="variety-{{ item.index }}"
+               class="bg-white border-l-4 border-primary-400 border border-gray-200 rounded-xl shadow-md overflow-hidden
+                      cursor-pointer transition-all duration-300 product-variety-card"
+               [class.border-primary-500]="isRowExpanded(item.index)"
+               [class.shadow-lg]="isRowExpanded(item.index)">
+            <!-- Product Name Badge -->
+            <div class="px-4 pt-3 pb-2 bg-gray-50 border-b border-gray-100">
+              <div class="flex items-center gap-2">
+                <img *ngIf="item.product?.imageUrl"
+                     [src]="item.product?.imageUrl"
+                     [alt]="item.product?.name"
+                     class="w-5 h-5 rounded object-cover border border-gray-200"
+                     (error)="onImageError($event)">
+                <span class="text-xs font-medium text-primary-700 bg-primary-50 px-2 py-1 rounded-full border border-primary-200">
+                  {{ item.product?.name || item.variety.cropName || 'Unknown Product' }}
+                </span>
+              </div>
+            </div>
+            <!-- Variety Image -->
+            <div *ngIf="item.variety.imageUrls && item.variety.imageUrls.length > 0"
+                 class="w-full h-40 sm:h-48 overflow-hidden bg-gray-100">
+              <img [src]="item.variety.imageUrls[0]"
+                   [alt]="item.variety.registeredName || item.variety.varietyReleaseName"
+                   class="w-full h-full object-cover"
+                   (error)="onImageError($event)">
+            </div>
+            <!-- Card Header -->
+            <div class="p-4 sm:p-5" [class.bg-primary-50]="isRowExpanded(item.index)">
+              <div class="flex items-start justify-between mb-3">
+                <div class="flex-1 min-w-0">
+                  <h3 class="text-base font-bold text-gray-900 mb-1 truncate" style="font-family: 'Inter', sans-serif;">
+                    {{ item.variety.varietyReleaseName }}
+                  </h3>
+                  <p class="text-sm text-gray-600 mb-2" style="font-family: 'Inter', sans-serif;">
+                    {{ item.variety.cropName }}
+                  </p>
+                </div>
+                <button class="ml-3 flex-shrink-0 px-3 py-2 -mr-2 touch-target details-button"
+                        (click)="toggleRow(item.index); $event.stopPropagation()"
+                        [attr.aria-label]="isRowExpanded(item.index) ? 'Hide details' : 'View details'"
+                        [attr.aria-expanded]="isRowExpanded(item.index)">
+                  <span class="text-xs sm:text-sm font-medium text-primary-700 mr-1.5 hidden sm:inline" style="font-family: 'Inter', sans-serif;">
+                    {{ isRowExpanded(item.index) ? 'Hide Details' : 'View Details' }}
+                  </span>
+                  <svg class="w-4 h-4 sm:w-5 sm:h-5 text-primary-600 transition-transform duration-300 flex-shrink-0"
+                       [class.rotate-180]="isRowExpanded(item.index)"
+                       fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                  </svg>
+                </button>
+              </div>
+              <!-- Summary Info -->
+              <div class="grid grid-cols-2 gap-3 mt-3">
+                <div *ngIf="item.variety.registeredName && item.variety.registeredName !== item.variety.varietyReleaseName">
+                  <p class="text-xs text-gray-500 mb-1">Registered Name</p>
+                  <p class="text-sm font-semibold text-gray-900 truncate">{{ item.variety.registeredName }}</p>
+                </div>
+                <div *ngIf="item.variety.yearOfRelease">
+                  <p class="text-xs text-gray-500 mb-1">Year of Release</p>
+                  <p class="text-sm font-semibold text-gray-900">{{ item.variety.yearOfRelease }}</p>
+                </div>
+                <div *ngIf="item.variety.maintainerCenterName">
+                  <p class="text-xs text-gray-500 mb-1">Maintainer</p>
+                  <p class="text-sm font-semibold text-gray-900 truncate">{{ item.variety.maintainerCenterName }}</p>
+                </div>
+                <div *ngIf="item.variety.varietyOriginalCode">
+                  <p class="text-xs text-gray-500 mb-1">Original Code</p>
+                  <p class="text-sm font-semibold text-gray-900">{{ item.variety.varietyOriginalCode }}</p>
+                </div>
+                <div>
+                  <p class="text-xs text-gray-500 mb-1">Potential Yield</p>
+                  <p class="text-sm font-semibold text-gray-900">
+                    {{ item.variety.potentialYieldMin && item.variety.potentialYieldMax
+                      ? item.variety.potentialYieldMin + '-' + item.variety.potentialYieldMax + ' ton/ha'
+                      : item.variety.potentialYieldMin
+                      ? 'Min: ' + item.variety.potentialYieldMin + ' ton/ha'
+                      : item.variety.potentialYieldMax
+                      ? 'Max: ' + item.variety.potentialYieldMax + ' ton/ha'
+                      : 'N/A' }}
+                  </p>
+                </div>
+                <div>
+                  <p class="text-xs text-gray-500 mb-1">Variety Type</p>
+                  <p class="text-sm font-semibold text-gray-900">{{ item.variety.varietyType || 'N/A' }}</p>
+                </div>
+                <div *ngIf="item.variety.leadingCentreContacts" class="col-span-2">
+                  <p class="text-xs text-gray-500 mb-1">Contacts</p>
+                  <p class="text-sm font-semibold text-gray-900 line-clamp-2" [title]="item.variety.leadingCentreContacts">{{ item.variety.leadingCentreContacts }}</p>
+                </div>
+              </div>
+              <div class="mt-3">
+                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium"
+                      [class.bg-green-100]="item.variety.maintenanceStatus === 'Active' || item.variety.maintenanceStatus === 'Commercial'"
+                      [class.text-green-800]="item.variety.maintenanceStatus === 'Active' || item.variety.maintenanceStatus === 'Commercial'"
+                      [class.bg-gray-100]="item.variety.maintenanceStatus !== 'Active' && item.variety.maintenanceStatus !== 'Commercial'"
+                      [class.text-gray-800]="item.variety.maintenanceStatus !== 'Active' && item.variety.maintenanceStatus !== 'Commercial'">
+                  {{ item.variety.maintenanceStatus || 'N/A' }}
+                </span>
+              </div>
+            </div>
+            <!-- Expanded Details -->
+            <div *ngIf="isRowExpanded(item.index)" class="border-t border-gray-200 bg-gray-50 expandable-details-mobile">
+              <div class="expandable-details-content max-h-[500px] overflow-y-auto p-4 sm:p-5 space-y-5 pr-2">
+                <!-- Reuse the same expanded details structure from single product mode -->
+                <!-- Basic Information -->
+                <div>
+                  <h4 class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">Basic Information</h4>
+                  <dl class="space-y-2">
+                    <div>
+                      <dt class="text-xs text-gray-500 uppercase mb-1">Crop Name</dt>
+                      <dd class="text-sm text-gray-900">{{ item.variety.cropName || 'N/A' }}</dd>
+                    </div>
+                    <div>
+                      <dt class="text-xs text-gray-500 uppercase mb-1">Variety Release Name</dt>
+                      <dd class="text-sm text-gray-900">{{ item.variety.varietyReleaseName || 'N/A' }}</dd>
+                    </div>
+                    <div>
+                      <dt class="text-xs text-gray-500 uppercase mb-1">Common Name</dt>
+                      <dd class="text-sm text-gray-900">{{ item.variety.commonName || 'N/A' }}</dd>
+                    </div>
+                    <div>
+                      <dt class="text-xs text-gray-500 uppercase mb-1">Botanical Name</dt>
+                      <dd class="text-sm text-gray-900 italic">{{ item.variety.botanicalName || 'N/A' }}</dd>
+                    </div>
+                  </dl>
+                </div>
+                <!-- Production Details -->
+                <div>
+                  <h4 class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">Production Details</h4>
+                  <dl class="space-y-2">
+                    <div>
+                      <dt class="text-xs text-gray-500 uppercase mb-1">Production Altitude</dt>
+                      <dd class="text-sm text-gray-900">{{ item.variety.productionAltitude || 'N/A' }}</dd>
+                    </div>
+                    <div>
+                      <dt class="text-xs text-gray-500 uppercase mb-1">Potential Yield</dt>
+                      <dd class="text-sm text-gray-900">
+                        {{ item.variety.potentialYieldMin && item.variety.potentialYieldMax
+                          ? item.variety.potentialYieldMin + '-' + item.variety.potentialYieldMax + ' ton/ha'
+                          : item.variety.potentialYieldMin
+                          ? 'Min: ' + item.variety.potentialYieldMin + ' ton/ha'
+                          : item.variety.potentialYieldMax
+                          ? 'Max: ' + item.variety.potentialYieldMax + ' ton/ha'
+                          : 'N/A' }}
+                      </dd>
+                    </div>
+                    <div>
+                      <dt class="text-xs text-gray-500 uppercase mb-1">Maturity (Days)</dt>
+                      <dd class="text-sm text-gray-900">{{ item.variety.maturityDays ? item.variety.maturityDays + ' days' : 'N/A' }}</dd>
+                    </div>
+                    <div>
+                      <dt class="text-xs text-gray-500 uppercase mb-1">Year of Release</dt>
+                      <dd class="text-sm text-gray-900">{{ item.variety.yearOfRelease || 'N/A' }}</dd>
+                    </div>
+                  </dl>
+                </div>
+                <!-- Administrative Information -->
+                <div>
+                  <h4 class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">Administrative Information</h4>
+                  <dl class="space-y-2">
+                    <div>
+                      <dt class="text-xs text-gray-500 uppercase mb-1">Release Entity/Owner</dt>
+                      <dd class="text-sm text-gray-900">{{ item.variety.releaseEntityOwner || 'N/A' }}</dd>
+                    </div>
+                    <div>
+                      <dt class="text-xs text-gray-500 uppercase mb-1">Maintainer</dt>
+                      <dd class="text-sm text-gray-900">{{ item.variety.maintainer || 'N/A' }}</dd>
+                    </div>
+                    <div>
+                      <dt class="text-xs text-gray-500 uppercase mb-1">Maintenance Status</dt>
+                      <dd class="text-sm text-gray-900">{{ item.variety.maintenanceStatus || 'N/A' }}</dd>
+                    </div>
+                    <div>
+                      <dt class="text-xs text-gray-500 uppercase mb-1">Type of License</dt>
+                      <dd class="text-sm text-gray-900">{{ item.variety.typeOfLicense || 'N/A' }}</dd>
+                    </div>
+                    <div *ngIf="item.variety.leadingCentreContacts">
+                      <dt class="text-xs text-gray-500 uppercase mb-1">Leading Centre Contacts</dt>
+                      <dd class="text-sm text-gray-900 whitespace-pre-line">{{ item.variety.leadingCentreContacts }}</dd>
+                    </div>
+                  </dl>
+                </div>
+                <!-- Geographic Information -->
+                <div *ngIf="item.variety.regionNames && item.variety.regionNames.length > 0 || item.variety.recommendedAgriculturalEcologicalZones">
+                  <h4 class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">Geographic Information</h4>
+                  <dl class="space-y-2">
+                    <div *ngIf="item.variety.regionNames && item.variety.regionNames.length > 0">
+                      <dt class="text-xs text-gray-500 uppercase mb-1">Regions</dt>
+                      <dd class="text-sm text-gray-900">
+                        <div class="flex flex-wrap gap-2 mt-1">
+                          <span *ngFor="let region of item.variety.regionNames"
+                                class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                            {{ region }}
+                          </span>
+                        </div>
+                      </dd>
+                    </div>
+                    <div *ngIf="item.variety.recommendedAgriculturalEcologicalZones">
+                      <dt class="text-xs text-gray-500 uppercase mb-1">Recommended Agricultural Ecological Zones</dt>
+                      <dd class="text-sm text-gray-900 whitespace-pre-line">{{ item.variety.recommendedAgriculturalEcologicalZones }}</dd>
+                    </div>
+                  </dl>
+                </div>
+                <!-- Additional Information -->
+                <div *ngIf="item.variety.limitation || item.variety.commercialisationLevel || (item.variety.imageUrls && item.variety.imageUrls.length > 0)">
+                  <h4 class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">Additional Information</h4>
+                  <dl class="space-y-2">
+                    <div *ngIf="item.variety.limitation">
+                      <dt class="text-xs text-gray-500 uppercase mb-1">Limitations</dt>
+                      <dd class="text-sm text-gray-900 whitespace-pre-line">{{ item.variety.limitation }}</dd>
+                    </div>
+                    <div *ngIf="item.variety.imageUrls && item.variety.imageUrls.length > 0" class="mt-4">
+                      <dt class="text-xs text-gray-500 uppercase mb-3">Variety Images</dt>
+                      <dd>
+                        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+                          <div *ngFor="let imageUrl of item.variety.imageUrls"
+                               class="relative w-full h-32 sm:h-40 rounded-lg overflow-hidden bg-gray-100">
+                            <img [src]="imageUrl"
+                                 [alt]="item.variety.registeredName || item.variety.varietyReleaseName"
+                                 class="w-full h-full object-cover cursor-pointer hover:opacity-90 transition-opacity"
+                                 (error)="onImageError($event)">
+                          </div>
+                        </div>
+                      </dd>
+                    </div>
+                    <div *ngIf="item.variety.commercialisationLevel">
+                      <dt class="text-xs text-gray-500 uppercase mb-1">Commercialisation Level</dt>
+                      <dd class="text-sm text-gray-900">{{ item.variety.commercialisationLevel }}</dd>
+                    </div>
+                  </dl>
+                </div>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+
+      <!-- Desktop Table Layout -->
+      <div class="hidden md:block bg-white border border-gray-200 rounded-xl shadow-md overflow-hidden product-table-card">
+        <div class="w-full">
+          <table class="w-full divide-y divide-gray-200 table-auto">
+            <thead class="bg-gradient-to-r from-gray-50 to-gray-100">
+              <tr>
+                <th class="px-6 lg:px-8 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider border-b border-gray-200" style="font-family: 'Inter', sans-serif;">Product</th>
+                <th class="px-6 lg:px-8 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider border-b border-gray-200" style="font-family: 'Inter', sans-serif;">Registered Name</th>
+                <th class="px-6 lg:px-8 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider border-b border-gray-200" style="font-family: 'Inter', sans-serif;">Local Name</th>
+                <th class="px-6 lg:px-8 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider border-b border-gray-200" style="font-family: 'Inter', sans-serif;">Original Code</th>
+                <th class="px-6 lg:px-8 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider border-b border-gray-200" style="font-family: 'Inter', sans-serif;">Year</th>
+                <th class="px-6 lg:px-8 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider border-b border-gray-200" style="font-family: 'Inter', sans-serif;">Potential Yield</th>
+                <th class="px-6 lg:px-8 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider border-b border-gray-200" style="font-family: 'Inter', sans-serif;">Maintainer</th>
+                <th class="px-6 lg:px-8 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider border-b border-gray-200" style="font-family: 'Inter', sans-serif;">Status</th>
+                <th class="px-6 lg:px-8 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider border-b border-gray-200" style="font-family: 'Inter', sans-serif;">Type</th>
+                <th class="px-6 lg:px-8 py-4 text-center text-xs font-bold text-gray-700 uppercase tracking-wider border-b border-gray-200" style="font-family: 'Inter', sans-serif;">Details</th>
+              </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+              <ng-container *ngFor="let item of getFlattenedVarieties()">
+                <tr (click)="toggleRow(item.index)"
+                    id="variety-{{ item.index }}"
+                    class="hover:bg-gray-50 transition-all duration-200 product-table-row cursor-pointer expandable-row"
+                    [class.bg-primary-50]="isRowExpanded(item.index)">
+                  <!-- Product Column -->
+                  <td class="px-6 lg:px-8 py-5 text-sm lg:text-base text-gray-700">{{ item.variety.product?.name || item.product?.name || item.variety.cropName || 'Unknown Product' }}</td>
+                  <td class="px-6 lg:px-8 py-5 text-sm lg:text-base text-gray-700">{{ item.variety.registeredName || 'N/A' }}</td>
+                  <td class="px-6 lg:px-8 py-5 text-sm lg:text-base text-gray-700">{{ item.variety.localName || 'N/A' }}</td>
+                  <td class="px-6 lg:px-8 py-5 text-sm lg:text-base text-gray-700">{{ item.variety.varietyOriginalCode || 'N/A' }}</td>
+                  <td class="px-6 lg:px-8 py-5 text-sm lg:text-base text-gray-700">{{ item.variety.yearOfRelease || 'N/A' }}</td>
+                  <td class="px-6 lg:px-8 py-5 text-sm lg:text-base text-gray-700">
+                    {{ item.variety.potentialYieldMin && item.variety.potentialYieldMax
+                      ? item.variety.potentialYieldMin + '-' + item.variety.potentialYieldMax + ' ton/ha'
+                      : item.variety.potentialYieldMin
+                      ? 'Min: ' + item.variety.potentialYieldMin + ' ton/ha'
+                      : item.variety.potentialYieldMax
+                      ? 'Max: ' + item.variety.potentialYieldMax + ' ton/ha'
+                      : 'N/A' }}
+                  </td>
+                  <td class="px-6 lg:px-8 py-5 text-sm lg:text-base text-gray-700 truncate max-w-xs">{{ item.variety.maintainerCenterName || 'N/A' }}</td>
+                  <td class="px-6 lg:px-8 py-5 text-sm lg:text-base">
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium"
+                          [class.bg-green-100]="item.variety.maintenanceStatus === 'Commercial' || item.variety.maintenanceStatus === 'Active'"
+                          [class.text-green-800]="item.variety.maintenanceStatus === 'Commercial' || item.variety.maintenanceStatus === 'Active'"
+                          [class.bg-gray-100]="item.variety.maintenanceStatus !== 'Commercial' && item.variety.maintenanceStatus !== 'Active'"
+                          [class.text-gray-800]="item.variety.maintenanceStatus !== 'Commercial' && item.variety.maintenanceStatus !== 'Active'">
+                      {{ item.variety.maintenanceStatus || 'N/A' }}
+                    </span>
+                  </td>
+                  <td class="px-6 lg:px-8 py-5 text-sm lg:text-base text-gray-700">{{ item.variety.varietyType || 'N/A' }}</td>
+                  <td class="px-6 lg:px-8 py-5 text-center">
+                    <button class="inline-flex items-center gap-2 px-3 py-2 rounded-md details-button-table"
+                            (click)="toggleRow(item.index); $event.stopPropagation()"
+                            [attr.aria-label]="isRowExpanded(item.index) ? 'Hide details' : 'View details'"
+                            [attr.aria-expanded]="isRowExpanded(item.index)">
+                      <span class="text-xs font-medium text-primary-700" style="font-family: 'Inter', sans-serif;">
+                        {{ isRowExpanded(item.index) ? 'Hide' : 'View' }}
+                      </span>
+                      <svg class="w-4 h-4 text-primary-600 transition-transform duration-300"
+                           [class.rotate-180]="isRowExpanded(item.index)"
+                           fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                      </svg>
+                    </button>
+                  </td>
+                </tr>
+                <!-- Expanded Details Row -->
+                <tr *ngIf="isRowExpanded(item.index)" class="expandable-details-row">
+                  <td colspan="10" class="px-6 lg:px-8 py-6 bg-gray-50">
+                    <div class="expandable-details-content max-h-[600px] overflow-y-auto pr-2">
+                      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <div>
+                          <h4 class="text-sm font-bold text-gray-900 mb-4 uppercase tracking-wide" style="font-family: 'Inter', sans-serif;">
+                            Basic & Production Details
+                          </h4>
+                          <dl class="space-y-3">
+                            <div>
+                              <dt class="text-xs font-semibold text-gray-500 uppercase mb-1">Crop Name</dt>
+                              <dd class="text-sm text-gray-900">{{ item.variety.cropName || 'N/A' }}</dd>
+                            </div>
+                            <div>
+                              <dt class="text-xs font-semibold text-gray-500 uppercase mb-1">Variety Release Name</dt>
+                              <dd class="text-sm text-gray-900">{{ item.variety.varietyReleaseName || 'N/A' }}</dd>
+                            </div>
+                            <div>
+                              <dt class="text-xs font-semibold text-gray-500 uppercase mb-1">Common Name</dt>
+                              <dd class="text-sm text-gray-900">{{ item.variety.commonName || 'N/A' }}</dd>
+                            </div>
+                            <div>
+                              <dt class="text-xs font-semibold text-gray-500 uppercase mb-1">Botanical Name</dt>
+                              <dd class="text-sm text-gray-900 italic">{{ item.variety.botanicalName || 'N/A' }}</dd>
+                            </div>
+                            <div>
+                              <dt class="text-xs font-semibold text-gray-500 uppercase mb-1">Production Altitude</dt>
+                              <dd class="text-sm text-gray-900">{{ item.variety.productionAltitude || 'N/A' }}</dd>
+                            </div>
+                            <div>
+                              <dt class="text-xs font-semibold text-gray-500 uppercase mb-1">Potential Yield</dt>
+                              <dd class="text-sm text-gray-900">
+                                {{ item.variety.potentialYieldMin && item.variety.potentialYieldMax
+                                  ? item.variety.potentialYieldMin + '-' + item.variety.potentialYieldMax + ' ton/ha'
+                                  : item.variety.potentialYieldMin
+                                  ? 'Min: ' + item.variety.potentialYieldMin + ' ton/ha'
+                                  : item.variety.potentialYieldMax
+                                  ? 'Max: ' + item.variety.potentialYieldMax + ' ton/ha'
+                                  : 'N/A' }}
+                              </dd>
+                            </div>
+                            <div>
+                              <dt class="text-xs font-semibold text-gray-500 uppercase mb-1">Maturity (Days)</dt>
+                              <dd class="text-sm text-gray-900">{{ item.variety.maturityDays ? item.variety.maturityDays + ' days' : 'N/A' }}</dd>
+                            </div>
+                            <div>
+                              <dt class="text-xs font-semibold text-gray-500 uppercase mb-1">Year of Release</dt>
+                              <dd class="text-sm text-gray-900">{{ item.variety.yearOfRelease || 'N/A' }}</dd>
+                            </div>
+                          </dl>
+                        </div>
+                        <div>
+                          <h4 class="text-sm font-bold text-gray-900 mb-4 uppercase tracking-wide" style="font-family: 'Inter', sans-serif;">
+                            Administrative, Geographic & Additional
+                          </h4>
+                          <dl class="space-y-3">
+                            <div>
+                              <dt class="text-xs font-semibold text-gray-500 uppercase mb-1">Release Entity/Owner</dt>
+                              <dd class="text-sm text-gray-900">{{ item.variety.releaseEntityOwner || 'N/A' }}</dd>
+                            </div>
+                            <div>
+                              <dt class="text-xs font-semibold text-gray-500 uppercase mb-1">Maintainer</dt>
+                              <dd class="text-sm text-gray-900">{{ item.variety.maintainer || 'N/A' }}</dd>
+                            </div>
+                            <div>
+                              <dt class="text-xs font-semibold text-gray-500 uppercase mb-1">Maintenance Status</dt>
+                              <dd class="text-sm text-gray-900">{{ item.variety.maintenanceStatus || 'N/A' }}</dd>
+                            </div>
+                            <div>
+                              <dt class="text-xs font-semibold text-gray-500 uppercase mb-1">Type of License</dt>
+                              <dd class="text-sm text-gray-900">{{ item.variety.typeOfLicense || 'N/A' }}</dd>
+                            </div>
+                            <div *ngIf="item.variety.regionNames && item.variety.regionNames.length > 0">
+                              <dt class="text-xs font-semibold text-gray-500 uppercase mb-1">Regions</dt>
+                              <dd class="text-sm text-gray-900">
+                                <div class="flex flex-wrap gap-2 mt-1">
+                                  <span *ngFor="let region of item.variety.regionNames"
+                                        class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                    {{ region }}
+                                  </span>
+                                </div>
+                              </dd>
+                            </div>
+                            <div *ngIf="item.variety.recommendedAgriculturalEcologicalZones">
+                              <dt class="text-xs font-semibold text-gray-500 uppercase mb-1">Recommended Agricultural Ecological Zones</dt>
+                              <dd class="text-sm text-gray-900 whitespace-pre-line">{{ item.variety.recommendedAgriculturalEcologicalZones }}</dd>
+                            </div>
+                            <div *ngIf="item.variety.limitation">
+                              <dt class="text-xs font-semibold text-gray-500 uppercase mb-1">Limitations</dt>
+                              <dd class="text-sm text-gray-900 whitespace-pre-line">{{ item.variety.limitation }}</dd>
+                            </div>
+                            <!-- Variety Images Section -->
+                            <div *ngIf="item.variety.imageUrls && item.variety.imageUrls.length > 0" class="mt-4">
+                              <dt class="text-xs font-semibold text-gray-500 uppercase mb-3">Variety Images</dt>
+                              <dd>
+                                <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+                                  <div *ngFor="let imageUrl of item.variety.imageUrls"
+                                       class="relative w-full h-32 sm:h-40 rounded-lg overflow-hidden bg-gray-100">
+                                    <img [src]="imageUrl"
+                                         [alt]="item.variety.registeredName || item.variety.varietyReleaseName"
+                                         class="w-full h-full object-cover cursor-pointer hover:opacity-90 transition-opacity"
+                                         (error)="onImageError($event)">
+                                  </div>
+                                </div>
+                              </dd>
+                            </div>
+                            <div *ngIf="item.variety.commercialisationLevel">
+                              <dt class="text-xs font-semibold text-gray-500 uppercase mb-1">Commercialisation Level</dt>
+                              <dd class="text-sm text-gray-900">{{ item.variety.commercialisationLevel }}</dd>
+                            </div>
+                          </dl>
+                        </div>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              </ng-container>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Empty State for Region-Only Search -->
+    <div *ngIf="!(isLoading$ | async) && searchMode === 'region-only' && varietiesByProduct.size === 0 && varieties.length === 0" class="text-center py-20 sm:py-24 lg:py-32 bg-white rounded-2xl shadow-lg border border-gray-200">
+      <svg class="mx-auto h-12 w-12 text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      <h3 class="text-xl sm:text-2xl font-bold text-gray-900 mb-2">No varieties found</h3>
+      <p class="text-gray-500 text-base mb-4">No varieties match the selected regions</p>
+    </div>
+
+    <!-- Loading/Not Found State - Premium Design -->
+    <div *ngIf="!product && selectedProductUid && !(isLoading$ | async) && searchMode !== 'region-only'" class="text-center py-20 sm:py-24 lg:py-32 bg-white rounded-2xl shadow-lg border border-gray-200">
+      <div class="inline-flex items-center justify-center w-20 h-20 rounded-full bg-gray-100 mb-6">
+        <svg class="w-10 h-10 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+        </svg>
+      </div>
+      <h3 class="text-xl sm:text-2xl font-bold text-gray-900 mb-2 tracking-tight" style="font-family: 'Inter', sans-serif;">
+        Product not found
+      </h3>
+      <p class="text-gray-500 text-base sm:text-lg mb-8 max-w-md mx-auto">
+        The product you're looking for doesn't exist or has been removed.
+      </p>
+    </div>
+  </div>
+</div>

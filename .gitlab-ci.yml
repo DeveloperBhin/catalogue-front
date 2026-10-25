@@ -1,0 +1,47 @@
+stages:
+  - pull
+  - build_deploy
+
+Pulling(develop):
+  stage: pull
+  script:
+    - cd /data/.catalogue/catalogue-frontend
+    - git pull origin develop
+  tags:
+    - dev-runner
+  only:
+    - develop
+
+build_deploy(develop):
+  stage: build_deploy
+  script:
+    - cd /data/tcbms
+    - docker compose up --build -d catalogue-frontend
+  tags:
+    - dev-runner
+  only:
+    - develop
+
+
+
+# Production Stage
+Pulling(production):
+  stage: pull
+  script:
+    - cd /data/.catalogue/catalogue-frontend
+    - git pull origin main
+  tags:
+    - prod-runner
+  only:
+    - main
+
+build_deploy(production):
+  stage: build_deploy
+  script:
+    - cd /data/tcbms
+    - docker compose up --build -d catalogue-frontend
+  tags:
+    - prod-runner
+  only:
+    - main
+

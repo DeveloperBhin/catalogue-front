@@ -1,0 +1,17 @@
+// Minimal SCSS - most styling done with Tailwind CSS
+.variety-info-card {
+	min-width: 0;
+	padding: 1.25rem;
+	border: 1px solid #e5e7eb;
+	border-radius: 0.5rem;
+	background: #fff;
+}
+
+.variety-info-heading {
+	margin-bottom: 1rem;
+	padding-bottom: 0.65rem;
+	border-bottom: 1px solid #e5e7eb;
+	color: #111827;
+	font-size: 1rem;
+	font-weight: 700;
+}

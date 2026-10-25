@@ -1,0 +1,26 @@
+{
+  "/api": {
+    "target": "http://41.59.225.78:8018",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug"
+  },
+  "/media/s1": {
+    "target": "http://41.59.228.129:9000",
+    "secure": false,
+    "changeOrigin": true,
+    "pathRewrite": {
+      "^/media/s1": ""
+    },
+    "logLevel": "debug"
+  },
+  "/media/s2": {
+    "target": "http://41.59.225.78:9000",
+    "secure": false,
+    "changeOrigin": true,
+    "pathRewrite": {
+      "^/media/s2": ""
+    },
+    "logLevel": "debug"
+  }
+}

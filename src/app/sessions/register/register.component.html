@@ -1,0 +1,391 @@
+
+<div class="auth-page">
+
+  <div class="auth-card register-card">
+
+    <!-- BRAND HEADER -->
+    <div class="brand-header">
+      <img
+        src="assets/images/logo.png"
+        alt="TARI Logo"
+      />
+
+      <div>
+        <h2>{{ 'AUTH.ORGANIZATION' | translate }}</h2>
+        <p>{{ 'AUTH.SYSTEM_NAME' | translate }}</p>
+      </div>
+    </div>
+
+    <!-- PAGE HEADING -->
+    <div class="form-heading">
+      <h1>{{ 'AUTH.CREATE_ACCOUNT' | translate }}</h1>
+      <p>{{ 'AUTH.REGISTER_DESCRIPTION' | translate }}</p>
+    </div>
+
+    <!-- OPTIONS ERROR -->
+    <div
+      class="error-alert"
+      *ngIf="optionsError"
+      role="alert"
+    >
+      {{ optionsError | translate }}
+
+      <button
+        type="button"
+        (click)="loadOptions()"
+        [disabled]="loadingOptions"
+      >
+        {{ 'AUTH.RETRY' | translate }}
+      </button>
+    </div>
+
+    <!-- REGISTRATION ERROR -->
+    <div
+      class="error-alert"
+      *ngIf="errorMessage"
+      role="alert"
+    >
+      {{ errorMessage | translate }}
+    </div>
+
+    <!-- REGISTRATION FORM -->
+    <form
+      [formGroup]="form"
+      (ngSubmit)="submit()"
+      novalidate
+    >
+
+      <!-- =========================
+           PERSONAL DETAILS
+      ========================== -->
+      <h3 class="section-heading">
+        {{ 'AUTH.PERSONAL_DETAILS' | translate }}
+      </h3>
+
+      <div class="form-grid">
+
+        <div class="form-group">
+          <label for="fullName">
+            {{ 'AUTH.FULL_NAME' | translate }}
+          </label>
+
+          <input
+            id="fullName"
+            type="text"
+            formControlName="fullName"
+            autocomplete="name"
+          />
+
+          <small
+            class="field-error"
+            *ngIf="f.fullName.touched && f.fullName.invalid"
+          >
+            {{ 'AUTH.FIELD_REQUIRED' | translate }}
+          </small>
+        </div>
+
+        <div class="form-group">
+          <label for="email">
+            {{ 'AUTH.EMAIL' | translate }}
+          </label>
+
+          <input
+            id="email"
+            type="email"
+            formControlName="email"
+            autocomplete="email"
+            placeholder="name@tari.go.tz"
+          />
+
+          <small
+            class="field-error"
+            *ngIf="f.email.touched && f.email.invalid"
+          >
+            {{ 'AUTH.INVALID_EMAIL' | translate }}
+          </small>
+        </div>
+
+        <div class="form-group">
+          <label for="phoneNumber">
+            {{ 'AUTH.PHONE_NUMBER' | translate }}
+          </label>
+
+          <input
+            id="phoneNumber"
+            type="tel"
+            formControlName="phoneNumber"
+            placeholder="07XXXXXXXX"
+          />
+
+          <small
+            class="field-error"
+            *ngIf="
+              f.phoneNumber.touched &&
+              f.phoneNumber.invalid
+            "
+          >
+            {{ 'AUTH.FIELD_REQUIRED' | translate }}
+          </small>
+        </div>
+
+        <div class="form-group">
+          <label for="staffId">
+            {{ 'AUTH.STAFF_ID' | translate }}
+          </label>
+
+          <input
+            id="staffId"
+            type="text"
+            formControlName="staffId"
+          />
+
+          <small
+            class="field-error"
+            *ngIf="f.staffId.touched && f.staffId.invalid"
+          >
+            {{ 'AUTH.FIELD_REQUIRED' | translate }}
+          </small>
+        </div>
+
+      </div>
+
+      <!-- =========================
+           WORK DETAILS
+      ========================== -->
+      <h3 class="section-heading">
+        {{ 'AUTH.WORK_DETAILS' | translate }}
+      </h3>
+
+      <div class="form-grid">
+
+        <!-- TARI CENTER -->
+        <div class="form-group">
+          <label for="centerId">
+            {{ 'AUTH.CENTER' | translate }}
+          </label>
+
+          <select
+            id="centerId"
+            formControlName="centerId"
+            [disabled]="loadingOptions"
+          >
+            <option [ngValue]="0">
+              {{ 'AUTH.SELECT_CENTER' | translate }}
+            </option>
+
+            <option
+              *ngFor="let center of centers"
+              [ngValue]="center.id"
+            >
+              {{ center.name }}
+            </option>
+          </select>
+
+          <small
+            class="field-error"
+            *ngIf="f.centerId.touched && f.centerId.invalid"
+          >
+            {{ 'AUTH.FIELD_REQUIRED' | translate }}
+          </small>
+        </div>
+
+        <!-- ROLE / POSITION -->
+        <div class="form-group">
+          <label for="requestedRoleId">
+            {{ 'AUTH.SELECT_ROLE' | translate }}
+          </label>
+
+          <select
+            id="requestedRoleId"
+            formControlName="requestedRoleId"
+            [disabled]="loadingOptions"
+          >
+            <option [ngValue]="0">
+              {{
+                (loadingOptions
+                  ? 'AUTH.LOADING_ROLES'
+                  : 'AUTH.SELECT_ROLE_PLACEHOLDER')
+                  | translate
+              }}
+            </option>
+
+            <option
+              *ngFor="let role of roles"
+              [ngValue]="role.id"
+            >
+              {{ role.name.replace('ROLE_', '').replaceAll('_', ' ') }}
+            </option>
+          </select>
+
+          <small
+            class="field-error"
+            *ngIf="
+              f.requestedRoleId.touched &&
+              f.requestedRoleId.invalid
+            "
+          >
+            {{ 'AUTH.ROLE_REQUIRED' | translate }}
+          </small>
+        </div>
+
+        <!-- DRIVER LICENCE -->
+        <div
+          class="form-group full-width"
+          *ngIf="isDriver"
+        >
+          <label for="driverLicence">
+            {{ 'AUTH.DRIVER_LICENCE' | translate }}
+          </label>
+
+          <input
+            id="driverLicence"
+            type="text"
+            formControlName="driverLicenceNumber"
+            placeholder="CHK-88421"
+          />
+
+          <small
+            class="field-error"
+            *ngIf="
+              f.driverLicenceNumber.touched &&
+              f.driverLicenceNumber.invalid
+            "
+          >
+            {{ 'AUTH.FIELD_REQUIRED' | translate }}
+          </small>
+        </div>
+
+      </div>
+
+      <!-- ROLE APPROVAL NOTICE -->
+      <div class="info-notice">
+        <span class="material-symbols-outlined">
+          verified_user
+        </span>
+
+        {{ 'AUTH.ROLE_APPROVAL_NOTICE' | translate }}
+      </div>
+
+      <!-- =========================
+           ACCOUNT SECURITY
+      ========================== -->
+      <h3 class="section-heading">
+        {{ 'AUTH.ACCOUNT_SECURITY' | translate }}
+      </h3>
+
+      <div class="form-grid">
+
+        <!-- PASSWORD -->
+        <div class="form-group">
+          <label for="password">
+            {{ 'AUTH.PASSWORD' | translate }}
+          </label>
+
+          <div class="password-box">
+            <input
+              id="password"
+              formControlName="password"
+              [type]="showPassword ? 'text' : 'password'"
+              autocomplete="new-password"
+            />
+
+            <button
+              type="button"
+              (click)="showPassword = !showPassword"
+              [attr.aria-label]="showPassword ? 'Hide password' : 'Show password'"
+            >
+              <span class="material-symbols-outlined">
+                {{ showPassword ? 'visibility_off' : 'visibility' }}
+              </span>
+            </button>
+          </div>
+
+          <small
+            class="field-error"
+            *ngIf="f.password.touched && f.password.invalid"
+          >
+            {{ 'AUTH.PASSWORD_MIN_LENGTH' | translate }}
+          </small>
+        </div>
+
+        <!-- CONFIRM PASSWORD -->
+        <div class="form-group">
+          <label for="confirmPassword">
+            {{ 'AUTH.CONFIRM_PASSWORD' | translate }}
+          </label>
+
+          <div class="password-box">
+            <input
+              id="confirmPassword"
+              formControlName="confirmPassword"
+              [type]="showConfirmPassword ? 'text' : 'password'"
+              autocomplete="new-password"
+            />
+
+            <button
+              type="button"
+              (click)="showConfirmPassword = !showConfirmPassword"
+              [attr.aria-label]="showConfirmPassword ? 'Hide password' : 'Show password'"
+            >
+              <span class="material-symbols-outlined">
+                {{ showConfirmPassword ? 'visibility_off' : 'visibility' }}
+              </span>
+            </button>
+          </div>
+
+          <small
+            class="field-error"
+            *ngIf="
+              f.confirmPassword.touched &&
+              f.confirmPassword.invalid
+            "
+          >
+            {{ 'AUTH.FIELD_REQUIRED' | translate }}
+          </small>
+
+          <small
+            class="field-error"
+            *ngIf="
+              f.confirmPassword.touched &&
+              form.hasError('passwordMismatch')
+            "
+          >
+            {{ 'AUTH.PASSWORD_MISMATCH' | translate }}
+          </small>
+        </div>
+
+      </div>
+
+      <!-- SUBMIT BUTTON -->
+      <button
+        class="submit-btn"
+        type="submit"
+        [disabled]="
+          loading ||
+          loadingOptions ||
+          !!optionsError ||
+          form.invalid
+        "
+      >
+        {{
+          (loading
+            ? 'AUTH.CREATING_ACCOUNT'
+            : 'AUTH.REGISTER')
+            | translate
+        }}
+      </button>
+
+    </form>
+
+    <!-- FOOTER -->
+    <div class="auth-footer">
+      {{ 'AUTH.ALREADY_HAVE_ACCOUNT' | translate }}
+
+      <a routerLink="/auth/login">
+        {{ 'AUTH.SIGN_IN' | translate }}
+      </a>
+    </div>
+
+  </div>
+
+</div>

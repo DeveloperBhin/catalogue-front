@@ -1,0 +1,479 @@
+{
+  "LOGIN": {
+    "TITLE": "Sign in to your account",
+    "USERNAME": "User Name",
+    "PASSWORD": "Password",
+    "BUTTON": "Login",
+    "NO_ACCOUNT": "Don't have an account?",
+    "REGISTER": "Register",
+    "FORGOT_PASSWORD": "Forgot password?"
+  },
+
+  "REGISTER": {
+    "TITLE": "Registration",
+    "SUBTITLE": "Create your system account",
+    "DESCRIPTION": "Enter your information below to create a system account.",
+
+    "FULLNAME": "Full Name",
+    "USERNAME": "User Name",
+    "REGION":"Region",
+    "DISTRICT":"District",
+    "WARD":"Ward",
+    "VILLAGE":"Village",
+    "EMAIL": "Email Address",
+    "PHONE": "Phone Number",
+    "PASSWORD": "Password",
+    "CONFIRM_PASSWORD": "Confirm Password",
+    "BUTTON": "Create Account",
+
+    "HAVE_ACCOUNT": "Already have an account?",
+    "SIGN_IN": "Sign in"
+  },
+
+  "LANGUAGE": {
+    "ENGLISH": "English",
+    "SWAHILI": "Swahili"
+  },
+
+  "SYSTEM": {
+    "NAME": "Cashew Production Management System (CPMS)"
+  },
+  "VALIDATION": {
+  "REQUIRED": "is required"
+},
+
+  "FARMS": {
+    "DASHBOARD_TITLE": "Farm Dashboard",
+    "GREETING": "Good Morning, Farmer John",
+    "TOTAL_FARMS": "Total Farms",
+    "TOTAL_ACRES": "Total Acres",
+    "TOTAL_TREES": "Total Trees",
+    "ADD_FARM": "Add Farm",
+    "VIEW_FARM": "View Farm"
+  },
+
+  "TREES": {
+    "DASHBOARD_TITLE": "Tree Dashboard",
+    "GREETING": "Good Morning, Farmer John",
+    "AVAILABLE_TREES": "Available Trees",
+    "AVAILABLE_VARIETIES": "Available Varieties",
+    "TOTAL_PRODUCED": "Total Kgs Produced",
+    "ADD_TREE": "Add Tree",
+    "SEARCH": "Search...",
+    "TREE_ID": "Tree ID",
+    "BARCODE": "Barcode",
+    "VARIETY": "Variety",
+    "AGE": "Age",
+    "STATUS": "Status",
+    "PRODUCTION": "Production",
+    "ACTIONS": "Actions",
+    "HEALTHY": "Healthy"
+  },
+  "ADD_FARM": {
+  "TITLE": "Add Farm",
+  "FARM_NAME": "Farm Name",
+  "FARM_NAME_REQUIRED": "Farm name is required",
+  "PLANTING_DATE": "Planting Date",
+  "FARM_TYPE": "Farm Type",
+  "SELECT_FARM_TYPE": "Select Farm Type",
+  "NEW_FARM": "New Farm",
+  "PRODUCTION_FARM": "Production Farm",
+  "FARM_SIZE": "Farm Size",
+  "ACRES": "Acres",
+  "SUBMIT": "Submit"
+},
+"REGISTER_TREE": {
+  "TITLE": "Register Tree",
+  "FARM": "Farm",
+  "SELECT_FARM": "Select Farm",
+  "PLANTING_DATE": "Planting Date",
+  "VARIETY": "Variety",
+  "SELECT_VARIETY": "Select Variety",
+  "LATITUDE": "Tree Latitude",
+  "LATITUDE_PLACEHOLDER": "Tree Lat (0°)",
+  "LONGITUDE": "Tree Longitude",
+  "LONGITUDE_PLACEHOLDER": "Tree Long (0°)",
+  "STATUS": "Status",
+  "SELECT_STATUS": "Select Status",
+  "HEALTHY": "Healthy",
+  "DISEASED": "Diseased",
+  "DEAD": "Dead",
+  "SUBMIT": "Submit"
+},
+
+  "SIDEBAR": {
+    "VEHICLE_MANAGEMENT": "VEHICLE MANAGEMENT",
+    "DASHBOARD": "Dashboard",
+    "VEHICLES": "Vehicles",
+    "REQUESTS": "Requests",
+    "REPORTS": "Reports",
+    "DRIVERS": "Drivers",
+    "INSPECTIONS": "Inspections",
+    "MAINTENANCE": "Maintenance",
+    "ACCIDENTS": "Accidents",
+    "FUEL": "Fuel",
+    "USERS": "Users",
+    "SETTINGS": "Settings",
+    "PROFILE": "Profile",
+    "REGISTER":"Register",
+    "LOGOUT": "Logout"
+  },
+  "DASHBOARD": {
+  "ASSIGNED_VEHICLE": "Assigned Vehicle",
+  "CURRENT_MILEAGE": "Current Mileage",
+  "PENDING_REQUESTS": "Pending Requests",
+  "APPROVED_PERMITS": "Approved Permits",
+
+  "OPERATIONAL": "Operational",
+  "YEAR": "Year",
+  "STATION": "Station",
+  "NEW_MAINTENANCE_REQUEST": "New Maintenance Request",
+
+  "CHASSIS_NUMBER": "Chassis Number",
+  "ROUTINE_SERVICE": "Routine Service",
+  "ASSIGNED_DRIVER": "Assigned Driver",
+  "REMAINING": "remaining",
+
+  "MAINTENANCE_HISTORY": "Maintenance Requests & Permit History",
+  "MAINTENANCE_HISTORY_SUBTITLE": "Track request status and download approved permits",
+  "TOTAL_REQUESTS": "Total Requests",
+
+  "REQUEST_NO": "Ref / Request No.",
+  "SERVICE_TYPE": "Service Type",
+  "REASON_DESCRIPTION": "Reason / Description",
+  "DATE": "Date",
+  "COST_TSH": "Cost (TSH)",
+  "APPROVAL_STATUS": "Approval Status",
+  "ACTION": "Action",
+
+  "ROUTINE_SERVICE_TYPE": "Routine Service",
+  "KILOMETER_BASED": "Kilometer Based",
+  "BREAKDOWN_REPAIR": "Fault / Breakdown Repair",
+  "EMERGENCY_SERVICE": "Emergency Service",
+
+  "APPROVED": "Approved",
+  "CENTER_SUPERVISOR": "Center Supervisor",
+  "CENTER_DIRECTOR": "Center Director",
+  "IT_AM_HQ": "IT / AM (HQ)",
+  "PERMIT_PENDING": "Permit Pending",
+
+  "USER_COPY": "User Copy",
+  "DOWNLOAD_PERMIT": "Download Permit"
+},
+
+  "MAINTENANCE_REQUEST": {
+    "TITLE": "Submit Service or Maintenance Request",
+    "ASSIGNED_VEHICLE": "Assigned Vehicle",
+    "SERVICE_TYPE": "Service Type",
+    "SELECT_SERVICE_TYPE": "Select service type",
+    "ROUTINE_SERVICE": "Routine Service (KM Based)",
+    "BREAKDOWN_REPAIR": "Fault / Breakdown Repair",
+    "EMERGENCY_SERVICE": "Emergency Service",
+    "OTHER": "Other",
+    "CURRENT_MILEAGE": "Current Mileage (KM)",
+    "CURRENT_MILEAGE_PLACEHOLDER": "Enter current mileage",
+    "DESCRIPTION": "Reason / Maintenance Description",
+    "DESCRIPTION_PLACEHOLDER": "Describe the fault or items that need replacement (e.g. Oil, Oil Filter, Brake Pads, etc.)",
+    "ESTIMATED_COST": "Estimated Cost (TSh)",
+    "COST_PLACEHOLDER": "Example: 450,000",
+    "SERVICE_TYPE_REQUIRED": "Service type is required",
+    "MILEAGE_REQUIRED": "Current mileage is required",
+    "DESCRIPTION_REQUIRED": "Maintenance description is required",
+    "INVALID_COST": "Enter a valid estimated cost",
+    "SUBMIT": "Submit Request"
+  },
+
+  "COMMON": {
+    "CANCEL": "Cancel",
+    "CLOSE": "Close"
+  },
+  "CENTER_SUPERVISOR": {
+  "DASHBOARD": "Dashboard",
+  "ROLE": "Center Supervisor",
+
+  "WELCOME_MESSAGE": "Welcome to TARI-VMS. This system is also available on the mobile application.",
+
+  "SUMMARY": "Summary of activities according to your role.",
+
+  "DOWNLOAD_REPORT": "Download Center Report",
+
+  "TOTAL_VEHICLES": "Total Vehicles",
+  "OPERATIONAL_VEHICLES": "Operational",
+  "OUT_OF_SERVICE": "Out of Service",
+  "PENDING_REQUESTS": "Pending Requests",
+  "NEED_DECISION": "require your decision",
+
+  "RECENT_REQUESTS": "Recent Requests",
+  "VEHICLES": "Vehicles",
+  "REQUESTS": "Requests",
+
+  "VIEW_ALL": "View All",
+
+  "ROUTINE_SERVICE": "Routine Service (KM-based)",
+  "BREAKDOWN_REPAIR": "Breakdown Repair",
+  "EMERGENCY_SERVICE": "Emergency Service",
+
+  "PENDING": "Pending",
+  "APPROVED": "Approved",
+
+  "OPERATIONAL": "Operational",
+  "UNDER_SERVICE": "Under Service"
+},
+"VEHICLES": {
+  "TITLE": "Vehicles",
+  "DESCRIPTION": "Your center's driver vehicles. Only the Check No is used to identify drivers.",
+  "SEARCH": "Search...",
+  "VEHICLE_NUMBER": "Vehicle Number",
+  "TYPE_MODEL": "Type / Model",
+  "MILEAGE": "Fuel / Mileage (KM)",
+  "STATUS": "Status",
+  "CENTER": "Center",
+  "CHECK_NO": "Check No",
+  "OPERATIONAL": "Operational",
+  "UNDER_SERVICE": "Under Service",
+  "NO_VEHICLES": "No vehicles found",
+  "NO_REQUESTS": "No maintenance requests found."
+
+},
+
+  "APPROVAL": {
+    "TITLE": "Approvals",
+    "DESCRIPTION": "Review each request that requires your approval.",
+
+    "REQUESTED_BY": "Requested by",
+
+    "DRIVER_REQUESTED": "Driver Requested",
+    "CENTER_SUPERVISOR": "Center Supervisor",
+    "CENTER_DIRECTOR": "Center Director",
+
+    "RECOMMEND": "Recommend",
+    "REJECT": "Reject",
+
+    "STATUS_PENDING": "Pending",
+    "STATUS_APPROVED": "Approved",
+    "STATUS_REJECTED": "Rejected",
+
+    "SERVICE_ROUTINE": "Routine Service (KM-based)",
+    "SERVICE_REPAIR": "Fault Repair",
+    "SERVICE_EMERGENCY": "Emergency Service",
+
+    "DATE_TODAY_0842": "Today, 08:42",
+    "DATE_YESTERDAY_1410": "Yesterday, 14:10",
+    "DATE_TODAY_0715": "Today, 07:15",
+
+    "DESCRIPTION_ROUTINE": "The vehicle has reached 85,000 KM and requires routine service before the trip to Dodoma.",
+    "DESCRIPTION_REPAIR": "The rear brakes are making noise and require urgent inspection.",
+    "DESCRIPTION_EMERGENCY": "The vehicle has broken down on the way from the farm and requires emergency assistance.",
+
+    "NO_APPROVALS": "No Pending Approvals",
+    "NO_APPROVALS_DESCRIPTION": "There are currently no requests requiring your approval."
+  },
+  
+
+  "CENTER_DIRECTOR": {
+    "DASHBOARD": "Dashboard",
+    "ROLE": "Center Director",
+    "WELCOME_MESSAGE": "Welcome to TARI-VMS. This system is also available on the mobile application.",
+    "SUMMARY": "Summary of activities based on your responsibilities.",
+    "DOWNLOAD_REPORT": "Your Center Report",
+    "TOTAL_VEHICLES": "Total Vehicles",
+    "OPERATIONAL": "Operational",
+    "UNDER_SERVICE": "Under Service",
+    "PENDING_REQUESTS": "Pending Requests",
+    "NEED_DECISION": "require your decision",
+    "RECENT_REQUESTS": "Recent Requests",
+    "VIEW_ALL": "View All",
+    "VEHICLES": "Vehicles",
+    "ROUTINE_SERVICE": "Routine Service (KM-based)",
+    "BREAKDOWN_REPAIR": "Breakdown Repair",
+    "EMERGENCY_SERVICE": "Emergency Service",
+    "PENDING": "Pending",
+    "APPROVED": "Approved",
+    "REJECTED": "Rejected",
+    "REQUESTS": "Requests",
+    "ROLE": "Center Director"
+
+
+  },
+  
+  "APPROVAL": {
+    "TITLE": "Requests",
+    "DESCRIPTION": "Make final approval decisions for each request.",
+    "REQUESTED_BY": "Requested by",
+    "DRIVER_REQUESTED": "Driver Requested",
+    "CENTER_SUPERVISOR": "Center Supervisor",
+    "CENTER_DIRECTOR": "Center Director",
+    "PENDING": "Pending",
+    "APPROVED": "Approved",
+    "REJECTED": "Rejected",
+    "APPROVE": "Approve",
+    "REJECT": "Reject",
+    "NO_APPROVALS": "No requests found",
+    "NO_APPROVALS_DESCRIPTION": "There are currently no requests to display.",
+    "ROUTINE_SERVICE": "Routine Service (KM-based)",
+    "BREAKDOWN_REPAIR": "Breakdown Repair",
+    "DESC_1001": "Vehicle has reached 85,000 KM and requires routine servicing before travelling to Dodoma.",
+    "DESC_1002": "Rear brakes are making noise and require urgent inspection."
+  },
+  
+
+  "TRANSPORT_OFFICER": {
+    "DASHBOARD": "Dashboard",
+    "ROLE": "Transport Officer (TO)",
+    "WELCOME_MESSAGE": "Welcome to TARI-VMS. This system is also available on the mobile application.",
+    "SUMMARY": "Overview of activities based on your role.",
+    "DOWNLOAD_REPORT": "All Centers Report",
+    "TOTAL_CENTERS": "Total Centers",
+    "TOTAL_VEHICLES": "Total Vehicles (Nationwide)",
+    "OUT_OF_SERVICE": "Out of Service",
+    "PENDING_REQUESTS": "Requests Awaiting Decision",
+    "AWAITING_DECISION": "in your queue",
+    "RECENT_REQUESTS": "Recent Requests",
+    "VEHICLES": "Vehicles",
+    "VIEW_ALL": "View All",
+    "REQUESTS": "Requests",
+    "ROUTINE_SERVICE": "Routine Service (KM-based)",
+    "BREAKDOWN_REPAIR": "Breakdown Repair",
+    "EMERGENCY_SERVICE": "Emergency Service",
+    "PENDING": "Pending",
+    "APPROVED": "Approved",
+    "REJECTED": "Rejected",
+    "OPERATIONAL": "Operational",
+    "UNDER_SERVICE": "Under Service",
+    "NO_REQUESTS": "No requests available.",
+    "NO_VEHICLES": "No vehicles available."
+  },
+  
+
+  "ADMIN_MANAGER": {
+    "DASHBOARD": "Dashboard",
+    "ROLE": "Administration Manager (AM)",
+    "SUMMARY": "Overview of activities based on your responsibilities.",
+    "DOWNLOAD_REPORT": "All Centers Report",
+
+    "TOTAL_CENTERS": "Research Centers",
+    "TOTAL_VEHICLES": "Total Vehicles (Nationwide)",
+    "UNDER_SERVICE": "Under Service",
+    "PENDING_REQUESTS": "Requests Awaiting Decision",
+    "NEED_DECISION": "Awaiting your decision",
+
+    "RECENT_REQUESTS": "Recent Requests",
+    "VEHICLES": "Vehicles",
+    "VIEW_ALL": "View All",
+
+    "ROUTINE_SERVICE": "Routine Service (KM-based)",
+    "BREAKDOWN_REPAIR": "Breakdown Repair",
+    "EMERGENCY_SERVICE": "Emergency Service",
+
+    "STATUS_PENDING": "Pending",
+    "STATUS_APPROVED": "Approved",
+    "STATUS_REJECTED": "Rejected",
+    "STATUS_OPERATIONAL": "Operational",
+    "STATUS_UNDER_SERVICE": "Under Service",
+
+    "NO_REQUESTS": "No recent requests available.",
+    "NO_VEHICLES": "No vehicles available."
+  },
+  
+
+  "CENTERS": {
+    "TITLE": "All Centers",
+    "SUMMARY_TITLE": "Centers Summary",
+    "SUMMARY_DESCRIPTION": "All 21 TARI centers nationwide.",
+    "CENTER": "Center",
+    "VEHICLES": "Vehicles",
+    "OPERATIONAL": "Operational",
+    "UNDER_SERVICE": "Under Service",
+    "PENDING_REQUESTS": "Pending Requests",
+    "VIEW": "View",
+    "NO_CENTERS": "No centers available."
+  },
+  
+
+  "DIRECTOR_HR": {
+    "DASHBOARD": "Dashboard",
+    "ROLE": "Director HR (DRAM)",
+    "HEAD_OFFICE": "Head Office",
+    "WELCOME_MESSAGE": "Welcome to TARI-VMS. This system is also available on mobile.",
+    "SUMMARY": "Overview of activities related to your responsibilities.",
+    "DOWNLOAD_REPORT": "All Centers Report",
+    "TOTAL_CENTERS": "All Centers",
+    "TOTAL_VEHICLES": "All Vehicles Nationwide",
+    "OPERATIONAL": "Operational",
+    "OPERATIONAL_PERCENT": "68%",
+    "MONTHLY_REQUESTS": "Requests This Month",
+    "RECENT_REQUESTS": "Recent Requests",
+    "VEHICLES": "Vehicles",
+    "VIEW_ALL": "View All",
+    "NO_REQUESTS": "No recent requests.",
+    "NO_VEHICLES": "No vehicles available."
+  }
+  ,
+  
+
+  "AUTH": {
+    "ORGANIZATION": "TANZANIA AGRICULTURAL RESEARCH INSTITUTE (TARI)",
+    "SYSTEM_NAME": "Vehicle Management System (TARI-VMS)",
+    "WELCOME_BACK": "Welcome Back",
+    "LOGIN_DESCRIPTION": "Sign in to your staff account",
+    "CREATE_ACCOUNT": "Create Account",
+    "REGISTER_DESCRIPTION": "Register to access the Vehicle Management System",
+    "PERSONAL_DETAILS": "Personal Information",
+    "WORK_DETAILS": "Work Information",
+    "ACCOUNT_SECURITY": "Account Security",
+    "FULL_NAME": "Full Name",
+    "EMAIL": "Email Address",
+    "PHONE_NUMBER": "Phone Number",
+    "STAFF_ID": "Staff ID",
+    "CENTER": "TARI Center",
+    "SELECT_CENTER": "Select TARI Center",
+    "SELECT_ROLE": "Role",
+    "SELECT_ROLE_PLACEHOLDER": "Select your role",
+    "LOADING_ROLES": "Loading roles...",
+    "ROLE_REQUIRED": "Please select a role",
+    "DRIVER_LICENCE": "Driving Licence / Check Number",
+    "ROLE_APPROVAL_NOTICE": "Your selected role will require administrator approval.",
+    "PASSWORD": "Password",
+    "CONFIRM_PASSWORD": "Confirm Password",
+    "PASSWORD_MIN_LENGTH": "Password must contain at least 8 characters",
+    "PASSWORD_MISMATCH": "Passwords do not match",
+    "FIELD_REQUIRED": "This field is required",
+    "INVALID_EMAIL": "Enter a valid email address",
+    "SIGN_IN": "Sign In",
+    "SIGNING_IN": "Signing in...",
+    "REGISTER": "Register",
+    "CREATING_ACCOUNT": "Creating account...",
+    "NO_ACCOUNT": "Don't have an account?",
+    "ALREADY_HAVE_ACCOUNT": "Already have an account?",
+    "INVALID_CREDENTIALS": "Invalid email or password",
+    "EMAIL_EXISTS": "This email address is already registered",
+    "LOGIN_FAILED": "Unable to sign in. Please try again.",
+    "REGISTRATION_FAILED": "Registration failed. Please try again.",
+    "OPTIONS_LOAD_FAILED": "Unable to load roles or centers.",
+    "RETRY": "Retry",
+    "FORGOT_PASSWORD":"Forgot password ?"
+  }
+,
+
+
+  "REQUEST_STATUS": {
+    "APPROVED": "Approved",
+    "PENDING": "Pending Approval",
+    "REJECTED": "Rejected",
+    "COMPLETED": "Completed",
+    "CANCELLED": "Cancelled"
+  },
+  "VEHICLE_STATUS": {
+    "OPERATIONAL": "Operational",
+    "UNDER_MAINTENANCE": "Under Maintenance",
+    "OUT_OF_SERVICE": "Out of Service",
+    "INACTIVE": "Inactive"
+  }
+
+
+
+
+
+
+
+}
